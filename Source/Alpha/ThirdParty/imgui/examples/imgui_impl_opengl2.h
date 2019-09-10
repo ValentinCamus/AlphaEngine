@@ -11,7 +11,7 @@
 
 // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
 // **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGuiDetails integration works, because it is shorter to read.
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
 // If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
 // complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
 // confuse your GPU driver.

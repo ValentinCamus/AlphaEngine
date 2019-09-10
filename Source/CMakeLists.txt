@@ -51,9 +51,9 @@ set(THIRD_PARTY
         Alpha/Engine/Renderer/Renderer.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.cpp
         Alpha/Layer/LayerStack.cpp
-
+        Alpha/Gui/ImGuiLayer.cpp
         Alpha/Gui/ImGuiDetails/ImGuiImplGLFW.cpp
-        Alpha/Gui/ImGuiDetails/ImGuiImplOpenGL3.cpp Alpha/Gui/ImGuiLayer.cpp Alpha/Gui/ImGuiLayer.h Alpha/Gui/ImGuiDetails/ImGuiBuild.h)
+        Alpha/Gui/ImGuiDetails/ImGuiImplOpenGL3.cpp)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

@@ -1,5 +1,5 @@
 // dear imgui: Renderer + Platform Binding for Marmalade + IwGx
-// Marmalade code: Copyright (C) 2015 by Giovanni Zito (this file is part of Dear ImGuiDetails)
+// Marmalade code: Copyright (C) 2015 by Giovanni Zito (this file is part of Dear ImGui)
 
 // Implemented features:
 //  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
@@ -15,7 +15,7 @@ IMGUI_IMPL_API void     ImGui_Marmalade_Shutdown();
 IMGUI_IMPL_API void     ImGui_Marmalade_NewFrame();
 IMGUI_IMPL_API void     ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data);
 
-// Use if you want to reset your rendering device without losing ImGuiDetails state.
+// Use if you want to reset your rendering device without losing ImGui state.
 IMGUI_IMPL_API void     ImGui_Marmalade_InvalidateDeviceObjects();
 IMGUI_IMPL_API bool     ImGui_Marmalade_CreateDeviceObjects();
 

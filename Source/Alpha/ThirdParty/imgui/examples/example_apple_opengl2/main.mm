@@ -40,7 +40,7 @@
 
 -(void)updateAndDrawDemoView
 {
-    // Start the Dear ImGuiDetails frame
+    // Start the Dear ImGui frame
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplOSX_NewFrame(self);
     ImGui::NewFrame();
@@ -50,7 +50,7 @@
     static bool show_another_window = false;
     static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    // 1. Show the big demo window (Most of the sample code is in ImGuiDetails::ShowDemoWindow()! You can browse its code to learn more about Dear ImGuiDetails!).
+    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -178,7 +178,7 @@
     NSRect viewRect = NSMakeRect(100.0, 100.0, 100.0 + 1280.0, 100 + 720.0);
 
     _window = [[NSWindow alloc] initWithContentRect:viewRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable|NSWindowStyleMaskClosable backing:NSBackingStoreBuffered defer:YES];
-    [_window setTitle:@"Dear ImGuiDetails OSX+OpenGL2 Example"];
+    [_window setTitle:@"Dear ImGui OSX+OpenGL2 Example"];
     [_window setOpaque:YES];
     [_window makeKeyAndOrderFront:NSApp];
 
@@ -191,8 +191,8 @@
     NSMenu* appMenu;
     NSMenuItem* menuItem;
 
-    appMenu = [[NSMenu alloc] initWithTitle:@"Dear ImGuiDetails OSX+OpenGL2 Example"];
-    menuItem = [appMenu addItemWithTitle:@"Quit Dear ImGuiDetails OSX+OpenGL2 Example" action:@selector(terminate:) keyEquivalent:@"q"];
+    appMenu = [[NSMenu alloc] initWithTitle:@"Dear ImGui OSX+OpenGL2 Example"];
+    menuItem = [appMenu addItemWithTitle:@"Quit Dear ImGui OSX+OpenGL2 Example" action:@selector(terminate:) keyEquivalent:@"q"];
     [menuItem setKeyEquivalentModifierMask:NSEventModifierFlagCommand];
 
     menuItem = [[NSMenuItem alloc] init];
@@ -237,23 +237,23 @@
     if ([view openGLContext] == nil)
         NSLog(@"No OpenGL Context!");
 
-    // Setup Dear ImGuiDetails context
+    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 
-    // Setup Dear ImGuiDetails style
+    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGuiDetails::StyleColorsClassic();
+    //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
     ImGui_ImplOSX_Init();
     ImGui_ImplOpenGL2_Init();
 
     // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGuiDetails::PushFont()/PopFont() to select them.
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
     // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
     // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.

@@ -23,7 +23,7 @@ option(GLFW_DOCUMENT_INTERNALS "Include internals in documentation" OFF)
 add_subdirectory(${GLFW_DIR} binary_dir EXCLUDE_FROM_ALL)
 include_directories(${GLFW_DIR}/include)
 
-# Dear ImGuiDetails
+# Dear ImGui
 set(IMGUI_DIR ../..)
 include_directories(${IMGUI_DIR} ..)
 

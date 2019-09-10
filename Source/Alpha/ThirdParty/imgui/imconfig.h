@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
 // COMPILE-TIME OPTIONS FOR DEAR IMGUI
 // Runtime options (clipboard callbacks, enabling various features, etc.) can generally be set via the ImGuiIO structure.
-// You can use ImGuiDetails::SetAllocatorFunctions() before calling ImGuiDetails::CreateContext() to rewire memory allocation functions.
+// You can use ImGui::SetAllocatorFunctions() before calling ImGui::CreateContext() to rewire memory allocation functions.
 //-----------------------------------------------------------------------------
-// A) You may edit imconfig.h (and not overwrite it when updating Dear ImGuiDetails, or maintain a patch/branch with your modifications to imconfig.h)
+// A) You may edit imconfig.h (and not overwrite it when updating Dear ImGui, or maintain a patch/branch with your modifications to imconfig.h)
 // B) or add configuration directives in your own file and compile with #define IMGUI_USER_CONFIG "myfilename.h"
-// If you do so you need to make sure that configuration settings are defined consistently _everywhere_ Dear ImGuiDetails is used, which include
-// the imgui*.cpp files but also _any_ of your code that uses Dear ImGuiDetails. This is because some compile-time options have an affect on data structures.
+// If you do so you need to make sure that configuration settings are defined consistently _everywhere_ Dear ImGui is used, which include
+// the imgui*.cpp files but also _any_ of your code that uses Dear ImGui. This is because some compile-time options have an affect on data structures.
 // Defining those options in imconfig.h will ensure every compilation unit gets to see the same data structure layouts.
 // Call IMGUI_CHECKVERSION() from your .cpp files to verify that the data structures your files are using are matching the ones imgui.cpp is using.
 //-----------------------------------------------------------------------------
@@ -37,7 +37,7 @@
 //#define IMGUI_ENABLE_OSX_DEFAULT_CLIPBOARD_FUNCTIONS      // [OSX] Implement default OSX clipboard handler (need to link with '-framework ApplicationServices').
 //#define IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with vsnprintf.
 //#define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself. Declare your prototypes in imconfig.h.
-//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free() to avoid linking with them. You will need to call ImGuiDetails::SetAllocatorFunctions().
+//#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free() to avoid linking with them. You will need to call ImGui::SetAllocatorFunctions().
 
 //---- Include imgui_user.h at the end of imgui.h as a convenience
 //#define IMGUI_INCLUDE_IMGUI_USER_H
@@ -84,9 +84,9 @@
 // This adds a small runtime cost which is why it is not enabled by default.
 //#define IMGUI_DEBUG_TOOL_ITEM_PICKER_EX
 
-//---- Tip: You can add extra functions within the ImGuiDetails:: namespace, here or in your own headers files.
+//---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers files.
 /*
-namespace ImGuiDetails
+namespace ImGui
 {
     void MyFunction(const char* name, const MyMatrix44& v);
 }

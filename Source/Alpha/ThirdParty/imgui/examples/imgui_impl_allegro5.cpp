@@ -27,7 +27,7 @@
 //  2018-04-18: Misc: Renamed file from imgui_impl_a5.cpp to imgui_impl_allegro5.cpp.
 //  2018-04-18: Misc: Added support for 32-bits vertex indices to avoid conversion at runtime. Added imconfig_allegro5.h to enforce 32-bit indices when included from imgui.h.
 //  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_ImplAllegro5_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGuiDetails::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
 //  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
 
 #include <stdint.h>     // uint64_t
@@ -84,7 +84,7 @@ static void ImGui_ImplAllegro5_SetupRenderState(ImDrawData* draw_data)
 }
 
 // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGuiDetails::Render(), but you can now call this directly from your main loop)
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
 void ImGui_ImplAllegro5_RenderDrawData(ImDrawData* draw_data)
 {
     // Avoid rendering when minimized
@@ -124,7 +124,7 @@ void ImGui_ImplAllegro5_RenderDrawData(ImDrawData* draw_data)
         const int* indices = NULL;
         if (sizeof(ImDrawIdx) == 2)
         {
-            // FIXME-OPT: Unfortunately Allegro doesn't support 16-bit indices.. You can '#define ImDrawIdx int' in imconfig.h to request Dear ImGuiDetails to output 32-bit indices.
+            // FIXME-OPT: Unfortunately Allegro doesn't support 16-bit indices.. You can '#define ImDrawIdx int' in imconfig.h to request Dear ImGui to output 32-bit indices.
             // Otherwise, we convert them from 16-bit to 32-bit at runtime here, which works perfectly but is a little wasteful.
             static ImVector<int> indices_converted;
             indices_converted.resize(cmd_list->IdxBuffer.Size);

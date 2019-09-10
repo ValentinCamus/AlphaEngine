@@ -1,7 +1,7 @@
 // dear imgui, v1.73 WIP
 // (internal structures/api)
 
-// You may use this file to debug, understand or extend ImGuiDetails features but we don't provide any guarantee of forward compatibility!
+// You may use this file to debug, understand or extend ImGui features but we don't provide any guarantee of forward compatibility!
 // Set:
 //   #define IMGUI_DEFINE_MATH_OPERATORS
 // To implement maths operators for ImVec2 (disabled by default to not collide with using IM_VEC2_CLASS_EXTRA along with your own math types+operators)
@@ -70,7 +70,7 @@ struct ImDrawListSharedData;        // Data shared between all ImDrawList instan
 struct ImGuiColorMod;               // Stacked color modifier, backup of modified data so we can restore it
 struct ImGuiColumnData;             // Storage data for a single column
 struct ImGuiColumns;                // Storage data for a columns set
-struct ImGuiContext;                // Main Dear ImGuiDetails context
+struct ImGuiContext;                // Main Dear ImGui context
 struct ImGuiDataTypeInfo;           // Type information associated to a ImGuiDataType enum
 struct ImGuiDockContext;            // Docking system context
 struct ImGuiDockNode;               // Docking system node (hold a list of Windows OR two child dock nodes)
@@ -134,7 +134,7 @@ namespace ImStb
 extern IMGUI_API ImGuiContext* GImGui;  // Current implicit context pointer
 #endif
 
-// Internal Drag and Drop payload types. String starting with '_' are reserved for Dear ImGuiDetails.
+// Internal Drag and Drop payload types. String starting with '_' are reserved for Dear ImGui.
 #define IMGUI_PAYLOAD_TYPE_WINDOW       "_IMWINDOW"     // Payload == ImGuiWindow*
 
 //-----------------------------------------------------------------------------
@@ -1664,8 +1664,8 @@ namespace ImGui
 {
     // We should always have a CurrentWindow in the stack (there is an implicit "Debug" window)
     // If this ever crash because g.CurrentWindow is NULL it means that either
-    // - ImGuiDetails::NewFrame() has never been called, which is illegal.
-    // - You are calling ImGuiDetails functions after ImGuiDetails::EndFrame()/ImGuiDetails::Render() and before the next ImGuiDetails::NewFrame(), which is also illegal.
+    // - ImGui::NewFrame() has never been called, which is illegal.
+    // - You are calling ImGui functions after ImGui::EndFrame()/ImGui::Render() and before the next ImGui::NewFrame(), which is also illegal.
     inline    ImGuiWindow*  GetCurrentWindowRead()      { ImGuiContext& g = *GImGui; return g.CurrentWindow; }
     inline    ImGuiWindow*  GetCurrentWindow()          { ImGuiContext& g = *GImGui; g.CurrentWindow->WriteAccessed = true; return g.CurrentWindow; }
     IMGUI_API ImGuiWindow*  FindWindowByID(ImGuiID id);
@@ -1874,7 +1874,7 @@ namespace ImGui
     IMGUI_API const char*   FindRenderedTextEnd(const char* text, const char* text_end = NULL); // Find the optional ## from which we stop displaying text.
     IMGUI_API void          LogRenderedText(const ImVec2* ref_pos, const char* text, const char* text_end = NULL);
 
-    // Render helpers (those functions don't access any ImGuiDetails state!)
+    // Render helpers (those functions don't access any ImGui state!)
     IMGUI_API void          RenderArrow(ImDrawList* draw_list, ImVec2 pos, ImU32 col, ImGuiDir dir, float scale = 1.0f);
     IMGUI_API void          RenderBullet(ImDrawList* draw_list, ImVec2 pos, ImU32 col);
     IMGUI_API void          RenderArrowPointingAt(ImDrawList* draw_list, ImVec2 pos, ImVec2 half_sz, ImGuiDir direction, ImU32 col);
@@ -1943,7 +1943,7 @@ namespace ImGui
     // Debug Tools
     inline void             DebugStartItemPicker() { GImGui->DebugItemPickerActive = true; }
 
-} // namespace ImGuiDetails
+} // namespace ImGui
 
 // ImFontAtlas internals
 IMGUI_API bool              ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas);

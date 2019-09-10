@@ -1,5 +1,5 @@
-// ImGuiDetails - standalone example application for GLFW + Metal, using programmable pipeline
-// If you are new to ImGuiDetails, see examples/README.txt and documentation at the top of imgui.cpp.
+// ImGui - standalone example application for GLFW + Metal, using programmable pipeline
+// If you are new to ImGui, see examples/README.txt and documentation at the top of imgui.cpp.
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -22,7 +22,7 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int, char**)
 {
-    // Setup Dear ImGuiDetails binding
+    // Setup Dear ImGui binding
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -31,10 +31,10 @@ int main(int, char**)
 
     // Setup style
     ImGui::StyleColorsDark();
-    //ImGuiDetails::StyleColorsClassic();
+    //ImGui::StyleColorsClassic();
 
     // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGuiDetails::PushFont()/PopFont() to select them.
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
     // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
     // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
@@ -55,7 +55,7 @@ int main(int, char**)
 
     // Create window with graphics context
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGuiDetails GLFW+Metal example", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+Metal example", NULL, NULL);
     if (window == NULL)
         return 1;
 
@@ -100,14 +100,14 @@ int main(int, char**)
         renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
         renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
         id <MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
-        [renderEncoder pushDebugGroup:@"ImGuiDetails demo"];
+        [renderEncoder pushDebugGroup:@"ImGui demo"];
 
-        // Start the Dear ImGuiDetails frame
+        // Start the Dear ImGui frame
         ImGui_ImplMetal_NewFrame(renderPassDescriptor);
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGuiDetails::ShowDemoWindow()! You can browse its code to learn more about Dear ImGuiDetails!).
+        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 

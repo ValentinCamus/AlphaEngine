@@ -4,7 +4,7 @@
 
 // Implemented features:
 //  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
-//  [X] Platform: OSX clipboard is supported within core Dear ImGuiDetails (no specific code in this back-end).
+//  [X] Platform: OSX clipboard is supported within core Dear ImGui (no specific code in this back-end).
 // Issues:
 //  [ ] Platform: Keys are all generally very broken. Best using [event keycode] and not [event characters]..
 //  [ ] Platform: Multi-viewport / platform windows.

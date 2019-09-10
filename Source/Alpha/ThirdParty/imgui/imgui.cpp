@@ -1,8 +1,8 @@
 // dear imgui, v1.73 WIP
 // (main code and documentation)
 
-// Call and read ImGuiDetails::ShowDemoWindow() in imgui_demo.cpp for demo code.
-// Newcomers, read 'Programmer guide' below for notes on how to setup Dear ImGuiDetails in your codebase.
+// Call and read ImGui::ShowDemoWindow() in imgui_demo.cpp for demo code.
+// Newcomers, read 'Programmer guide' below for notes on how to setup Dear ImGui in your codebase.
 // Get latest version at https://github.com/ocornut/imgui
 // Releases change-log at https://github.com/ocornut/imgui/releases
 // Technical Support for Getting Started https://discourse.dearimgui.org/c/getting-started
@@ -15,7 +15,7 @@
 // Individuals: you can support continued maintenance and development via donations or Patreon https://www.patreon.com/imgui.
 
 // It is recommended that you don't modify imgui.cpp! It will become difficult for you to update the library.
-// Note that 'ImGuiDetails::' being a namespace, you can add functions into the namespace from your own source files, without
+// Note that 'ImGui::' being a namespace, you can add functions into the namespace from your own source files, without
 // modifying imgui.h or imgui.cpp. You may include imgui_internal.h to access internal data structures, but it doesn't
 // come with any guarantee of forward compatibility. Discussing your changes on the GitHub Issue Tracker may lead you
 // to a better solution or official support for them.
@@ -30,8 +30,8 @@ DOCUMENTATION
 - END-USER GUIDE
 - PROGRAMMER GUIDE (read me!)
   - Read first.
-  - How to update to a newer version of Dear ImGuiDetails.
-  - Getting started with integrating Dear ImGuiDetails in your code/engine.
+  - How to update to a newer version of Dear ImGui.
+  - Getting started with integrating Dear ImGui in your code/engine.
   - This is how a simple application may look like (2 variations).
   - This is how a simple rendering function may look like.
   - Using gamepad/keyboard navigation controls.
@@ -39,8 +39,8 @@ DOCUMENTATION
 - FREQUENTLY ASKED QUESTIONS (FAQ), TIPS
   - Where is the documentation?
   - Which version should I get?
-  - Who uses Dear ImGuiDetails?
-  - Why the odd dual naming, "Dear ImGuiDetails" vs "ImGuiDetails"?
+  - Who uses Dear ImGui?
+  - Why the odd dual naming, "Dear ImGui" vs "ImGui"?
   - How can I tell whether to dispatch mouse/keyboard to imgui or to my application?
   - How can I display an image? What is ImTextureID, how does it works?
   - Why are multiple widgets reacting when I interact with a single one? How can I have
@@ -51,10 +51,10 @@ DOCUMENTATION
   - How can I load multiple fonts?
   - How can I display and input non-latin characters such as Chinese, Japanese, Korean, Cyrillic?
   - How can I interact with standard C++ types (such as std::string and std::vector)?
-  - How can I use the drawing facilities without a Dear ImGuiDetails window? (using ImDrawList API)
-  - How can I use Dear ImGuiDetails on a platform that doesn't have a mouse or a keyboard? (input share, remoting, gamepad)
-  - I integrated Dear ImGuiDetails in my engine and the text or lines are blurry..
-  - I integrated Dear ImGuiDetails in my engine and some elements are clipping or disappearing when I move windows around..
+  - How can I use the drawing facilities without a Dear ImGui window? (using ImDrawList API)
+  - How can I use Dear ImGui on a platform that doesn't have a mouse or a keyboard? (input share, remoting, gamepad)
+  - I integrated Dear ImGui in my engine and the text or lines are blurry..
+  - I integrated Dear ImGui in my engine and some elements are clipping or disappearing when I move windows around..
   - How can I help?
 
 CODE
@@ -114,7 +114,7 @@ CODE
  ==============
 
  - Double-click on title bar to collapse window.
- - Click upper right corner to close a window, available when 'bool* p_open' is passed to ImGuiDetails::Begin().
+ - Click upper right corner to close a window, available when 'bool* p_open' is passed to ImGui::Begin().
  - Click and drag on lower right corner to resize window (double-click to auto fit window to its contents).
  - Click and drag on any empty space to move window.
  - TAB/SHIFT+TAB to cycle through keyboard editable fields.
@@ -142,18 +142,18 @@ CODE
  - Read the FAQ below this section!
  - Your code creates the UI, if your code doesn't run the UI is gone! The UI can be highly dynamic, there are no construction
    or destruction steps, less superfluous data retention on your side, less state duplication, less state synchronization, less bugs.
- - Call and read ImGuiDetails::ShowDemoWindow() for demo code demonstrating most features.
+ - Call and read ImGui::ShowDemoWindow() for demo code demonstrating most features.
  - The library is designed to be built from sources. Avoid pre-compiled binaries and packaged versions. See imconfig.h to configure your build.
- - Dear ImGuiDetails is an implementation of the IMGUI paradigm (immediate-mode graphical user interface, a term coined by Casey Muratori).
+ - Dear ImGui is an implementation of the IMGUI paradigm (immediate-mode graphical user interface, a term coined by Casey Muratori).
    You can learn about IMGUI principles at http://www.johno.se/book/imgui.html, http://mollyrocket.com/861 & more links docs/README.md.
- - Dear ImGuiDetails is a "single pass" rasterizing implementation of the IMGUI paradigm, aimed at ease of use and high-performances.
+ - Dear ImGui is a "single pass" rasterizing implementation of the IMGUI paradigm, aimed at ease of use and high-performances.
    For every application frame your UI code will be called only once. This is in contrast to e.g. Unity's own implementation of an IMGUI,
    where the UI code is called multiple times ("multiple passes") from a single entry point. There are pros and cons to both approaches.
  - Our origin are on the top-left. In axis aligned bounding boxes, Min = top-left, Max = bottom-right.
  - This codebase is also optimized to yield decent performances with typical "Debug" builds settings.
  - Please make sure you have asserts enabled (IM_ASSERT redirects to assert() by default, but can be redirected).
    If you get an assert, read the messages and comments around the assert.
- - C++: this is a very C-ish codebase: we don't rely on C++11, we don't include any C++ headers, and ImGuiDetails:: is a namespace.
+ - C++: this is a very C-ish codebase: we don't rely on C++11, we don't include any C++ headers, and ImGui:: is a namespace.
  - C++: ImVec2/ImVec4 do not expose math operators by default, because it is expected that you use your own math types.
    See FAQ "How can I use my own math types instead of ImVec2/ImVec4?" for details about setting up imconfig.h for that.
    However, imgui_internal.h can optionally export math operators for ImVec2/ImVec4, which we use in this codebase.
@@ -172,13 +172,13 @@ CODE
  GETTING STARTED WITH INTEGRATING DEAR IMGUI IN YOUR CODE/ENGINE:
 
  - Run and study the examples and demo in imgui_demo.cpp to get acquainted with the library.
- - Add the Dear ImGuiDetails source files to your projects or using your preferred build system.
+ - Add the Dear ImGui source files to your projects or using your preferred build system.
    It is recommended you build and statically link the .cpp files as part of your project and not as shared library (DLL).
- - You can later customize the imconfig.h file to tweak some compile-time behavior, such as integrating Dear ImGuiDetails types with your own maths types.
- - When using Dear ImGuiDetails, your programming IDE is your friend: follow the declaration of variables, functions and types to find comments about them.
- - Dear ImGuiDetails never touches or knows about your GPU state. The only function that knows about GPU is the draw function that you provide.
+ - You can later customize the imconfig.h file to tweak some compile-time behavior, such as integrating Dear ImGui types with your own maths types.
+ - When using Dear ImGui, your programming IDE is your friend: follow the declaration of variables, functions and types to find comments about them.
+ - Dear ImGui never touches or knows about your GPU state. The only function that knows about GPU is the draw function that you provide.
    Effectively it means you can create widgets at any time in your code, regardless of considerations of being in "update" vs "render"
-   phases of your own application. All rendering information are stored into command-lists that you will retrieve after calling ImGuiDetails::Render().
+   phases of your own application. All rendering information are stored into command-lists that you will retrieve after calling ImGui::Render().
  - Refer to the bindings and demo applications in the examples/ folder for instruction on how to setup your code.
  - If you are running over a standard OS with a common graphics API, you should be able to use unmodified imgui_impl_*** files from the examples/ folder.
 
@@ -186,8 +186,8 @@ CODE
  EXHIBIT 1: USING THE EXAMPLE BINDINGS (imgui_impl_XXX.cpp files from the examples/ folder).
 
      // Application init: create a dear imgui context, setup some options, load fonts
-     ImGuiDetails::CreateContext();
-     ImGuiIO& io = ImGuiDetails::GetIO();
+     ImGui::CreateContext();
+     ImGuiIO& io = ImGui::GetIO();
      // TODO: Set optional io.ConfigFlags values, e.g. 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard' to enable keyboard controls.
      // TODO: Fill optional fields of the io structure later.
      // TODO: Load TTF/OTF fonts if you don't want to use the default font.
@@ -202,28 +202,28 @@ CODE
          // Feed inputs to dear imgui, start new frame
          ImGui_ImplDX11_NewFrame();
          ImGui_ImplWin32_NewFrame();
-         ImGuiDetails::NewFrame();
+         ImGui::NewFrame();
 
          // Any application code here
-         ImGuiDetails::Text("Hello, world!");
+         ImGui::Text("Hello, world!");
 
          // Render dear imgui into screen
-         ImGuiDetails::Render();
-         ImGui_ImplDX11_RenderDrawData(ImGuiDetails::GetDrawData());
+         ImGui::Render();
+         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
          g_pSwapChain->Present(1, 0);
      }
 
      // Shutdown
      ImGui_ImplDX11_Shutdown();
      ImGui_ImplWin32_Shutdown();
-     ImGuiDetails::DestroyContext();
+     ImGui::DestroyContext();
 
  HOW A SIMPLE APPLICATION MAY LOOK LIKE:
  EXHIBIT 2: IMPLEMENTING CUSTOM BINDING / CUSTOM ENGINE.
 
      // Application init: create a dear imgui context, setup some options, load fonts
-     ImGuiDetails::CreateContext();
-     ImGuiIO& io = ImGuiDetails::GetIO();
+     ImGui::CreateContext();
+     ImGuiIO& io = ImGui::GetIO();
      // TODO: Set optional io.ConfigFlags values, e.g. 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard' to enable keyboard controls.
      // TODO: Fill optional fields of the io structure later.
      // TODO: Load TTF/OTF fonts if you don't want to use the default font.
@@ -252,26 +252,26 @@ CODE
         io.MouseDown[0] = my_mouse_buttons[0];  // set the mouse button states
         io.MouseDown[1] = my_mouse_buttons[1];
 
-        // Call NewFrame(), after this point you can use ImGuiDetails::* functions anytime
-        // (So you want to try calling NewFrame() as early as you can in your mainloop to be able to use Dear ImGuiDetails everywhere)
-        ImGuiDetails::NewFrame();
+        // Call NewFrame(), after this point you can use ImGui::* functions anytime
+        // (So you want to try calling NewFrame() as early as you can in your mainloop to be able to use Dear ImGui everywhere)
+        ImGui::NewFrame();
 
         // Most of your application code here
-        ImGuiDetails::Text("Hello, world!");
-        MyGameUpdate(); // may use any Dear ImGuiDetails functions, e.g. ImGuiDetails::Begin("My window"); ImGuiDetails::Text("Hello, world!"); ImGuiDetails::End();
-        MyGameRender(); // may use any Dear ImGuiDetails functions as well!
+        ImGui::Text("Hello, world!");
+        MyGameUpdate(); // may use any Dear ImGui functions, e.g. ImGui::Begin("My window"); ImGui::Text("Hello, world!"); ImGui::End();
+        MyGameRender(); // may use any Dear ImGui functions as well!
 
         // Render dear imgui, swap buffers
-        // (You want to try calling EndFrame/Render as late as you can, to be able to use Dear ImGuiDetails in your own game rendering code)
-        ImGuiDetails::EndFrame();
-        ImGuiDetails::Render();
-        ImDrawData* draw_data = ImGuiDetails::GetDrawData();
+        // (You want to try calling EndFrame/Render as late as you can, to be able to use Dear ImGui in your own game rendering code)
+        ImGui::EndFrame();
+        ImGui::Render();
+        ImDrawData* draw_data = ImGui::GetDrawData();
         MyImGuiRenderFunction(draw_data);
         SwapBuffers();
      }
 
      // Shutdown
-     ImGuiDetails::DestroyContext();
+     ImGui::DestroyContext();
 
  HOW A SIMPLE RENDERING FUNCTION MAY LOOK LIKE:
 
@@ -284,8 +284,8 @@ CODE
        for (int n = 0; n < draw_data->CmdListsCount; n++)
        {
           const ImDrawList* cmd_list = draw_data->CmdLists[n];
-          const ImDrawVert* vtx_buffer = cmd_list->VtxBuffer.Data;  // vertex buffer generated by Dear ImGuiDetails
-          const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;   // index buffer generated by Dear ImGuiDetails
+          const ImDrawVert* vtx_buffer = cmd_list->VtxBuffer.Data;  // vertex buffer generated by Dear ImGui
+          const ImDrawIdx* idx_buffer = cmd_list->IdxBuffer.Data;   // index buffer generated by Dear ImGui
           for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
           {
              const ImDrawCmd* pcmd = &cmd_list->CmdBuffer[cmd_i];
@@ -296,7 +296,7 @@ CODE
              else
              {
                  // The texture for the draw call is specified by pcmd->TextureId.
-                 // The vast majority of draw calls will use the Dear ImGuiDetails texture atlas, which value you have set yourself during initialization.
+                 // The vast majority of draw calls will use the Dear ImGui texture atlas, which value you have set yourself during initialization.
                  MyEngineBindTexture((MyTexture*)pcmd->TextureId);
 
                  // We are using scissoring to clip some objects. All low-level graphics API should supports it.
@@ -321,8 +321,8 @@ CODE
 
  - The examples/ folders contains many actual implementation of the pseudo-codes above.
  - When calling NewFrame(), the 'io.WantCaptureMouse', 'io.WantCaptureKeyboard' and 'io.WantTextInput' flags are updated.
-   They tell you if Dear ImGuiDetails intends to use your inputs. When a flag is set you want to hide the corresponding inputs from the
-   rest of your application. In every cases you need to pass on the inputs to Dear ImGuiDetails. Refer to the FAQ for more information.
+   They tell you if Dear ImGui intends to use your inputs. When a flag is set you want to hide the corresponding inputs from the
+   rest of your application. In every cases you need to pass on the inputs to Dear ImGui. Refer to the FAQ for more information.
  - Please read the FAQ below!. Amusingly, it is called a FAQ because people frequently run into the same issues!
 
  USING GAMEPAD/KEYBOARD NAVIGATION CONTROLS
@@ -412,12 +412,12 @@ CODE
  - 2018/08/21 (1.63) - removed ImGuiInputTextCallbackData::ReadOnly since it is a duplication of (ImGuiInputTextCallbackData::Flags & ImGuiInputTextFlags_ReadOnly).
  - 2018/08/01 (1.63) - removed per-window ImGuiWindowFlags_ResizeFromAnySide beta flag in favor of a global io.ConfigResizeWindowsFromEdges [update 1.67 renamed to ConfigWindowsResizeFromEdges] to enable the feature.
  - 2018/08/01 (1.63) - renamed io.OptCursorBlink to io.ConfigCursorBlink [-> io.ConfigInputTextCursorBlink in 1.65], io.OptMacOSXBehaviors to ConfigMacOSXBehaviors for consistency.
- - 2018/07/22 (1.63) - changed ImGuiDetails::GetTime() return value from float to double to avoid accumulating floating point imprecisions over time.
+ - 2018/07/22 (1.63) - changed ImGui::GetTime() return value from float to double to avoid accumulating floating point imprecisions over time.
  - 2018/07/08 (1.63) - style: renamed ImGuiCol_ModalWindowDarkening to ImGuiCol_ModalWindowDimBg for consistency with other features. Kept redirection enum (will obsolete).
  - 2018/06/08 (1.62) - examples: the imgui_impl_xxx files have been split to separate platform (Win32, Glfw, SDL2, etc.) from renderer (DX11, OpenGL, Vulkan,  etc.).
                        old bindings will still work as is, however prefer using the separated bindings as they will be updated to support multi-viewports.
                        when adopting new bindings follow the main.cpp code of your preferred examples/ folder to know which functions to call.
-                       in particular, note that old bindings called ImGuiDetails::NewFrame() at the end of their ImGui_ImplXXXX_NewFrame() function.
+                       in particular, note that old bindings called ImGui::NewFrame() at the end of their ImGui_ImplXXXX_NewFrame() function.
  - 2018/06/06 (1.62) - renamed GetGlyphRangesChinese() to GetGlyphRangesChineseFull() to distinguish other variants and discourage using the full set.
  - 2018/06/06 (1.62) - TreeNodeEx()/TreeNodeBehavior(): the ImGuiTreeNodeFlags_CollapsingHeader helper now include the ImGuiTreeNodeFlags_NoTreePushOnOpen flag. See Changelog for details.
  - 2018/05/03 (1.61) - DragInt(): the default compile-time format string has been changed from "%.0f" to "%d", as we are not using integers internally any more.
@@ -432,9 +432,9 @@ CODE
  - 2018/03/08 (1.60) - changed ImFont::DisplayOffset.y to default to 0 instead of +1. Fixed rounding of Ascent/Descent to match TrueType renderer. If you were adding or subtracting to ImFont::DisplayOffset check if your fonts are correctly aligned vertically.
  - 2018/03/03 (1.60) - renamed ImGuiStyleVar_Count_ to ImGuiStyleVar_COUNT and ImGuiMouseCursor_Count_ to ImGuiMouseCursor_COUNT for consistency with other public enums.
  - 2018/02/18 (1.60) - BeginDragDropSource(): temporarily removed the optional mouse_button=0 parameter because it is not really usable in many situations at the moment.
- - 2018/02/16 (1.60) - obsoleted the io.RenderDrawListsFn callback, you can call your graphics engine render function after ImGuiDetails::Render(). Use ImGuiDetails::GetDrawData() to retrieve the ImDrawData* to display.
+ - 2018/02/16 (1.60) - obsoleted the io.RenderDrawListsFn callback, you can call your graphics engine render function after ImGui::Render(). Use ImGui::GetDrawData() to retrieve the ImDrawData* to display.
  - 2018/02/07 (1.60) - reorganized context handling to be more explicit,
-                       - YOU NOW NEED TO CALL ImGuiDetails::CreateContext() AT THE BEGINNING OF YOUR APP, AND CALL ImGuiDetails::DestroyContext() AT THE END.
+                       - YOU NOW NEED TO CALL ImGui::CreateContext() AT THE BEGINNING OF YOUR APP, AND CALL ImGui::DestroyContext() AT THE END.
                        - removed Shutdown() function, as DestroyContext() serve this purpose.
                        - you may pass a ImFontAtlas* pointer to CreateContext() to share a font atlas between contexts. Otherwise CreateContext() will create its own font atlas instance.
                        - removed allocator parameters from CreateContext(), they are now setup with SetAllocatorFunctions(), and shared by all contexts.
@@ -454,7 +454,7 @@ CODE
  - 2017/12/12 (1.53) - renamed ImGuiTreeNodeFlags_AllowOverlapMode to ImGuiTreeNodeFlags_AllowItemOverlap. Kept redirection enum (will obsolete).
  - 2017/12/10 (1.53) - removed SetNextWindowContentWidth(), prefer using SetNextWindowContentSize(). Kept redirection function (will obsolete).
  - 2017/11/27 (1.53) - renamed ImGuiTextBuffer::append() helper to appendf(), appendv() to appendfv(). If you copied the 'Log' demo in your code, it uses appendv() so that needs to be renamed.
- - 2017/11/18 (1.53) - Style, Begin: removed ImGuiWindowFlags_ShowBorders window flag. Borders are now fully set up in the ImGuiStyle structure (see e.g. style.FrameBorderSize, style.WindowBorderSize). Use ImGuiDetails::ShowStyleEditor() to look them up.
+ - 2017/11/18 (1.53) - Style, Begin: removed ImGuiWindowFlags_ShowBorders window flag. Borders are now fully set up in the ImGuiStyle structure (see e.g. style.FrameBorderSize, style.WindowBorderSize). Use ImGui::ShowStyleEditor() to look them up.
                        Please note that the style system will keep evolving (hopefully stabilizing in Q1 2018), and so custom styles will probably subtly break over time. It is recommended you use the StyleColorsClassic(), StyleColorsDark(), StyleColorsLight() functions.
  - 2017/11/18 (1.53) - Style: removed ImGuiCol_ComboBg in favor of combo boxes using ImGuiCol_PopupBg for consistency.
  - 2017/11/18 (1.53) - Style: renamed ImGuiCol_ChildWindowBg to ImGuiCol_ChildBg.
@@ -505,7 +505,7 @@ CODE
  - 2016/05/07 (1.49) - removed confusing set of GetInternalState(), GetInternalStateSize(), SetInternalState() functions. Now using CreateContext(), DestroyContext(), GetCurrentContext(), SetCurrentContext().
  - 2016/05/02 (1.49) - renamed SetNextTreeNodeOpened() to SetNextTreeNodeOpen(), no redirection.
  - 2016/05/01 (1.49) - obsoleted old signature of CollapsingHeader(const char* label, const char* str_id = NULL, bool display_frame = true, bool default_open = false) as extra parameters were badly designed and rarely used. You can replace the "default_open = true" flag in new API with CollapsingHeader(label, ImGuiTreeNodeFlags_DefaultOpen).
- - 2016/04/26 (1.49) - changed ImDrawList::PushClipRect(ImVec4 rect) to ImDrawList::PushClipRect(Imvec2 min,ImVec2 max,bool intersect_with_current_clip_rect=false). Note that higher-level ImGuiDetails::PushClipRect() is preferable because it will clip at logic/widget level, whereas ImDrawList::PushClipRect() only affect your renderer.
+ - 2016/04/26 (1.49) - changed ImDrawList::PushClipRect(ImVec4 rect) to ImDrawList::PushClipRect(Imvec2 min,ImVec2 max,bool intersect_with_current_clip_rect=false). Note that higher-level ImGui::PushClipRect() is preferable because it will clip at logic/widget level, whereas ImDrawList::PushClipRect() only affect your renderer.
  - 2016/04/03 (1.48) - removed style.WindowFillAlphaDefault setting which was redundant. Bake default BG alpha inside style.Colors[ImGuiCol_WindowBg] and all other Bg color values. (ref github issue #337).
  - 2016/04/03 (1.48) - renamed ImGuiCol_TooltipBg to ImGuiCol_PopupBg, used by popups/menus and tooltips. popups/menus were previously using ImGuiCol_WindowBg. (ref github issue #337)
  - 2016/03/21 (1.48) - renamed GetWindowFont() to GetFont(), GetWindowFontSize() to GetFontSize(). Kept inline redirection function (will obsolete).
@@ -541,7 +541,7 @@ CODE
  - 2015/05/31 (1.40) - renamed GetWindowCollapsed() to IsWindowCollapsed() for consistency. Kept inline redirection function (will obsolete).
  - 2015/05/31 (1.40) - renamed IsRectClipped() to IsRectVisible() for consistency. Note that return value is opposite! Kept inline redirection function (will obsolete).
  - 2015/05/27 (1.40) - removed the third 'repeat_if_held' parameter from Button() - sorry! it was rarely used and inconsistent. Use PushButtonRepeat(true) / PopButtonRepeat() to enable repeat on desired buttons.
- - 2015/05/11 (1.40) - changed BeginPopup() API, takes a string identifier instead of a bool. ImGuiDetails needs to manage the open/closed state of popups. Call OpenPopup() to actually set the "open" state of a popup. BeginPopup() returns true if the popup is opened.
+ - 2015/05/11 (1.40) - changed BeginPopup() API, takes a string identifier instead of a bool. ImGui needs to manage the open/closed state of popups. Call OpenPopup() to actually set the "open" state of a popup. BeginPopup() returns true if the popup is opened.
  - 2015/05/03 (1.40) - removed style.AutoFitPadding, using style.WindowPadding makes more sense (the default values were already the same).
  - 2015/04/13 (1.38) - renamed IsClipped() to IsRectClipped(). Kept inline redirection function until 1.50.
  - 2015/04/09 (1.38) - renamed ImDrawList::AddArc() to ImDrawList::AddArcFast() for compatibility with future API
@@ -560,13 +560,13 @@ CODE
  - 2015/01/19 (1.30) - renamed ImGuiStorage::GetIntPtr()/GetFloatPtr() to GetIntRef()/GetIntRef() because Ptr was conflicting with actual pointer storage functions.
  - 2015/01/11 (1.30) - big font/image API change! now loads TTF file. allow for multiple fonts. no need for a PNG loader.
               (1.30) - removed GetDefaultFontData(). uses io.Fonts->GetTextureData*() API to retrieve uncompressed pixels.
-                       font init:  { const void* png_data; unsigned int png_size; ImGuiDetails::GetDefaultFontData(NULL, NULL, &png_data, &png_size); <..Upload texture to GPU..>; }
+                       font init:  { const void* png_data; unsigned int png_size; ImGui::GetDefaultFontData(NULL, NULL, &png_data, &png_size); <..Upload texture to GPU..>; }
                        became:     { unsigned char* pixels; int width, height; io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height); <..Upload texture to GPU>; io.Fonts->TexId = YourTextureIdentifier; }
                        you now have more flexibility to load multiple TTF fonts and manage the texture buffer for internal needs.
                        it is now recommended that you sample the font texture with bilinear interpolation.
               (1.30) - added texture identifier in ImDrawCmd passed to your render function (we can now render images). make sure to set io.Fonts->TexID.
               (1.30) - removed IO.PixelCenterOffset (unnecessary, can be handled in user projection matrix)
-              (1.30) - removed ImGuiDetails::IsItemFocused() in favor of ImGuiDetails::IsItemActive() which handles all widgets
+              (1.30) - removed ImGui::IsItemFocused() in favor of ImGui::IsItemActive() which handles all widgets
  - 2014/12/10 (1.18) - removed SetNewWindowDefaultPos() in favor of new generic API SetNextWindowPos(pos, ImGuiSetCondition_FirstUseEver)
  - 2014/11/28 (1.17) - moved IO.Font*** options to inside the IO.Font-> structure (FontYOffset, FontTexUvForWhite, FontBaseScale, FontFallbackGlyph)
  - 2014/11/26 (1.17) - reworked syntax of IMGUI_ONCE_UPON_A_FRAME helper macro to increase compiler compatibility
@@ -586,11 +586,11 @@ CODE
  Q: Where is the documentation?
  A: This library is poorly documented at the moment and expects of the user to be acquainted with C/C++.
     - Run the examples/ and explore them.
-    - See demo code in imgui_demo.cpp and particularly the ImGuiDetails::ShowDemoWindow() function.
-    - The demo covers most features of Dear ImGuiDetails, so you can read the code and see its output.
+    - See demo code in imgui_demo.cpp and particularly the ImGui::ShowDemoWindow() function.
+    - The demo covers most features of Dear ImGui, so you can read the code and see its output.
     - See documentation and comments at the top of imgui.cpp + effectively imgui.h.
     - Dozens of standalone example applications using e.g. OpenGL/DirectX are provided in the examples/ 
-      folder to explain how to integrate Dear ImGuiDetails with your own engine/application.
+      folder to explain how to integrate Dear ImGui with your own engine/application.
     - Your programming IDE is your friend, find the type or function declaration to find comments 
       associated to it.
 
@@ -602,22 +602,22 @@ CODE
     - Multi-viewport features (https://github.com/ocornut/imgui/issues/1542)
     Many projects are using this branch and it is kept in sync with master regularly.
 
- Q: Who uses Dear ImGuiDetails?
+ Q: Who uses Dear ImGui?
  A: See "Quotes" (https://github.com/ocornut/imgui/wiki/Quotes) and
-    "Software using Dear ImGuiDetails" (https://github.com/ocornut/imgui/wiki/Software-using-dear-imgui) Wiki pages
+    "Software using Dear ImGui" (https://github.com/ocornut/imgui/wiki/Software-using-dear-imgui) Wiki pages
     for a list of games/software which are publicly known to use dear imgui. Please add yours if you can!
 
- Q: Why the odd dual naming, "Dear ImGuiDetails" vs "ImGuiDetails"?
- A: The library started its life as "ImGuiDetails" due to the fact that I didn't give it a proper name when
+ Q: Why the odd dual naming, "Dear ImGui" vs "ImGui"?
+ A: The library started its life as "ImGui" due to the fact that I didn't give it a proper name when
     when I released 1.0, and had no particular expectation that it would take off. However, the term IMGUI 
     (immediate-mode graphical user interface) was coined before and is being used in variety of other 
     situations (e.g. Unity uses it own implementation of the IMGUI paradigm). 
     To reduce the ambiguity without affecting existing code bases, I have decided on an alternate, 
-    longer name "Dear ImGuiDetails" that people can use to refer to this specific library.
-    Please try to refer to this library as "Dear ImGuiDetails".
+    longer name "Dear ImGui" that people can use to refer to this specific library.
+    Please try to refer to this library as "Dear ImGui".
 
- Q: How can I tell whether to dispatch mouse/keyboard to Dear ImGuiDetails or to my application?
- A: You can read the 'io.WantCaptureMouse', 'io.WantCaptureKeyboard' and 'io.WantTextInput' flags from the ImGuiIO structure (e.g. if (ImGuiDetails::GetIO().WantCaptureMouse) { ... } )
+ Q: How can I tell whether to dispatch mouse/keyboard to Dear ImGui or to my application?
+ A: You can read the 'io.WantCaptureMouse', 'io.WantCaptureKeyboard' and 'io.WantTextInput' flags from the ImGuiIO structure (e.g. if (ImGui::GetIO().WantCaptureMouse) { ... } )
     - When 'io.WantCaptureMouse' is set, imgui wants to use your mouse state, and you may want to discard/hide the inputs from the rest of your application.
     - When 'io.WantCaptureKeyboard' is set, imgui wants to use your keyboard state, and you may want to discard/hide the inputs from the rest of your application.
     - When 'io.WantTextInput' is set to may want to notify your OS to popup an on-screen keyboard, if available (e.g. on a mobile phone, or console OS).
@@ -625,27 +625,27 @@ CODE
      This is because imgui needs to detect that you clicked in the void to unfocus its own windows.
     Note: The 'io.WantCaptureMouse' is more accurate that any attempt to "check if the mouse is hovering a window" (don't do that!).
      It handle mouse dragging correctly (both dragging that started over your application or over an imgui window) and handle e.g. modal windows blocking inputs.
-     Those flags are updated by ImGuiDetails::NewFrame(). Preferably read the flags after calling NewFrame() if you can afford it, but reading them before is also
+     Those flags are updated by ImGui::NewFrame(). Preferably read the flags after calling NewFrame() if you can afford it, but reading them before is also
      perfectly fine, as the bool toggle fairly rarely. If you have on a touch device, you might find use for an early call to UpdateHoveredWindowAndCaptureFlags().
     Note: Text input widget releases focus on "Return KeyDown", so the subsequent "Return KeyUp" event that your application receive will typically
      have 'io.WantCaptureKeyboard=false'. Depending on your application logic it may or not be inconvenient. You might want to track which key-downs
-     were targeted for Dear ImGuiDetails, e.g. with an array of bool, and filter out the corresponding key-ups.)
+     were targeted for Dear ImGui, e.g. with an array of bool, and filter out the corresponding key-ups.)
 
  Q: How can I display an image? What is ImTextureID, how does it works?
  A: Short explanation:
-    - You may use functions such as ImGuiDetails::Image(), ImGuiDetails::ImageButton() or lower-level ImDrawList::AddImage() to emit draw calls that will use your own textures.
+    - You may use functions such as ImGui::Image(), ImGui::ImageButton() or lower-level ImDrawList::AddImage() to emit draw calls that will use your own textures.
     - Actual textures are identified in a way that is up to the user/engine. Those identifiers are stored and passed as ImTextureID (void*) value.
-    - Loading image files from the disk and turning them into a texture is not within the scope of Dear ImGuiDetails (for a good reason).
+    - Loading image files from the disk and turning them into a texture is not within the scope of Dear ImGui (for a good reason).
       Please read documentations or tutorials on your graphics API to understand how to display textures on the screen before moving onward.
 
     Long explanation:
-    - Dear ImGuiDetails's job is to create "meshes", defined in a renderer-agnostic format made of draw commands and vertices.
+    - Dear ImGui's job is to create "meshes", defined in a renderer-agnostic format made of draw commands and vertices.
       At the end of the frame those meshes (ImDrawList) will be displayed by your rendering function. They are made up of textured polygons and the code
       to render them is generally fairly short (a few dozen lines). In the examples/ folder we provide functions for popular graphics API (OpenGL, DirectX, etc.).
     - Each rendering function decides on a data type to represent "textures". The concept of what is a "texture" is entirely tied to your underlying engine/graphics API.
       We carry the information to identify a "texture" in the ImTextureID type.
       ImTextureID is nothing more that a void*, aka 4/8 bytes worth of data: just enough to store 1 pointer or 1 integer of your choice.
-      Dear ImGuiDetails doesn't know or understand what you are storing in ImTextureID, it merely pass ImTextureID values until they reach your rendering function.
+      Dear ImGui doesn't know or understand what you are storing in ImTextureID, it merely pass ImTextureID values until they reach your rendering function.
     - In the examples/ bindings, for each graphics API binding we decided on a type that is likely to be a good representation for specifying
       an image from the end-user perspective. This is what the _examples_ rendering functions are using:
 
@@ -668,15 +668,15 @@ CODE
 
         // Cast our texture type to ImTextureID / void*
         MyTexture* texture = g_CoffeeTableTexture;
-        ImGuiDetails::Image((void*)texture, ImVec2(texture->Width, texture->Height));
+        ImGui::Image((void*)texture, ImVec2(texture->Width, texture->Height));
 
-    The renderer function called after ImGuiDetails::Render() will receive that same value that the user code passed:
+    The renderer function called after ImGui::Render() will receive that same value that the user code passed:
 
         // Cast ImTextureID / void* stored in the draw command as our texture type
         MyTexture* texture = (MyTexture*)pcmd->TextureId;
         MyEngineBindTexture2D(texture);
 
-    Once you understand this design you will understand that loading image files and turning them into displayable textures is not within the scope of Dear ImGuiDetails.
+    Once you understand this design you will understand that loading image files and turning them into displayable textures is not within the scope of Dear ImGui.
     This is by design and is actually a good thing, because it means your code has full control over your data types and how you display them.
     If you want to display an image file (e.g. PNG file) into the screen, please refer to documentation and tutorials for the graphics API you are using.
 
@@ -699,7 +699,7 @@ CODE
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
 
         // Now that we have an OpenGL texture, assuming our imgui rendering function (imgui_impl_xxx.cpp file) takes GLuint as ImTextureID, we can display it:
-        ImGuiDetails::Image((void*)(intptr_t)my_opengl_texture, ImVec2(my_image_width, my_image_height));
+        ImGui::Image((void*)(intptr_t)my_opengl_texture, ImVec2(my_image_width, my_image_height));
 
     C/C++ tip: a void* is pointer-sized storage. You may safely store any pointer or integer into it by casting your value to ImTextureID / void*, and vice-versa.
     Because both end-points (user code and rendering function) are under your control, you know exactly what is stored inside the ImTextureID / void*.
@@ -715,13 +715,13 @@ CODE
         my_void_ptr = (void*)my_dx11_srv;                       // cast a ID3D11ShaderResourceView* into an opaque void*
         my_dx11_srv = (ID3D11ShaderResourceView*)my_void_ptr;   // cast a void* into a ID3D11ShaderResourceView*
 
-    Finally, you may call ImGuiDetails::ShowMetricsWindow() to explore/visualize/understand how the ImDrawList are generated.
+    Finally, you may call ImGui::ShowMetricsWindow() to explore/visualize/understand how the ImDrawList are generated.
 
  Q: Why are multiple widgets reacting when I interact with a single one?
  Q: How can I have multiple widgets with the same label or with an empty label?
  A: A primer on labels and the ID Stack...
 
-    Dear ImGuiDetails internally need to uniquely identify UI elements.
+    Dear ImGui internally need to uniquely identify UI elements.
     Elements that are typically not clickable (such as calls to the Text functions) don't need an ID.
     Interactive widgets (such as calls to Button buttons) need a unique ID.
     Unique ID are used internally to track active widgets and occasionally associate state to widgets.
@@ -835,11 +835,11 @@ CODE
 
  Q: How can I use my own math types instead of ImVec2/ImVec4?
  A: You can edit imconfig.h and setup the IM_VEC2_CLASS_EXTRA/IM_VEC4_CLASS_EXTRA macros to add implicit type conversions.
-    This way you'll be able to use your own types everywhere, e.g. passing glm::vec2 to ImGuiDetails functions instead of ImVec2.
+    This way you'll be able to use your own types everywhere, e.g. passing glm::vec2 to ImGui functions instead of ImVec2.
 
  Q: How can I load a different font than the default?
  A: Use the font atlas to load the TTF/OTF file you want:
-      ImGuiIO& io = ImGuiDetails::GetIO();
+      ImGuiIO& io = ImGui::GetIO();
       io.Fonts->AddFontFromFileTTF("myfontfile.ttf", size_in_pixels);
       io.Fonts->GetTexDataAsRGBA32() or GetTexDataAsAlpha8()
     Default is ProggyClean.ttf, monospace, rendered at size 13, embedded in dear imgui's source code.
@@ -864,13 +864,13 @@ CODE
  A: Use the font atlas to pack them into a single texture:
     (Read the 'misc/fonts/README.txt' file and the code in ImFontAtlas for more details.)
 
-      ImGuiIO& io = ImGuiDetails::GetIO();
+      ImGuiIO& io = ImGui::GetIO();
       ImFont* font0 = io.Fonts->AddFontDefault();
       ImFont* font1 = io.Fonts->AddFontFromFileTTF("myfontfile.ttf", size_in_pixels);
       ImFont* font2 = io.Fonts->AddFontFromFileTTF("myfontfile2.ttf", size_in_pixels);
       io.Fonts->GetTexDataAsRGBA32() or GetTexDataAsAlpha8()
       // the first loaded font gets used by default
-      // use ImGuiDetails::PushFont()/ImGuiDetails::PopFont() to change the font at runtime
+      // use ImGui::PushFont()/ImGui::PopFont() to change the font at runtime
 
       // Options
       ImFontConfig config;
@@ -919,13 +919,13 @@ CODE
  A: - Being highly portable (bindings for several languages, frameworks, programming style, obscure or older platforms/compilers),
       and aiming for compatibility & performance suitable for every modern real-time game engines, dear imgui does not use
       any of std C++ types. We use raw types (e.g. char* instead of std::string) because they adapt to more use cases.
-    - To use ImGuiDetails::InputText() with a std::string or any resizable string class, see misc/cpp/imgui_stdlib.h.
+    - To use ImGui::InputText() with a std::string or any resizable string class, see misc/cpp/imgui_stdlib.h.
     - To use combo boxes and list boxes with std::vector or any other data structure: the BeginCombo()/EndCombo() API
       lets you iterate and submit items yourself, so does the ListBoxHeader()/ListBoxFooter() API.
       Prefer using them over the old and awkward Combo()/ListBox() api.
     - Generally for most high-level types you should be able to access the underlying data type.
-      You may write your own one-liner wrappers to facilitate user code (tip: add new functions in ImGuiDetails:: namespace from your code).
-    - Dear ImGuiDetails applications often need to make intensive use of strings. It is expected that many of the strings you will pass
+      You may write your own one-liner wrappers to facilitate user code (tip: add new functions in ImGui:: namespace from your code).
+    - Dear ImGui applications often need to make intensive use of strings. It is expected that many of the strings you will pass
       to the API are raw literals (free in C/C++) or allocated in a manner that won't incur a large cost on your application.
       Please bear in mind that using std::string on applications with large amount of UI may incur unsatisfactory performances.
       Modern implementations of std::string often include small-string optimization (which is often a local buffer) but those
@@ -937,17 +937,17 @@ CODE
       This is a small helper where you can instance strings with configurable local buffers length. Many game engines will
       provide similar or better string helpers.
 
- Q: How can I use the drawing facilities without an ImGuiDetails window? (using ImDrawList API)
+ Q: How can I use the drawing facilities without an ImGui window? (using ImDrawList API)
  A: - You can create a dummy window. Call Begin() with the NoBackground | NoDecoration | NoSavedSettings | NoInputs flags.
       (The ImGuiWindowFlags_NoDecoration flag itself is a shortcut for NoTitleBar | NoResize | NoScrollbar | NoCollapse)
       Then you can retrieve the ImDrawList* via GetWindowDrawList() and draw to it in any way you like.
-    - You can call ImGuiDetails::GetBackgroundDrawList() or ImGuiDetails::GetForegroundDrawList() and use those draw list to display
+    - You can call ImGui::GetBackgroundDrawList() or ImGui::GetForegroundDrawList() and use those draw list to display
       contents behind or over every other imgui windows (one bg/fg drawlist per viewport).
-    - You can create your own ImDrawList instance. You'll need to initialize them ImGuiDetails::GetDrawListSharedData(), or create
+    - You can create your own ImDrawList instance. You'll need to initialize them ImGui::GetDrawListSharedData(), or create
       your own ImDrawListSharedData, and then call your rendered code with your own ImDrawList or ImDrawData data.
 
  Q: How can I use this without a mouse, without a keyboard or without a screen? (gamepad, input share, remote display)
- A: - You can control Dear ImGuiDetails with a gamepad. Read about navigation in "Using gamepad/keyboard navigation controls".
+ A: - You can control Dear ImGui with a gamepad. Read about navigation in "Using gamepad/keyboard navigation controls".
       (short version: map gamepad inputs into the io.NavInputs[] array + set io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad)
     - You can share your computer mouse seamlessly with your console/tablet/phone using Synergy (https://symless.com/synergy)
       This is the preferred solution for developer productivity.
@@ -955,22 +955,22 @@ CODE
       and portable source code (uSynergy.c/.h) for a small embeddable client that you can use on any platform to connect
       to your host computer, based on the Synergy 1.x protocol. Make sure you download the Synergy 1 server on your computer.
       Console SDK also sometimes provide equivalent tooling or wrapper for Synergy-like protocols.
-    - You may also use a third party solution such as Remote ImGuiDetails (https://github.com/JordiRos/remoteimgui) which sends
-      the vertices to render over the local network, allowing you to use Dear ImGuiDetails even on a screen-less machine.
+    - You may also use a third party solution such as Remote ImGui (https://github.com/JordiRos/remoteimgui) which sends
+      the vertices to render over the local network, allowing you to use Dear ImGui even on a screen-less machine.
     - For touch inputs, you can increase the hit box of widgets (via the style.TouchPadding setting) to accommodate
       for the lack of precision of touch inputs, but it is recommended you use a mouse or gamepad to allow optimizing
       for screen real-estate and precision.
 
- Q: I integrated Dear ImGuiDetails in my engine and the text or lines are blurry..
+ Q: I integrated Dear ImGui in my engine and the text or lines are blurry..
  A: In your Render function, try translating your projection matrix by (0.5f,0.5f) or (0.375f,0.375f).
     Also make sure your orthographic projection matrix and io.DisplaySize matches your actual framebuffer dimension.
 
- Q: I integrated Dear ImGuiDetails in my engine and some elements are clipping or disappearing when I move windows around..
+ Q: I integrated Dear ImGui in my engine and some elements are clipping or disappearing when I move windows around..
  A: You are probably mishandling the clipping rectangles in your render function.
-    Rectangles provided by ImGuiDetails are defined as (x1=left,y1=top,x2=right,y2=bottom) and NOT as (x1,y1,width,height).
+    Rectangles provided by ImGui are defined as (x1=left,y1=top,x2=right,y2=bottom) and NOT as (x1,y1,width,height).
 
  Q: How can I help?
- A: - If you are experienced with Dear ImGuiDetails and C++, look at the github issues, look at the Wiki, read docs/TODO.txt
+ A: - If you are experienced with Dear ImGui and C++, look at the github issues, look at the Wiki, read docs/TODO.txt
       and see how you want to help and can help!
     - Businesses: convince your company to fund development via support contracts/sponsoring! This is among the most useful thing you can do for dear imgui.
     - Individuals: you can also become a Patron (http://www.patreon.com/imgui) or donate on PayPal! See README.
@@ -985,7 +985,7 @@ CODE
  - tip: the ImGuiOnceUponAFrame helper will allow run the block of code only once a frame. You can use it to quickly add custom UI in the middle
         of a deep nested inner loop in your code.
  - tip: you can call Render() multiple times (e.g for VR renders).
- - tip: call and read the ShowDemoWindow() code in imgui_demo.cpp for more example of how to use ImGuiDetails!
+ - tip: call and read the ShowDemoWindow() code in imgui_demo.cpp for more example of how to use ImGui!
 
 */
 
@@ -1024,7 +1024,7 @@ CODE
 #pragma clang diagnostic ignored "-Wold-style-cast"         // warning : use of old-style cast                              // yes, they are more terse.
 #pragma clang diagnostic ignored "-Wfloat-equal"            // warning : comparing floating point with == or != is unsafe   // storing and comparing against same constants (typically 0.0f) is ok.
 #pragma clang diagnostic ignored "-Wformat-nonliteral"      // warning : format string is not a string literal              // passing non-literal to vsnformat(). yes, user passing incorrect format strings can crash the code.
-#pragma clang diagnostic ignored "-Wexit-time-destructors"  // warning : declaration requires an exit-time destructor       // exit-time destruction order is undefined. if MemFree() leads to users code that has been disabled before exit it might cause problems. ImGuiDetails coding style welcomes static/globals.
+#pragma clang diagnostic ignored "-Wexit-time-destructors"  // warning : declaration requires an exit-time destructor       // exit-time destruction order is undefined. if MemFree() leads to users code that has been disabled before exit it might cause problems. ImGui coding style welcomes static/globals.
 #pragma clang diagnostic ignored "-Wglobal-constructors"    // warning : declaration requires a global destructor           // similar to above, not sure what the exact difference is.
 #pragma clang diagnostic ignored "-Wsign-conversion"        // warning : implicit conversion changes signedness             //
 #pragma clang diagnostic ignored "-Wformat-pedantic"        // warning : format specifies type 'void *' but the argument has type 'xxxx *' // unreasonable, would lead to casting every %p arg to void*. probably enabled by -pedantic.
@@ -1130,12 +1130,12 @@ static void             UpdateViewportPlatformMonitor(ImGuiViewportP* viewport);
 // [SECTION] CONTEXT AND MEMORY ALLOCATORS
 //-----------------------------------------------------------------------------
 
-// Current context pointer. Implicitly used by all Dear ImGuiDetails functions. Always assumed to be != NULL.
-// ImGuiDetails::CreateContext() will automatically set this pointer if it is NULL. Change to a different context by calling ImGuiDetails::SetCurrentContext().
+// Current context pointer. Implicitly used by all Dear ImGui functions. Always assumed to be != NULL.
+// ImGui::CreateContext() will automatically set this pointer if it is NULL. Change to a different context by calling ImGui::SetCurrentContext().
 // 1) Important: globals are not shared across DLL boundaries! If you use DLLs or any form of hot-reloading: you will need to call
 //    SetCurrentContext() (with the pointer you got from CreateContext) from each unique static/DLL boundary, and after each hot-reloading.
 //    In your debugger, add GImGui to your watch window and notice how its value changes depending on which location you are currently stepping into.
-// 2) Important: Dear ImGuiDetails functions are not thread-safe because of this pointer.
+// 2) Important: Dear ImGui functions are not thread-safe because of this pointer.
 //    If you want thread-safety to allow N threads to access N different contexts, you can:
 //    - Change this variable to use thread local storage so each thread can refer to a different context, in imconfig.h:
 //          struct ImGuiContext;
@@ -1143,7 +1143,7 @@ static void             UpdateViewportPlatformMonitor(ImGuiViewportP* viewport);
 //          #define GImGui MyImGuiTLS
 //      And then define MyImGuiTLS in one of your cpp file. Note that thread_local is a C++11 keyword, earlier C++ uses compiler-specific keyword.
 //    - Future development aim to make this context pointer explicit to all calls. Also read https://github.com/ocornut/imgui/issues/586
-//    - If you need a finite number of contexts, you may compile and use multiple instances of the ImGuiDetails code from different namespace.
+//    - If you need a finite number of contexts, you may compile and use multiple instances of the ImGui code from different namespace.
 #ifndef GImGui
 ImGuiContext*   GImGui = NULL;
 #endif
@@ -1169,7 +1169,7 @@ static void*    GImAllocatorUserData = NULL;
 
 ImGuiStyle::ImGuiStyle()
 {
-    Alpha                   = 1.0f;             // Global alpha applies to everything in ImGuiDetails
+    Alpha                   = 1.0f;             // Global alpha applies to everything in ImGui
     WindowPadding           = ImVec2(8,8);      // Padding within a window
     WindowRounding          = 7.0f;             // Radius of window corners rounding. Set to 0.0f to have rectangular windows
     WindowBorderSize        = 1.0f;             // Thickness of border around windows. Generally set to 0.0f or 1.0f. Other values not well tested.
@@ -1636,7 +1636,7 @@ FILE* ImFileOpen(const char* filename, const char* mode)
 }
 
 // Load file content into memory
-// Memory allocated with IM_ALLOC(), must be freed by user using IM_FREE() == ImGuiDetails::MemFree()
+// Memory allocated with IM_ALLOC(), must be freed by user using IM_FREE() == ImGui::MemFree()
 void* ImFileLoadToMemory(const char* filename, const char* file_open_mode, size_t* out_file_size, int padding_bytes)
 {
     IM_ASSERT(filename && file_open_mode);
@@ -2376,7 +2376,7 @@ void ImGuiListClipper::End()
 {
     if (ItemsCount < 0)
         return;
-    // In theory here we should assert that ImGuiDetails::GetCursorPosY() == StartPosY + DisplayEnd * ItemsHeight, but it feels saner to just seek at the end and not assert/crash the user.
+    // In theory here we should assert that ImGui::GetCursorPosY() == StartPosY + DisplayEnd * ItemsHeight, but it feels saner to just seek at the end and not assert/crash the user.
     if (ItemsCount < INT_MAX)
         SetCursorPosYAndSetupDummyPrevLine(StartPosY + ItemsCount * ItemsHeight, ItemsHeight); // advance cursor
     ItemsCount = -1;
@@ -2426,7 +2426,7 @@ bool ImGuiListClipper::Step()
 //-----------------------------------------------------------------------------
 // [SECTION] RENDER HELPERS
 // Those (internal) functions are currently quite a legacy mess - their signature and behavior will change.
-// Also see imgui_draw.cpp for some more which have been reworked to not rely on ImGuiDetails:: state.
+// Also see imgui_draw.cpp for some more which have been reworked to not rely on ImGui:: state.
 //-----------------------------------------------------------------------------
 
 const char* ImGui::FindRenderedTextEnd(const char* text, const char* text_end)
@@ -2440,7 +2440,7 @@ const char* ImGui::FindRenderedTextEnd(const char* text, const char* text_end)
     return text_display_end;
 }
 
-// Internal ImGuiDetails functions to render text
+// Internal ImGui functions to render text
 // RenderText***() functions calls ImDrawList::AddText() calls ImBitmapFont::RenderText()
 void ImGui::RenderText(ImVec2 pos, const char* text, const char* text_end, bool hide_text_after_hash)
 {
@@ -3251,7 +3251,7 @@ float ImGui::CalcWrapWidthForPos(const ImVec2& pos, float wrap_pos_x)
     return ImMax(wrap_pos_x - pos.x, 1.0f);
 }
 
-// IM_ALLOC() == ImGuiDetails::MemAlloc()
+// IM_ALLOC() == ImGui::MemAlloc()
 void* ImGui::MemAlloc(size_t size)
 {
     if (ImGuiContext* ctx = GImGui)
@@ -3259,7 +3259,7 @@ void* ImGui::MemAlloc(size_t size)
     return GImAllocatorAllocFunc(size, GImAllocatorUserData);
 }
 
-// IM_FREE() == ImGuiDetails::MemFree()
+// IM_FREE() == ImGui::MemFree()
 void ImGui::MemFree(void* ptr)
 {
     if (ptr)
@@ -3286,7 +3286,7 @@ const char* ImGui::GetVersion()
     return IMGUI_VERSION;
 }
 
-// Internal state access - if you want to share Dear ImGuiDetails state between modules (e.g. DLL) or allocate it yourself
+// Internal state access - if you want to share Dear ImGui state between modules (e.g. DLL) or allocate it yourself
 // Note that we still point to some static data and members (such as GFontAtlas), so the state instance you end up using will point to the static data within its module
 ImGuiContext* ImGui::GetCurrentContext()
 {
@@ -3302,11 +3302,11 @@ void ImGui::SetCurrentContext(ImGuiContext* ctx)
 #endif
 }
 
-// Helper function to verify ABI compatibility between caller code and compiled version of Dear ImGuiDetails.
+// Helper function to verify ABI compatibility between caller code and compiled version of Dear ImGui.
 // Verify that the type sizes are matching between the calling file's compilation unit and imgui.cpp's compilation unit
 // If the user has inconsistent compilation settings, imgui configuration #define, packing pragma, etc. your user code
 // may see different structures than what imgui.cpp sees, which is problematic.
-// We usually require settings to be in imconfig.h to make sure that they are accessible to all compilation units involved with Dear ImGuiDetails.
+// We usually require settings to be in imconfig.h to make sure that they are accessible to all compilation units involved with Dear ImGui.
 bool ImGui::DebugCheckVersionAndDataLayout(const char* version, size_t sz_io, size_t sz_style, size_t sz_vec2, size_t sz_vec4, size_t sz_vert, size_t sz_idx)
 {
     bool error = false;
@@ -3348,19 +3348,19 @@ void ImGui::DestroyContext(ImGuiContext* ctx)
 
 ImGuiIO& ImGui::GetIO()
 {
-    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGuiDetails::CreateContext() and ImGuiDetails::SetCurrentContext() ?");
+    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() and ImGui::SetCurrentContext() ?");
     return GImGui->IO;
 }
 
 ImGuiPlatformIO& ImGui::GetPlatformIO()
 {
-    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGuiDetails::CreateContext() or ImGuiDetails::SetCurrentContext()?");
+    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() or ImGui::SetCurrentContext()?");
     return GImGui->PlatformIO;
 }
 
 ImGuiStyle& ImGui::GetStyle()
 {
-    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGuiDetails::CreateContext() and ImGuiDetails::SetCurrentContext() ?");
+    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() and ImGui::SetCurrentContext() ?");
     return GImGui->Style;
 }
 
@@ -3791,19 +3791,19 @@ void ImGui::UpdateHoveredWindowAndCaptureFlags()
     }
     const bool mouse_avail_to_imgui = (mouse_earliest_button_down == -1) || g.IO.MouseDownOwned[mouse_earliest_button_down];
 
-    // If mouse was first clicked outside of ImGuiDetails bounds we also cancel out hovering.
+    // If mouse was first clicked outside of ImGui bounds we also cancel out hovering.
     // FIXME: For patterns of drag and drop across OS windows, we may need to rework/remove this test (first committed 311c0ca9 on 2015/02)
     const bool mouse_dragging_extern_payload = g.DragDropActive && (g.DragDropSourceFlags & ImGuiDragDropFlags_SourceExtern) != 0;
     if (!mouse_avail_to_imgui && !mouse_dragging_extern_payload)
         g.HoveredWindow = g.HoveredRootWindow = g.HoveredWindowUnderMovingWindow = NULL;
 
-    // Update io.WantCaptureMouse for the user application (true = dispatch mouse info to imgui, false = dispatch mouse info to Dear ImGuiDetails + app)
+    // Update io.WantCaptureMouse for the user application (true = dispatch mouse info to imgui, false = dispatch mouse info to Dear ImGui + app)
     if (g.WantCaptureMouseNextFrame != -1)
         g.IO.WantCaptureMouse = (g.WantCaptureMouseNextFrame != 0);
     else
         g.IO.WantCaptureMouse = (mouse_avail_to_imgui && (g.HoveredWindow != NULL || mouse_any_down)) || (!g.OpenPopupStack.empty());
 
-    // Update io.WantCaptureKeyboard for the user application (true = dispatch keyboard info to imgui, false = dispatch keyboard info to Dear ImGuiDetails + app)
+    // Update io.WantCaptureKeyboard for the user application (true = dispatch keyboard info to imgui, false = dispatch keyboard info to Dear ImGui + app)
     if (g.WantCaptureKeyboardNextFrame != -1)
         g.IO.WantCaptureKeyboard = (g.WantCaptureKeyboardNextFrame != 0);
     else
@@ -3845,7 +3845,7 @@ static void NewFrameSanityChecks()
 
 void ImGui::NewFrame()
 {
-    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGuiDetails::CreateContext() and ImGuiDetails::SetCurrentContext() ?");
+    IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() and ImGui::SetCurrentContext() ?");
     ImGuiContext& g = *GImGui;
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
@@ -3879,7 +3879,7 @@ void ImGui::NewFrame()
             if (g.IO.ConfigDockingTransparentPayload && (g.IO.ConfigFlags & ImGuiConfigFlags_DockingEnable))
                 IM_ASSERT(g.PlatformIO.Platform_SetWindowAlpha != NULL && "Platform_SetWindowAlpha handler is required to use io.ConfigDockingTransparent!");
 #ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
-            IM_ASSERT(g.IO.RenderDrawListsFn == NULL);  // Call ImGuiDetails::Render() then pass ImGuiDetails::GetDrawData() yourself to your render function!
+            IM_ASSERT(g.IO.RenderDrawListsFn == NULL);  // Call ImGui::Render() then pass ImGui::GetDrawData() yourself to your render function!
 #endif
         }
         else
@@ -4101,7 +4101,7 @@ void ImGui::NewFrame()
 
     // Create implicit/fallback window - which we will only render it if the user has added something to it.
     // We don't use "Debug" to avoid colliding with user trying to create a "Debug" window with custom flags.
-    // This fallback is particularly important as it avoid ImGuiDetails:: calls from crashing.
+    // This fallback is particularly important as it avoid ImGui:: calls from crashing.
     g.FrameScopePushedFallbackWindow = true;
     SetNextWindowSize(ImVec2(400,400), ImGuiCond_FirstUseEver);
     Begin("Debug##Default");
@@ -4179,7 +4179,7 @@ void ImGui::Shutdown(ImGuiContext* context)
     }
     g.IO.Fonts = NULL;
 
-    // Cleanup of other data are conditional on actually having initialized Dear ImGuiDetails.
+    // Cleanup of other data are conditional on actually having initialized Dear ImGui.
     if (!g.Initialized)
         return;
 
@@ -4456,7 +4456,7 @@ void ImGui::EndFrame()
     IM_ASSERT(g.Initialized);
     if (g.FrameCountEnded == g.FrameCount)          // Don't process EndFrame() multiple times.
         return;
-    IM_ASSERT(g.FrameScopeActive && "Forgot to call ImGuiDetails::NewFrame()?");
+    IM_ASSERT(g.FrameScopeActive && "Forgot to call ImGui::NewFrame()?");
 
     // Notify OS when our Input Method Editor cursor has moved (e.g. CJK inputs using Microsoft IME)
     if (g.PlatformIO.Platform_SetImeInputPos && (g.PlatformImeLastPos.x == FLT_MAX || ImLengthSqr(g.PlatformImePos - g.PlatformImeLastPos) > 0.0001f))
@@ -5814,20 +5814,20 @@ void ImGui::UpdateWindowParentAndRootLinks(ImGuiWindow* window, ImGuiWindowFlags
     }
 }
 
-// Push a new Dear ImGuiDetails window to add widgets to.
+// Push a new Dear ImGui window to add widgets to.
 // - A default window called "Debug" is automatically stacked at the beginning of every frame so you can use widgets without explicitly calling a Begin/End pair.
 // - Begin/End can be called multiple times during the frame with the same window name to append content.
 // - The window name is used as a unique identifier to preserve window information across frames (and save rudimentary information to the .ini file).
 //   You can use the "##" or "###" markers to use the same label with different id, or same id with different label. See documentation at the top of this file.
-// - Return false when window is collapsed, so you can early out in your code. You always need to call ImGuiDetails::End() even if false is returned.
+// - Return false when window is collapsed, so you can early out in your code. You always need to call ImGui::End() even if false is returned.
 // - Passing 'bool* p_open' displays a Close button on the upper-right corner of the window, the pointed value will be set to false when the button is pressed.
 bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 {
     ImGuiContext& g = *GImGui;
     const ImGuiStyle& style = g.Style;
     IM_ASSERT(name != NULL && name[0] != '\0');     // Window name required
-    IM_ASSERT(g.FrameScopeActive);                  // Forgot to call ImGuiDetails::NewFrame()
-    IM_ASSERT(g.FrameCountEnded != g.FrameCount);   // Called ImGuiDetails::Render() or ImGuiDetails::EndFrame() and haven't called ImGuiDetails::NewFrame() again yet
+    IM_ASSERT(g.FrameScopeActive);                  // Forgot to call ImGui::NewFrame()
+    IM_ASSERT(g.FrameCountEnded != g.FrameCount);   // Called ImGui::Render() or ImGui::EndFrame() and haven't called ImGui::NewFrame() again yet
 
     // Find or create
     ImGuiWindow* window = FindWindowByName(name);
@@ -8361,7 +8361,7 @@ bool ImGui::BeginPopup(const char* str_id, ImGuiWindowFlags flags)
 }
 
 // If 'p_open' is specified for a modal popup window, the popup will have a regular close button which will close the popup.
-// Note that popup visibility status is owned by Dear ImGuiDetails (and manipulated with e.g. OpenPopup) so the actual value of *p_open is meaningless here.
+// Note that popup visibility status is owned by Dear ImGui (and manipulated with e.g. OpenPopup) so the actual value of *p_open is meaningless here.
 bool ImGui::BeginPopupModal(const char* name, bool* p_open, ImGuiWindowFlags flags)
 {
     ImGuiContext& g = *GImGui;
@@ -10582,7 +10582,7 @@ static void ImGui::UpdateViewportsNewFrame()
         const bool platform_funcs_available = viewport->PlatformWindowCreated;
         if ((g.ConfigFlagsCurrFrame & ImGuiConfigFlags_ViewportsEnable))
         {
-            // Update Position and Size (from Platform Window to ImGuiDetails) if requested.
+            // Update Position and Size (from Platform Window to ImGui) if requested.
             // We do it early in the frame instead of waiting for UpdatePlatformWindows() to avoid a frame of lag when moving/resizing using OS facilities.
             if (!(viewport->Flags & ImGuiViewportFlags_Minimized) && platform_funcs_available)
             {
@@ -10938,7 +10938,7 @@ void ImGui::UpdatePlatformWindows()
             viewport->PlatformWindowCreated = true;
         }
 
-        // Apply Position and Size (from ImGuiDetails to Platform/Renderer back-ends)
+        // Apply Position and Size (from ImGui to Platform/Renderer back-ends)
         if ((viewport->LastPlatformPos.x != viewport->Pos.x || viewport->LastPlatformPos.y != viewport->Pos.y) && !viewport->PlatformRequestMove)
             g.PlatformIO.Platform_SetWindowPos(viewport, viewport->Pos);
         if ((viewport->LastPlatformSize.x != viewport->Size.x || viewport->LastPlatformSize.y != viewport->Size.y) && !viewport->PlatformRequestResize)
@@ -11017,7 +11017,7 @@ void ImGui::UpdatePlatformWindows()
 // Custom renderers may prefer to not call this function at all, and instead iterate the publicly exposed platform data and handle rendering/sync themselves.
 // The Render/Swap functions stored in ImGuiPlatformIO are merely here to allow for this helper to exist, but you can do it yourself:
 //
-//    ImGuiPlatformIO& platform_io = ImGuiDetails::GetPlatformIO();
+//    ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
 //    for (int i = 1; i < platform_io.Viewports.Size; i++)
 //        if ((platform_io.Viewports[i]->Flags & ImGuiViewportFlags_Minimized) == 0)
 //            MyRenderFunction(platform_io.Viewports[i], my_args);
@@ -14094,7 +14094,7 @@ void ImGui::DockBuilderCopyDockSpace(ImGuiID src_dockspace_id, ImGuiID dst_docks
         }
     }
 
-    // Anything else in the source nodes of 'node_remap_pairs' are windows that were docked in src_dockspace_id but are not owned by it (unaffiliated windows, e.g. "ImGuiDetails Demo")
+    // Anything else in the source nodes of 'node_remap_pairs' are windows that were docked in src_dockspace_id but are not owned by it (unaffiliated windows, e.g. "ImGui Demo")
     // Find those windows and move to them to the cloned dock node. This may be optional?
     for (int dock_remap_n = 0; dock_remap_n < node_remap_pairs.Size; dock_remap_n += 2)
         if (ImGuiID src_dock_id = node_remap_pairs[dock_remap_n])
@@ -14718,7 +14718,7 @@ static const char* GetClipboardTextFn_DefaultImpl(void*)
 
 #else
 
-// Local Dear ImGuiDetails-only clipboard implementation, if user hasn't defined better clipboard handlers.
+// Local Dear ImGui-only clipboard implementation, if user hasn't defined better clipboard handlers.
 static const char* GetClipboardTextFn_DefaultImpl(void*)
 {
     ImGuiContext& g = *GImGui;
@@ -14791,7 +14791,7 @@ void ImGui::ShowViewportThumbnails()
     ImVec2 p = window->DC.CursorPos;
     ImVec2 off = p - bb_full.Min * SCALE;
     //for (int n = 0; n < g.PlatformIO.Monitors.Size; n++)
-    //    window->DrawList->AddRect(off + g.PlatformIO.Monitors[n].MainPos * SCALE, off + (g.PlatformIO.Monitors[n].MainPos + g.PlatformIO.Monitors[n].MainSize) * SCALE, ImGuiDetails::GetColorU32(ImGuiCol_Border));
+    //    window->DrawList->AddRect(off + g.PlatformIO.Monitors[n].MainPos * SCALE, off + (g.PlatformIO.Monitors[n].MainPos + g.PlatformIO.Monitors[n].MainSize) * SCALE, ImGui::GetColorU32(ImGuiCol_Border));
     for (int n = 0; n < g.Viewports.Size; n++)
     {
         ImGuiViewportP* viewport = g.Viewports[n];
@@ -14804,7 +14804,7 @@ void ImGui::ShowViewportThumbnails()
 #ifndef IMGUI_DISABLE_METRICS_WINDOW
 void ImGui::ShowMetricsWindow(bool* p_open)
 {
-    if (!ImGui::Begin("Dear ImGuiDetails Metrics", p_open))
+    if (!ImGui::Begin("Dear ImGui Metrics", p_open))
     {
         ImGui::End();
         return;
@@ -14822,7 +14822,7 @@ void ImGui::ShowMetricsWindow(bool* p_open)
     // Basic info
     ImGuiContext& g = *GImGui;
     ImGuiIO& io = ImGui::GetIO();
-    ImGui::Text("Dear ImGuiDetails %s", ImGui::GetVersion());
+    ImGui::Text("Dear ImGui %s", ImGui::GetVersion());
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
     ImGui::Text("%d vertices, %d indices (%d triangles)", io.MetricsRenderVertices, io.MetricsRenderIndices, io.MetricsRenderIndices / 3);
     ImGui::Text("%d active windows (%d visible)", io.MetricsActiveWindows, io.MetricsRenderWindows);

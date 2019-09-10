@@ -1,11 +1,11 @@
-// ImGuiDetails - binary_to_compressed_c.cpp
+// ImGui - binary_to_compressed_c.cpp
 // Helper tool to turn a file into a C array, if you want to embed font data in your source code.
 
 // The data is first compressed with stb_compress() to reduce source code size,
 // then encoded in Base85 to fit in a string so we can fit roughly 4 bytes of compressed data into 5 bytes of source code (suggested by @mmalex)
 // (If we used 32-bits constants it would require take 11 bytes of source code to encode 4 bytes, and be endianness dependent)
 // Note that even with compression, the output array is likely to be bigger than the binary file..
-// Load compressed TTF fonts with ImGuiDetails::GetIO().Fonts->AddFontFromMemoryCompressedTTF()
+// Load compressed TTF fonts with ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF()
 
 // Build with, e.g:
 //   # cl.exe binary_to_compressed_c.cpp

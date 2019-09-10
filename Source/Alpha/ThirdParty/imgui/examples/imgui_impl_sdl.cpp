@@ -6,7 +6,7 @@
 // Implemented features:
 //  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
 //  [X] Platform: Clipboard support.
-//  [X] Platform: Keyboard arrays indexed using SDL_SCANCODE_* codes, e.g. ImGuiDetails::IsKeyPressed(SDL_SCANCODE_SPACE).
+//  [X] Platform: Keyboard arrays indexed using SDL_SCANCODE_* codes, e.g. ImGui::IsKeyPressed(SDL_SCANCODE_SPACE).
 //  [X] Platform: Gamepad support. Enabled with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
 //  [X] Platform: Multi-viewport support (multiple windows). Enable with 'io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable'.
 // Missing features:
@@ -32,8 +32,8 @@
 //  2018-06-08: Misc: ImGui_ImplSDL2_InitForOpenGL() now takes a SDL_GLContext parameter.
 //  2018-05-09: Misc: Fixed clipboard paste memory leak (we didn't call SDL_FreeMemory on the data returned by SDL_GetClipboardText).
 //  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors flag + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGuiDetails::GetMouseCursor() value.
-//  2018-02-06: Misc: Removed call to ImGuiDetails::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-16: Inputs: Added support for mouse cursors, honoring ImGui::GetMouseCursor() value.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
 //  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
 //  2018-02-05: Misc: Using SDL_GetPerformanceCounter() instead of SDL_GetTicks() to be able to handle very high framerate (1000+ FPS).
 //  2018-02-05: Inputs: Keyboard mapping is using scancodes everywhere instead of a confusing mixture of keycodes and scancodes.
@@ -162,7 +162,7 @@ static bool ImGui_ImplSDL2_Init(SDL_Window* window, void* sdl_gl_context)
 #endif
     io.BackendPlatformName = "imgui_impl_sdl";
 
-    // Keyboard mapping. ImGuiDetails will use those indices to peek into the io.KeysDown[] array.
+    // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
     io.KeyMap[ImGuiKey_Tab] = SDL_SCANCODE_TAB;
     io.KeyMap[ImGuiKey_LeftArrow] = SDL_SCANCODE_LEFT;
     io.KeyMap[ImGuiKey_RightArrow] = SDL_SCANCODE_RIGHT;
@@ -262,7 +262,7 @@ static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
     io.MouseHoveredViewport = 0;
 
     // [1]
-    // Only when requested by io.WantSetMousePos: set OS mouse pos from Dear ImGuiDetails mouse pos.
+    // Only when requested by io.WantSetMousePos: set OS mouse pos from Dear ImGui mouse pos.
     // (rarely used, mostly when ImGuiConfigFlags_NavEnableSetMousePos is enabled by user)
     if (io.WantSetMousePos)
     {
@@ -279,7 +279,7 @@ static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
     }
     
     // [2]
-    // Set Dear ImGuiDetails mouse pos from OS mouse pos + get buttons. (this is the common behavior)
+    // Set Dear ImGui mouse pos from OS mouse pos + get buttons. (this is the common behavior)
     int mouse_x_local, mouse_y_local;
     Uint32 mouse_buttons = SDL_GetMouseState(&mouse_x_local, &mouse_y_local);
     io.MouseDown[0] = g_MousePressed[0] || (mouse_buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;      // If a mouse press event came, always pass it as "mouse held this frame", so we don't miss click-release events that are shorter than 1 frame.
@@ -297,7 +297,7 @@ static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
     {
         // Multi-viewport mode: mouse position in OS absolute coordinates (io.MousePos is (0,0) when the mouse is on the upper-left of the primary monitor)
         if (SDL_Window* focused_window = SDL_GetKeyboardFocus())
-            if (ImGuiDetails::FindViewportByPlatformHandle((void*)focused_window) != NULL)
+            if (ImGui::FindViewportByPlatformHandle((void*)focused_window) != NULL)
                 io.MousePos = ImVec2((float)mouse_x_global, (float)mouse_y_global);
     }
     else
@@ -313,7 +313,7 @@ static void ImGui_ImplSDL2_UpdateMousePosAndButtons()
 
     // SDL_CaptureMouse() let the OS know e.g. that our imgui drag outside the SDL window boundaries shouldn't e.g. trigger the OS window resize cursor.
     // The function is only supported from SDL 2.0.4 (released Jan 2016)
-    bool any_mouse_button_down = ImGuiDetails::IsAnyMouseDown();
+    bool any_mouse_button_down = ImGui::IsAnyMouseDown();
     SDL_CaptureMouse(any_mouse_button_down ? SDL_TRUE : SDL_FALSE);
 #else
     // SDL 2.0.3 and before: single-viewport only

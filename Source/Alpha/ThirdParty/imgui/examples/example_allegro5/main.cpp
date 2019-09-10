@@ -16,28 +16,28 @@ int main(int, char**)
     al_init_primitives_addon();
     al_set_new_display_flags(ALLEGRO_RESIZABLE);
     ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
-    al_set_window_title(display, "Dear ImGuiDetails Allegro 5 example");
+    al_set_window_title(display, "Dear ImGui Allegro 5 example");
     ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
 
-    // Setup Dear ImGuiDetails context
+    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;        // Enable Docking
 
-    // Setup Dear ImGuiDetails style
+    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGuiDetails::StyleColorsClassic();
+    //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
     ImGui_ImplAllegro5_Init(display);
 
     // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGuiDetails::PushFont()/PopFont() to select them.
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
     // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
     // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
@@ -78,11 +78,11 @@ int main(int, char**)
             }
         }
 
-        // Start the Dear ImGuiDetails frame
+        // Start the Dear ImGui frame
         ImGui_ImplAllegro5_NewFrame();
         ImGui::NewFrame();
 
-        // 1. Show the big demo window (Most of the sample code is in ImGuiDetails::ShowDemoWindow()! You can browse its code to learn more about Dear ImGuiDetails!).
+        // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 

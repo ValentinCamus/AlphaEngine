@@ -32,7 +32,7 @@ ExternalDownloadNowGit(glfw "https://github.com/glfw/glfw.git" "origin/master")
 add_subdirectory(glfw/src/glfw_download)
 
 #------------------------------------------------------------------------------
-# ImGuiDetails
+# ImGui
 #add_subdirectory(imgui)
 
 

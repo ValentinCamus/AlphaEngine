@@ -11,7 +11,7 @@
 
 // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
 // **Prefer using the code in imgui_impl_opengl3.cpp**
-// This code is mostly provided as a reference to learn how ImGuiDetails integration works, because it is shorter to read.
+// This code is mostly provided as a reference to learn how ImGui integration works, because it is shorter to read.
 // If your code is using GL3+ context or any semi modern OpenGL calls, using this is likely to make everything more
 // complicated, will require your code to reset every single OpenGL attributes to their initial state, and might
 // confuse your GPU driver.
@@ -122,7 +122,7 @@ static void ImGui_ImplOpenGL2_SetupRenderState(ImDrawData* draw_data, int fb_wid
 }
 
 // OpenGL2 Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGuiDetails::Render(), but you can now call this directly from your main loop)
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
 // Note that this implementation is little overcomplicated because we are saving/setting up/restoring every OpenGL state explicitly, in order to be able to run within any OpenGL engine that doesn't do so.
 void ImGui_ImplOpenGL2_RenderDrawData(ImDrawData* draw_data)
 {

@@ -4,7 +4,7 @@
 
 // Implemented features:
 //  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
-//  [X] Platform: OSX clipboard is supported within core Dear ImGuiDetails (no specific code in this back-end).
+//  [X] Platform: OSX clipboard is supported within core Dear ImGui (no specific code in this back-end).
 // Issues:
 //  [ ] Platform: Keys are all generally very broken. Best using [event keycode] and not [event characters]..
 //  [ ] Platform: Multi-viewport / platform windows.
@@ -47,7 +47,7 @@ bool ImGui_ImplOSX_Init()
     //io.BackendFlags |= ImGuiBackendFlags_HasMouseHoveredViewport; // We can set io.MouseHoveredViewport correctly (optional, not easy)
     io.BackendPlatformName = "imgui_impl_osx";
 
-    // Keyboard mapping. ImGuiDetails will use those indices to peek into the io.KeyDown[] array.
+    // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
     const int offset_for_function_keys = 256 - 0xF700;
     io.KeyMap[ImGuiKey_Tab]             = '\t';
     io.KeyMap[ImGuiKey_LeftArrow]       = NSLeftArrowFunctionKey + offset_for_function_keys;

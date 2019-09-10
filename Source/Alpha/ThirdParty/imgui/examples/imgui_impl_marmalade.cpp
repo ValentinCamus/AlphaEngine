@@ -1,5 +1,5 @@
 // dear imgui: Renderer + Platform Binding for Marmalade + IwGx
-// Marmalade code: Copyright (C) 2015 by Giovanni Zito (this file is part of Dear ImGuiDetails)
+// Marmalade code: Copyright (C) 2015 by Giovanni Zito (this file is part of Dear ImGui)
 
 // Implemented features:
 //  [X] Renderer: User texture binding. Use 'CIwTexture*' as ImTextureID. Read the FAQ about ImTextureID in imgui.cpp.
@@ -16,7 +16,7 @@
 //  2019-05-11: Inputs: Don't filter value from character callback before calling AddInputCharacter().
 //  2018-11-30: Misc: Setting up io.BackendPlatformName/io.BackendRendererName so they can be displayed in the About Window.
 //  2018-02-16: Misc: Obsoleted the io.RenderDrawListsFn callback and exposed ImGui_Marmalade_RenderDrawData() in the .h file so you can call it yourself.
-//  2018-02-06: Misc: Removed call to ImGuiDetails::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
 //  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
 
 #include "imgui.h"
@@ -39,7 +39,7 @@ static bool         g_osdKeyboardEnabled = false;
 static ImVec2       g_RenderScale = ImVec2(1.0f,1.0f);
 
 // Render function.
-// (this used to be set in io.RenderDrawListsFn and called by ImGuiDetails::Render(), but you can now call this directly from your main loop)
+// (this used to be set in io.RenderDrawListsFn and called by ImGui::Render(), but you can now call this directly from your main loop)
 void ImGui_Marmalade_RenderDrawData(ImDrawData* draw_data)
 {
     // Avoid rendering when minimized
@@ -221,7 +221,7 @@ bool    ImGui_Marmalade_Init(bool install_callbacks)
     ImGuiIO& io = ImGui::GetIO();
     io.BackendPlatformName = io.BackendRendererName = "imgui_impl_marmalade";
 
-    io.KeyMap[ImGuiKey_Tab] = s3eKeyTab;                     // Keyboard mapping. ImGuiDetails will use those indices to peek into the io.KeysDown[] array.
+    io.KeyMap[ImGuiKey_Tab] = s3eKeyTab;                     // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array.
     io.KeyMap[ImGuiKey_LeftArrow] = s3eKeyLeft;
     io.KeyMap[ImGuiKey_RightArrow] = s3eKeyRight;
     io.KeyMap[ImGuiKey_UpArrow] = s3eKeyUp;
@@ -272,7 +272,7 @@ void ImGui_Marmalade_NewFrame()
     // Setup display size (every frame to accommodate for window resizing)
     int w = IwGxGetScreenWidth(), h = IwGxGetScreenHeight();
     io.DisplaySize = ImVec2((float)w, (float)h);
-     // For retina display or other situations where window coordinates are different from framebuffer coordinates. User storage only, presently not used by ImGuiDetails.
+     // For retina display or other situations where window coordinates are different from framebuffer coordinates. User storage only, presently not used by ImGui.
     io.DisplayFramebufferScale = g_scale;
 
     // Setup time step
@@ -291,7 +291,7 @@ void ImGui_Marmalade_NewFrame()
         g_MousePressed[i] = false;
     }
 
-    // TODO: Hide OS mouse cursor if ImGuiDetails is drawing it
+    // TODO: Hide OS mouse cursor if ImGui is drawing it
     // s3ePointerSetInt(S3E_POINTER_HIDE_CURSOR,(io.MouseDrawCursor ? 0 : 1));
 
      // Show/hide OSD keyboard

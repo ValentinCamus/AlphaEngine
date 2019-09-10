@@ -25,7 +25,7 @@ static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 void my_display_code()
 {
-    // 1. Show the big demo window (Most of the sample code is in ImGuiDetails::ShowDemoWindow()! You can browse its code to learn more about Dear ImGuiDetails!).
+    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -65,7 +65,7 @@ void my_display_code()
 
 void glut_display_func()
 {
-    // Start the Dear ImGuiDetails frame
+    // Start the Dear ImGui frame
     ImGui_ImplOpenGL2_NewFrame();
     ImGui_ImplGLUT_NewFrame();
 
@@ -98,23 +98,23 @@ int main(int argc, char** argv)
 #endif
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_MULTISAMPLE);
     glutInitWindowSize(1280, 720);
-    glutCreateWindow("Dear ImGuiDetails GLUT+OpenGL2 Example");
+    glutCreateWindow("Dear ImGui GLUT+OpenGL2 Example");
 
     // Setup GLUT display function
     // We will also call ImGui_ImplGLUT_InstallFuncs() to get all the other functions installed for us,
     // otherwise it is possible to install our own functions and call the imgui_impl_glut.h functions ourselves.
     glutDisplayFunc(glut_display_func);
 
-    // Setup Dear ImGuiDetails context
+    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 
-    // Setup Dear ImGuiDetails style
+    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
-    //ImGuiDetails::StyleColorsClassic();
+    //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
     ImGui_ImplGLUT_Init();
@@ -122,7 +122,7 @@ int main(int argc, char** argv)
     ImGui_ImplOpenGL2_Init();
 
     // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGuiDetails::PushFont()/PopFont() to select them.
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
     // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
     // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
     // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.

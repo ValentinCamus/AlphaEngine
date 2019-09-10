@@ -4,7 +4,7 @@
 // Implemented features:
 //  [X] Platform: Clipboard support (for Win32 this is actually part of core imgui)
 //  [X] Platform: Mouse cursor shape and visibility. Disable with 'io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange'.
-//  [X] Platform: Keyboard arrays indexed using VK_* Virtual Key Codes, e.g. ImGuiDetails::IsKeyPressed(VK_SPACE).
+//  [X] Platform: Keyboard arrays indexed using VK_* Virtual Key Codes, e.g. ImGui::IsKeyPressed(VK_SPACE).
 //  [X] Platform: Gamepad support. Enabled with 'io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad'.
 //  [X] Platform: Multi-viewport support (multiple windows). Enable with 'io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable'.
 
@@ -29,10 +29,10 @@
 //  2018-06-10: Inputs: Fixed handling of mouse wheel messages to support fine position messages (typically sent by track-pads).
 //  2018-06-08: Misc: Extracted imgui_impl_win32.cpp/.h away from the old combined DX9/DX10/DX11/DX12 examples.
 //  2018-03-20: Misc: Setup io.BackendFlags ImGuiBackendFlags_HasMouseCursors and ImGuiBackendFlags_HasSetMousePos flags + honor ImGuiConfigFlags_NoMouseCursorChange flag.
-//  2018-02-20: Inputs: Added support for mouse cursors (ImGuiDetails::GetMouseCursor() value and WM_SETCURSOR message handling).
+//  2018-02-20: Inputs: Added support for mouse cursors (ImGui::GetMouseCursor() value and WM_SETCURSOR message handling).
 //  2018-02-06: Inputs: Added mapping for ImGuiKey_Space.
 //  2018-02-06: Inputs: Honoring the io.WantSetMousePos by repositioning the mouse (when using navigation and ImGuiConfigFlags_NavMoveMouse is set).
-//  2018-02-06: Misc: Removed call to ImGuiDetails::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
+//  2018-02-06: Misc: Removed call to ImGui::Shutdown() which is not available from 1.60 WIP, user needs to call CreateContext/DestroyContext themselves.
 //  2018-01-20: Inputs: Added Horizontal Mouse Wheel support.
 //  2018-01-08: Inputs: Added mapping for ImGuiKey_Insert.
 //  2018-01-05: Inputs: Added WM_LBUTTONDBLCLK double-click handlers for window classes with the CS_DBLCLKS flag.
@@ -77,7 +77,7 @@ bool    ImGui_ImplWin32_Init(void* hwnd)
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
         ImGui_ImplWin32_InitPlatformInterface();
 
-    // Keyboard mapping. ImGuiDetails will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
+    // Keyboard mapping. ImGui will use those indices to peek into the io.KeysDown[] array that we will update during the application lifetime.
     io.KeyMap[ImGuiKey_Tab] = VK_TAB;
     io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
     io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
@@ -142,7 +142,7 @@ static bool ImGui_ImplWin32_UpdateMouseCursor()
     return true;
 }
 
-// This code supports multi-viewports (multiple OS Windows mapped into different Dear ImGuiDetails viewports)
+// This code supports multi-viewports (multiple OS Windows mapped into different Dear ImGui viewports)
 // Because of that, it is a little more complicated than your typical single-viewport binding code!
 static void ImGui_ImplWin32_UpdateMousePos()
 {
@@ -543,7 +543,7 @@ static void ImGui_ImplWin32_CreateWindow(ImGuiViewport* viewport)
     RECT rect = { (LONG)viewport->Pos.x, (LONG)viewport->Pos.y, (LONG)(viewport->Pos.x + viewport->Size.x), (LONG)(viewport->Pos.y + viewport->Size.y) };
     ::AdjustWindowRectEx(&rect, data->DwStyle, FALSE, data->DwExStyle);
     data->Hwnd = ::CreateWindowEx(
-        data->DwExStyle, _T("ImGuiDetails Platform"), _T("Untitled"), data->DwStyle,   // Style, class name, window name
+        data->DwExStyle, _T("ImGui Platform"), _T("Untitled"), data->DwStyle,   // Style, class name, window name
         rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,    // Window area
         parent_window, NULL, ::GetModuleHandle(NULL), NULL);                    // Parent window, Menu, Instance, Param
     data->HwndOwned = true;
@@ -711,7 +711,7 @@ static void ImGui_ImplWin32_OnChangedViewport(ImGuiViewport* viewport)
     //default_style.ItemSpacing.y = 3.0f;
     //default_style.FramePadding = ImVec2(0, 0);
     default_style.ScaleAllSizes(viewport->DpiScale);
-    ImGuiStyle& style = ImGuiDetails::GetStyle();
+    ImGuiStyle& style = ImGui::GetStyle();
     style = default_style;
 #endif
 }
@@ -792,7 +792,7 @@ static void ImGui_ImplWin32_InitPlatformInterface()
     wcex.hCursor = NULL;
     wcex.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1);
     wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = _T("ImGuiDetails Platform");
+    wcex.lpszClassName = _T("ImGui Platform");
     wcex.hIconSm = NULL;
     ::RegisterClassEx(&wcex);
 
@@ -830,5 +830,5 @@ static void ImGui_ImplWin32_InitPlatformInterface()
 
 static void ImGui_ImplWin32_ShutdownPlatformInterface()
 {
-    ::UnregisterClass(_T("ImGuiDetails Platform"), ::GetModuleHandle(NULL));
+    ::UnregisterClass(_T("ImGui Platform"), ::GetModuleHandle(NULL));
 }

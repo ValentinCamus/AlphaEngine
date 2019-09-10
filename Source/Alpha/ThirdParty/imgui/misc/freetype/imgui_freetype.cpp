@@ -1,4 +1,4 @@
-// Wrapper to use FreeType (instead of stb_truetype) for Dear ImGuiDetails
+// Wrapper to use FreeType (instead of stb_truetype) for Dear ImGui
 // Get latest version at https://github.com/ocornut/imgui/tree/master/misc/freetype
 // Original code by @vuhdo (Aleksei Skriabin). Improvements by @mikesart. Maintained and v0.60+ by @ocornut.
 
@@ -164,7 +164,7 @@ namespace
 
     void FreeTypeFont::SetPixelHeight(int pixel_height)
     {
-        // Vuhdo: I'm not sure how to deal with font sizes properly. As far as I understand, currently ImGuiDetails assumes that the 'pixel_height'
+        // Vuhdo: I'm not sure how to deal with font sizes properly. As far as I understand, currently ImGui assumes that the 'pixel_height'
         // is a maximum height of an any given glyph, i.e. it's the sum of font's ascender and descender. Seems strange to me.
         // NB: FT_Set_Pixel_Sizes() doesn't seem to get us the same result.
         FT_Size_RequestRec req;
