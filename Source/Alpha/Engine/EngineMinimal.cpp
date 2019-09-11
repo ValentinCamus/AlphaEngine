@@ -2,11 +2,8 @@
 
 #include "EngineMinimal.h"
 
-#include <Alpha/Input/Input.h>
-#include <Alpha/Input/DefaultInput/DefaultInput.h>
-
 namespace Alpha
 {
-
+    Collection<Pointer<Light>> Engine::s_lights = Collection<Pointer<Light>>();
 }
 

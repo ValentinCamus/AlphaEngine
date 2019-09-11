@@ -79,4 +79,21 @@ namespace Alpha
 
 		return viewMatrix;
 	}
+
+    inline Vector3 CalculateForwardVector(const Transform& transform)
+    {
+        const Vector& location = transform.location;
+        const Vector& rotation = transform.rotation;
+        const Vector& scale = transform.scale;
+        Matrix4x4 matrix = MakeModelMatrix(location, rotation, scale);
+        Matrix4x4 inverted = glm::inverse(matrix);
+        Vector3 forward = -Vector3(inverted[2]);
+        return glm::normalize(forward);
+    }
+
+    inline Vector3 CalculateRightVector(const Transform& transform)
+    {
+        Vector3 forward = CalculateForwardVector(transform);
+        return -Vector3(forward.z, forward.y, -forward.x);
+    }
 }

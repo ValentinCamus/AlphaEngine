@@ -13,6 +13,7 @@
 #include <Alpha/Core/Types.h>
 #include <Alpha/Core/Utils.h>
 #include <Alpha/Core/Math.h>
+#include <Alpha/Core/Collection.h>
 
 namespace Alpha
 {

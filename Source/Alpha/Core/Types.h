@@ -16,6 +16,8 @@
 #define INV_PI (0.31830988618f)
 #define HALF_PI (1.57079632679f)
 
+#define TO_RAD (0.01745329251f)
+
 namespace Alpha
 {
 	// ============================================= 
@@ -105,6 +107,16 @@ namespace Alpha
 		Vector location;
 		Vector rotation; // Euler angles
 		Vector scale;
+
+		inline explicit Transform(const Vector3& inLocation = {0, 0, 0},
+		                          const Vector3& inRotation = {0, 0, 0},
+                                  const Vector3& inScale    = {1, 1, 1})
+            : location(inLocation)
+            , rotation(inRotation)
+            , scale(inScale)
+        {
+
+        }
 	};
 
 	struct Vertex

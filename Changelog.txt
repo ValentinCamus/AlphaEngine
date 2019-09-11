@@ -6,6 +6,8 @@
 * Refactoring classes/functions/names.
 * Add Framebuffer + OpenGL implementation.
 * Add Texture2D abstract class.
+* Add Light (spot, directional, point) from v-2.
+* Add Collection system.
 
 
 09/10/19:
