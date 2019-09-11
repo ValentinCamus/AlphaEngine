@@ -9,22 +9,22 @@
 
 namespace Alpha
 {
-	class DefaultWindowImpl : public Window
+	class DefaultWindow : public Window
 	{
 	public:
 		/// Constructor.
-		explicit DefaultWindowImpl(const WindowProps& props = {"Alpha Window", 1280, 720 })
+		explicit DefaultWindow(const WindowProps& props = {"Main Window", 1280, 720 })
 		{
 		    m_props.title = props.title;
 		    m_props.width = props.width;
 		    m_props.height = props.height;
 			Init();
 
-            Logger::Info("Use engine default window implementation");
+            Logger::Info("Window system: Use DefaultWindow");
 		}
 
 		/// Destructor.
-		~DefaultWindowImpl() override { Shutdown(); }
+		~DefaultWindow() override { Shutdown(); }
 
         inline void SetEventCallback(const EventCallbackFn& callback) override { m_props.eventCallback = callback; }
 

@@ -23,7 +23,7 @@ namespace Alpha
             Alpha::SetAtExitCallback();
             Alpha::Logger::SetLogLevel(Alpha::ELogLevel::Debug);
 
-            Alpha::Logger::Info("AlphaEngine core initialization [OK]");
+            Alpha::Logger::Info("AlphaEngine Core initialization [OK]");
         }
     }
 }

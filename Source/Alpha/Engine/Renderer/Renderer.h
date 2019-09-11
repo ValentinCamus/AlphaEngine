@@ -29,11 +29,13 @@ namespace Alpha
 
         static inline void Clear()
         {
+            ALPHA_ASSERT(s_instance, "Invalid renderer!");
             s_instance->ClearImpl();
         }
 
         static inline void SetClearColor(const Color4& color)
         {
+            ALPHA_ASSERT(s_instance, "Invalid renderer!");
             s_instance->SetClearColorImpl(color);
         }
 

@@ -5,10 +5,10 @@
 
 namespace Alpha
 {
-    class DefaultInputImpl : public Input
+    class DefaultInput : public Input
     {
     public:
-        inline DefaultInputImpl();
+        inline DefaultInput();
 
     protected:
         bool IsKeyPressedImpl(int32 keyCode) override;

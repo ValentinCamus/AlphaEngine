@@ -1,14 +1,17 @@
 #include "Application.h"
 
+#include <Alpha/Window/DefaultWindow/DefaultWindow.h>
+
 namespace Alpha
 {
     Application* Application::s_instance = nullptr;
 
-    Application::Application(const Pointer<Window> &window)
+    Application::Application()
     {
         ALPHA_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
 
+        Pointer<DefaultWindow> window = NewPointer<DefaultWindow>();
         SetWindow(window);
     }
 
@@ -46,10 +49,8 @@ namespace Alpha
             m_window = nullptr;
             return true;
         }
-        else
-        {
-            Logger::Warn("Trying to stop an invalid application - Nothing happened");
-        }
+
+        Logger::Warn("Trying to stop an invalid application - Nothing happened");
         return false;
     }
 

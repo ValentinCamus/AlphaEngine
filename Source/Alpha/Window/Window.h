@@ -1,24 +1,21 @@
 #pragma once
 
 #include <Alpha/Core/CoreMinimal.h>
-
 #include <Alpha/Event/Event.h>
 
 namespace Alpha
 {
-	struct WindowProps
-	{
-		/// The title of the window.
-		std::string title;
+    struct WindowProps
+    {
+        /// The title of the window.
+        std::string title;
+        /// The width of the window.
+        uint32 width;
+        /// The height of the window.
+        uint32 height;
+    };
 
-		/// The width of the window.
-		uint32 width;
-
-		/// The height of the window.
-		uint32 height;
-	};
-
-	class Window
+    class Window
 	{
 	public:
         using EventCallbackFn = std::function<void(Event&)>;

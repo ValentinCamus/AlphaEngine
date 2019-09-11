@@ -45,15 +45,15 @@ set(ENGINE_SRCS ${GLAD} ${IMGUI})
 set(THIRD_PARTY
         EntryPoint.cpp
         Alpha/Application/Application.cpp
-        Alpha/Window/DefaultWindow/DefaultWindowImpl.cpp
+        Alpha/Window/DefaultWindow/DefaultWindow.cpp
         Alpha/Engine/EngineMinimal.cpp
-        Alpha/Input/DefaultInput/DefaultInputImpl.cpp
+        Alpha/Input/DefaultInput/DefaultInput.cpp
         Alpha/Engine/Renderer/Renderer.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.cpp
         Alpha/Layer/LayerStack.cpp
         Alpha/Gui/ImGuiLayer.cpp
         Alpha/Gui/ImGuiDetails/ImGuiImplGLFW.cpp
-        Alpha/Gui/ImGuiDetails/ImGuiImplOpenGL3.cpp)
+        Alpha/Gui/ImGuiDetails/ImGuiImplOpenGL3.cpp Alpha/Engine/Renderer/Framebuffer.h Alpha/Engine/Renderer/Framebuffer.cpp Alpha/Engine/Renderer/Texture.cpp Alpha/Engine/Renderer/Texture.h Alpha/Engine/Renderer/OpenGL/OpenGLFramebuffer.cpp Alpha/Engine/Renderer/OpenGL/OpenGLFramebuffer.h Alpha/Gui/BuildInWidgets/DockerWidget.h Alpha/Gui/ImGuiWidget.h Alpha/Gui/BuildInWidgets/DockerWidget.cpp Alpha/Gui/BuildInWidgets/ViewportWidget.h Alpha/Gui/BuildInWidgets/ViewportWidget.cpp)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

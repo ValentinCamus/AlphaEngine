@@ -6,8 +6,13 @@
 #include <Alpha/Gui/ImGuiLayer.h>
 
 #include <Alpha/Engine/Renderer/Renderer.h>
+#include <Alpha/Engine/Renderer/Framebuffer.h>
+
+#include <Alpha/Gui/BuildInWidgets/DockerWidget.h>
+#include <Alpha/Gui/BuildInWidgets/ViewportWidget.h>
 
 #define SANDBOX_CLEAR_COLOR {0.2f, 0.3f, 0.3f, 1.0f}
+
 
 namespace Alpha
 {
@@ -16,77 +21,54 @@ namespace Alpha
     public:
         explicit inline SandboxLayer() : Layer("Sandbox Layer") {}
 
-        inline void OnUpdate() override
-        {
-            Renderer::Clear();
-            Renderer::SetClearColor(SANDBOX_CLEAR_COLOR);
-
-
-        }
+        inline void OnUpdate() override {}
     };
 
     class GuiSandboxLayer : public ImGuiLayer
     {
     public:
-        explicit inline GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer") {}
+        explicit inline GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")
+        {
+            m_framebuffer01 = Framebuffer::Create(500, 500);
+            m_framebuffer02 = Framebuffer::Create(500, 500);
+            m_framebuffer03 = Framebuffer::Create(500, 500);
+
+            m_viewport01.SetFramebuffer(m_framebuffer01);
+            m_viewport02.SetFramebuffer(m_framebuffer02);
+            m_viewport03.SetFramebuffer(m_framebuffer03);
+        }
 
         inline void OnImGuiRender() override
         {
-            ShowDockSpace();
+            m_docker.Render();
 
-            static bool show = true;
-            ImGui::ShowDemoWindow(&show);
+            m_framebuffer01->Bind();
+            Renderer::SetClearColor({1, 0, 0, 1});
+            Renderer::Clear();
+            m_framebuffer01->Unbind();
+            m_framebuffer02->Bind();
+            Renderer::SetClearColor({0, 1, 0, 1});
+            Renderer::Clear();
+            m_framebuffer02->Unbind();
+            m_framebuffer03->Bind();
+            Renderer::SetClearColor({0, 0, 1, 1});
+            Renderer::Clear();
+            m_framebuffer03->Unbind();
+
+            m_viewport01.Render();
+            m_viewport02.Render();
+            m_viewport03.Render();
         }
 
     private:
-        inline void ShowDockSpace()
-        {
-            bool bOptFullscreen = m_bIsDockSpaceFullscreen;
-            static ImGuiDockNodeFlags dockSpaceFlags = ImGuiDockNodeFlags_None;
+        DockerWidget m_docker = DockerWidget("Docker");
+        ViewportWidget m_viewport01 = ViewportWidget("Viewport 01");
+        ViewportWidget m_viewport02 = ViewportWidget("Viewport 02");
+        ViewportWidget m_viewport03 = ViewportWidget("Viewport 03");
 
-            // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dock-able into,
-            // because it would be confusing to have two docking targets within each others.
-            ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+        Pointer<Framebuffer> m_framebuffer01 = nullptr;
+        Pointer<Framebuffer> m_framebuffer02 = nullptr;
+        Pointer<Framebuffer> m_framebuffer03 = nullptr;
 
-            if (bOptFullscreen)
-            {
-                ImGuiViewport* viewport = ImGui::GetMainViewport();
-                ImGui::SetNextWindowPos(viewport->Pos);
-                ImGui::SetNextWindowSize(viewport->Size);
-                ImGui::SetNextWindowViewport(viewport->ID);
-                ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-                ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-                windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse;
-                windowFlags |= ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-                windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-            }
-
-            // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-            // and handle the pass-thru hole, so we ask Begin() to not render a background.
-            if (dockSpaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) windowFlags |= ImGuiWindowFlags_NoBackground;
-
-            // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
-            // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
-            // all active windows docked into it will lose their parent and become un-docked.
-            // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
-            // any change of dock space/settings would lead to windows being stuck in limbo and never being visible.
-            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-            ImGui::Begin("DockSpace", &m_bShowDockSpace, windowFlags);
-            ImGui::PopStyleVar();
-
-            if (bOptFullscreen) ImGui::PopStyleVar(2);
-
-            // DockSpace
-            ImGuiIO& io = ImGui::GetIO();
-            ALPHA_ASSERT(io.ConfigFlags & ImGuiConfigFlags_DockingEnable, "ImGui: Docking is not enabled");
-            ImGuiID dockSpaceId = ImGui::GetID("DockSpace");
-            ImGui::DockSpace(dockSpaceId, ImVec2(0.0f, 0.0f), dockSpaceFlags);
-
-            ImGui::End();
-        }
-
-    private:
-        bool m_bShowDockSpace = true;
-        bool m_bIsDockSpaceFullscreen = true;
     };
 }

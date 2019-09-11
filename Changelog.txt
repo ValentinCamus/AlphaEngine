@@ -1,5 +1,15 @@
-10/09/19:
-* Changelog
+09/11/19:
+* Add BuildInWidgets based on ImGui
+    > Docker
+    > Viewport:
+        Resizable widget based on a framebuffer.
+* Refactoring classes/functions/names.
+* Add Framebuffer + OpenGL implementation.
+* Add Texture2D abstract class.
+
+
+09/10/19:
+* Add Changelog.txt
 * AlphaEngine Version 3
 * Abstract renderer: The renderer can now support different rendering API.
     note: Only OpenGL the moment.

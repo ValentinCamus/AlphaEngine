@@ -1,4 +1,4 @@
-#include "DefaultWindowImpl.h"
+#include "DefaultWindow.h"
 
 #include <Alpha/Engine/EngineMinimal.h>
 
@@ -18,7 +18,7 @@ namespace Alpha
     bool Glfw::bIsInitialized = false;
     uint32 Glfw::nInstance = 0;
 
-    void DefaultWindowImpl::Init()
+    void DefaultWindow::Init()
     {
         Logger::Info("Creating {0}, Dimension = [{1}, {2}]", m_props.title, m_props.width, m_props.height);
 
@@ -48,7 +48,7 @@ namespace Alpha
         SetupEventsCallback();
     }
 
-    void DefaultWindowImpl::Shutdown()
+    void DefaultWindow::Shutdown()
     {
         --Glfw::nInstance;
 
@@ -56,7 +56,7 @@ namespace Alpha
         if (Glfw::nInstance == 0) glfwTerminate();
     }
 
-    void DefaultWindowImpl::OnUpdate()
+    void DefaultWindow::OnUpdate()
     {
         AppTickEvent event;
         m_props.eventCallback(event);
@@ -65,7 +65,7 @@ namespace Alpha
         glfwPollEvents();
     }
 
-    void DefaultWindowImpl::SetupEventsCallback()
+    void DefaultWindow::SetupEventsCallback()
     {
         glfwSetWindowSizeCallback(m_window, [](GLFWwindow *window, int32 width, int32 height)
         {

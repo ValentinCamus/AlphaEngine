@@ -17,7 +17,7 @@ namespace Alpha
 	class Application
 	{
 	public:
-	    explicit Application(const Pointer<Window>& window = nullptr);
+	    explicit Application();
 
 		void Run();
 
