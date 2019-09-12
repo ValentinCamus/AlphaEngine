@@ -1,14 +1,15 @@
-Build*/
-
+Build/*
+.idea/*
+tags/
 External/*
 !External/CMakeLists.txt
 
+
+
 *.sublime-workspace
-.tags
-tags
+*.tags
 *.pyc
 *.swp
 *.swo
-.idea/*
 *.iml
 *.DS_Store
