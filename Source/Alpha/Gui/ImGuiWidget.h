@@ -12,6 +12,8 @@ namespace Alpha
             Logger::Info("Creating ImGuiWidget: {0}", name);
         }
 
+        virtual ~ImGuiWidget() = default;
+
         virtual void Render() = 0;
 
         virtual bool IsVisible() const { return m_bIsVisible; }

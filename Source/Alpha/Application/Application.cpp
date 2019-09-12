@@ -43,6 +43,8 @@ namespace Alpha
 
     bool Application::OnWindowClose(WindowCloseEvent& e)
     {
+        ALPHA_UNUSED(e);
+
         if (m_bIsRunning)
         {
             m_bIsRunning = false;
@@ -56,6 +58,8 @@ namespace Alpha
 
     bool Application::OnUpdate(AppTickEvent &e)
     {
+        ALPHA_UNUSED(e);
+
         for (const Pointer<Layer>& layer : m_layerStack) layer->OnUpdate();
         return true;
     }

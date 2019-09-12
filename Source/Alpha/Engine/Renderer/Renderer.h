@@ -13,6 +13,8 @@ namespace Alpha
     class Renderer
     {
     public:
+        virtual ~Renderer() = default;
+
         static inline ERendererAPI GetRendererAPI() { return s_rendererAPI; }
 
         static inline void Init()

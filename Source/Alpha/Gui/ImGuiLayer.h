@@ -13,7 +13,7 @@ namespace Alpha
     class ImGuiLayer : public Layer
     {
     public:
-        ImGuiLayer(const std::string& name = "ImGuiLayer");
+        explicit ImGuiLayer(const std::string& name = "ImGuiLayer");
         ~ImGuiLayer() override = default;
 
         void OnAttach() override;
@@ -24,9 +24,6 @@ namespace Alpha
         static void End();
 
         virtual void OnImGuiRender() = 0;
-
-    private:
-        float m_time = 0.0f;
 };
 
 }

@@ -24,7 +24,7 @@ namespace Alpha
         }
 
         ImVec2 winSize = ImGui::GetWindowSize();
-        ImGui::Image((void*) m_framebuffer->GetTexture()->GetId(), m_framebufferSize, ImVec2(0, 0), ImVec2(1, 1));
+        ImGui::Image((void*)(uintptr_t) m_framebuffer->GetTexture()->GetId(), m_framebufferSize);
 
         m_framebuffer->Bind();
         if (winSize.x != m_framebuffer->GetWidth() || winSize.y != m_framebuffer->GetHeight())

@@ -12,6 +12,8 @@ namespace Alpha
     public:
         Input(const Input &) = delete;
 
+        virtual ~Input() = default;
+
         Input& operator=(const Input &) = delete;
 
         inline static bool IsKeyPressed(int keyCode)

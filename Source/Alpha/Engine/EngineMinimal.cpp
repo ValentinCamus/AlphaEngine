@@ -1,5 +1,3 @@
-#pragma once
-
 #include "EngineMinimal.h"
 
 namespace Alpha

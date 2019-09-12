@@ -34,7 +34,7 @@ namespace Alpha
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
-        glfwWindowHint32(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Requiered by on MacOs.
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Requiered by on MacOs.
 #endif
 
         m_window = glfwCreateWindow(m_props.width, m_props.height, ToCharArray(m_props.title), nullptr, nullptr);
@@ -86,6 +86,9 @@ namespace Alpha
 
         glfwSetKeyCallback(m_window, [](GLFWwindow *window, int32 key, int32 scanCode, int32 action, int32 mods)
         {
+            ALPHA_UNUSED(mods);
+            ALPHA_UNUSED(scanCode);
+
             AlphaWindowProps &data = *(AlphaWindowProps *) glfwGetWindowUserPointer(window);
 
             switch (action)
@@ -123,6 +126,8 @@ namespace Alpha
 
         glfwSetMouseButtonCallback(m_window, [](GLFWwindow *window, int32 button, int32 action, int32 mods)
         {
+            ALPHA_UNUSED(mods);
+
             AlphaWindowProps &data = *(AlphaWindowProps *) glfwGetWindowUserPointer(window);
 
             switch (action)

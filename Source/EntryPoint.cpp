@@ -9,6 +9,9 @@
 
 int main(int argc, char *argv[])
 {
+    ALPHA_UNUSED(argc);
+    ALPHA_UNUSED(argv);
+
     Alpha::Core::Init();
     Alpha::Renderer::Init();
 

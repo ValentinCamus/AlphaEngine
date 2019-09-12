@@ -40,6 +40,8 @@ namespace Alpha
     class Event
     {
     public:
+        virtual ~Event() = default;
+
         bool bIsHandled = false;
 
         virtual EventType GetEventType() const = 0;

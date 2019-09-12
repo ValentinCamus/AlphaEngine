@@ -16,13 +16,14 @@ namespace Alpha
 
         virtual ~Layer() = default;
 
-        virtual void OnAttach() {}
-        virtual void OnDetach() {}
+        virtual inline void OnAttach() {}
+        virtual inline void OnDetach() {}
 
-        virtual void OnUpdate() {}
-        virtual void OnEvent(Event& event) {}
+        virtual inline void OnUpdate() {}
+        virtual inline void OnEvent(Event& event) { ALPHA_UNUSED(event); }
 
-        inline const std::string& GetName() const { return m_name; }
+        virtual inline const std::string& GetName() const { return m_name; }
+
     protected:
         std::string m_name;
     };
