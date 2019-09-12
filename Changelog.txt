@@ -1,3 +1,8 @@
+09/12/19
+* Add stb library.
+* Add Texture2D OpenGL implementation.
+* Minor fixes.
+
 09/11/19:
 * Add BuildInWidgets based on ImGui
     > Docker
