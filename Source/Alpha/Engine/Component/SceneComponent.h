@@ -9,6 +9,8 @@ namespace Alpha
     public:
         inline explicit SceneComponent(const Transform& transform) : m_transform(transform) {}
 
+        virtual ~SceneComponent() = default;
+
         /// @getter: Position of the actor in the world.
         inline const Vector3& GetWorldLocation() const { return m_transform.location; }
 

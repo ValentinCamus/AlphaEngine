@@ -66,7 +66,7 @@ set(ENGINE_SRCS
         Alpha/Engine/Renderer/OpenGL/OpenGLFramebuffer.cpp
 
         Alpha/Gui/BuildInWidgets/DockerWidget.cpp
-        Alpha/Gui/BuildInWidgets/ViewportWidget.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.h Alpha/ThirdParty/stb/stb_image.cpp Alpha/ThirdParty/stb/stb_image.h)
+        Alpha/Gui/BuildInWidgets/ViewportWidget.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.h Alpha/ThirdParty/stb/stb_image.cpp Alpha/ThirdParty/stb/stb_image.h Alpha/Engine/Camera/Camera.h Alpha/Engine/Camera/EulerCamera.cpp Alpha/Engine/Camera/EulerCamera.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

@@ -2,6 +2,8 @@
 
 #include <Alpha/Core/CoreMinimal.h>
 
+#include <Alpha/Event/Event.h>
+
 namespace Alpha
 {
     class ImGuiWidget
@@ -14,6 +16,7 @@ namespace Alpha
 
         virtual ~ImGuiWidget() = default;
 
+        virtual void OnEvent(Event& e) { ALPHA_UNUSED(e); }
         virtual void Render() = 0;
 
         virtual bool IsVisible() const { return m_bIsVisible; }

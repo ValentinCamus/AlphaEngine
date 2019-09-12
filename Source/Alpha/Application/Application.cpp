@@ -33,9 +33,9 @@ namespace Alpha
 
     void Application::OnEvent(Event &e)
     {
-        auto * dispatcher = new EventDispatcher(e);
-        dispatcher->Dispatch<WindowCloseEvent>(ALPHA_BIND_EVENT(Application::OnWindowClose, this));
-        dispatcher->Dispatch<AppTickEvent>(ALPHA_BIND_EVENT(Application::OnUpdate, this));
+        EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<WindowCloseEvent>(ALPHA_BIND_EVENT(Application::OnWindowClose, this));
+        dispatcher.Dispatch<AppTickEvent>(ALPHA_BIND_EVENT(Application::OnUpdate, this));
 
         for (const Pointer<Layer>& layer : m_layerStack) layer->OnEvent(e);
 

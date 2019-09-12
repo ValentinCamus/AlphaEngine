@@ -1,5 +1,8 @@
 #include "ViewportWidget.h"
 
+#include <Alpha/Gui/ImGuiLayer.h>
+#include <Alpha/Engine/Renderer/Renderer.h>
+
 namespace Alpha
 {
     void ViewportWidget::Render()
@@ -24,7 +27,6 @@ namespace Alpha
         }
 
         ImVec2 winSize = ImGui::GetWindowSize();
-        ImGui::Image((void*)(uintptr_t) m_framebuffer->GetTexture()->GetId(), m_framebufferSize);
 
         m_framebuffer->Bind();
         if (winSize.x != m_framebuffer->GetWidth() || winSize.y != m_framebuffer->GetHeight())
@@ -34,6 +36,8 @@ namespace Alpha
             m_framebuffer->GetTexture()->Unbind();
         }
         m_framebuffer->Unbind();
+
+        ImGui::Image((void*)(uintptr_t) m_framebuffer->GetTexture()->GetId(), m_framebufferSize);
 
         ImGui::End();
     }
