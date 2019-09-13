@@ -1,5 +1,6 @@
 09/13/19
 * Add Shader abstract class + OpenGL implementation.
+* Add Material class from v2
 
 09/12/19
 * Add stb library.
