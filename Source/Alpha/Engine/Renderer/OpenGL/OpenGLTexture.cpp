@@ -1,17 +1,16 @@
 #include "OpenGLTexture.h"
 
-#include <Alpha/ThirdParty/stb/stb_image.h>
+#include <Alpha/Engine/Loader/ImageLoader.h>
 
 namespace Alpha
 {
 
     void OpenGLTexture2D::Init(const std::string &path)
     {
-        stbi_set_flip_vertically_on_load(true);
-
-        Logger::Info("Loading texture: {0}", path);
-        m_localBuffer = stbi_load(path.c_str(), &m_width, &m_height, &m_bitsPerPixel, 4);
-        ALPHA_ASSERT(m_localBuffer, "Texture::Init : file not found");
+        RawImage image = ImageLoader::Load(path);
+        m_width = image.width;
+        m_height = image.height;
+        m_bitsPerPixel = image.bitsPerPixel;
 
         glGenTextures(1, &m_id);
         glBindTexture(GL_TEXTURE_2D, m_id);
@@ -23,10 +22,8 @@ namespace Alpha
 
         // With: The second argument: No multi level texture
         // With: The six argument: No border
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_localBuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.pixels);
         glBindTexture(GL_TEXTURE_2D, 0);
-
-        stbi_image_free(m_localBuffer);
     }
 
     void OpenGLTexture2D::Bind(int32 slot)
