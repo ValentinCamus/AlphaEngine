@@ -2,6 +2,7 @@
 * Add Shader abstract class + OpenGL implementation.
 * Add Material class from v2.
 * Add an image loader.
+* Add Static Mesh abstract class + OpenGL implementation.
 
 09/12/19
 * Add stb library.
