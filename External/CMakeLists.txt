@@ -23,8 +23,8 @@ ExternalHeaderOnly_Add(spdlog "https://github.com/gabime/spdlog.git" "v1.x" "inc
 
 #------------------------------------------------------------------------------
 # Assimp
-#ExternalDownloadNowGit(assimp "https://github.com/assimp/assimp.git" "origin/master")
-#add_subdirectory(assimp/src/assimp_download)
+# ExternalDownloadNowGit(assimp "https://github.com/assimp/assimp.git" "origin/master")
+# add_subdirectory(assimp/src/assimp_download)
 
 #------------------------------------------------------------------------------
 # GLFW
