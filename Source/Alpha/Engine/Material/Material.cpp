@@ -2,9 +2,9 @@
 
 namespace Alpha
 {
-    void Material::Bind(Pointer<Shader> shader)
+    void Material::Bind(const Pointer<Shader>& shader)
     {
-        Pointer<Texture2D> textureKd = GetTexture(TextureType::TX_Diffuse);
+        Pointer<Texture2D> textureKd = GetTexture(ETextureType::TX_Diffuse);
         if (textureKd)
         {
             textureKd->Bind(0);
@@ -17,6 +17,7 @@ namespace Alpha
             shader->SetUniform(m_name + ".kd", m_kd);
         }
 
+        /*
         Pointer<Texture2D> textureKs = GetTexture(TextureType::TX_Specular);
         if (textureKs)
         {
@@ -68,6 +69,7 @@ namespace Alpha
             shader->SetUniform(m_name + ".transparency", m_transparency);
             shader->SetUniform(m_name + ".tex.hasTransparency", false);
         }
+         */
     }
 
     void Material::Unbind()

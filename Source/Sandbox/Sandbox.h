@@ -13,10 +13,16 @@
 
 #include <Alpha/Input/Input.h>
 
-#include <Alpha/Engine/Camera/EulerCamera.h>
 #include <Alpha/Engine/Renderer/Shader.h>
+
+#include <Alpha/Engine/Camera/EulerCamera.h>
+
 #include <Alpha/Engine/StaticMeshModel/StaticMeshModel.h>
 #include <Alpha/Engine/StaticMeshModel/StaticMeshEntity.h>
+
+#include <Alpha/Engine/Renderer/Texture.h>
+#include <Alpha/Engine/Material/Material.h>
+
 namespace Alpha
 {
     static Pointer<Framebuffer> m_framebuffer01 = nullptr;
@@ -28,15 +34,15 @@ namespace Alpha
 
         inline void Init()
         {
-            m_shader = Shader::Create(PROJECT_SOURCE_DIR + "Shaders/MeshShader.glsl");
+            m_shader = Shader::Create(PROJECT_SOURCE_DIR + "Shaders/Default.glsl");
 
             m_framebuffer01 = Framebuffer::Create(500, 500);
 
             std::vector<Vertex> vertices = {
-                    Vertex({  0.5f,  0.5f, 0.0f }),  // top right
-                    Vertex({  0.5f, -0.5f, 0.0f }),  // bottom right
-                    Vertex({ -0.5f, -0.5f, 0.0f }),  // bottom left
-                    Vertex({ -0.5f,  0.5f, 0.0f })   // top left
+                    Vertex({ 0.5f,  0.5f, 0.0f}, {1, 0, 0}, {1.0f, 1.0f}),
+                    Vertex({ 0.5f, -0.5f, 0.0f}, {1, 0, 0}, {1.0f, 0.0f}),
+                    Vertex({-0.5f, -0.5f, 0.0f}, {1, 0, 0}, {0.0f, 0.0f}),
+                    Vertex({-0.5f,  0.5f, 0.0f}, {1, 0, 0}, {0.0f, 1.0f}),
             };
 
             std::vector<uint32> indices = {
@@ -49,14 +55,16 @@ namespace Alpha
 
             m_entity = NewPointer<StaticMeshEntity>("Entity", m_sm);
 
-            Pointer<Material> material = NewPointer<Material>();
-            material->SetKd(Vector4(1.0f));
-            material->SetKs(Vector4(1.0f));
-            material->SetRoughness(0.9f);
+            Pointer<Material> material = NewPointer<Material>("material");
+
+            m_texture = Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg");
+
+            // material->SetKd(Vector4(1.0f));
+            material->AddTexture(Material::ETextureType::TX_Diffuse, m_texture);
 
             m_entity->SetMaterial(0, material);
 
-            m_entity->SetWorldRotation({0, 0, 45});
+            // m_entity->SetWorldRotation({0, 0, 45});
             m_entity->SetWorldLocation({0, 0, -2});
         }
 
@@ -67,6 +75,8 @@ namespace Alpha
             if (Input::IsKeyPressed(ALPHA_KEY_S)) m_camera.MoveForward(-1);
             if (Input::IsKeyPressed(ALPHA_KEY_A)) m_camera.MoveRight(-1);
             if (Input::IsKeyPressed(ALPHA_KEY_D)) m_camera.MoveRight(1);
+
+            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_1)) m_camera.Look(Input::GetMousePosition());
 
             ALPHA_ASSERT(m_framebuffer01, "Invalid Framebuffer: 01");
 
@@ -93,6 +103,8 @@ namespace Alpha
 
         Pointer<StaticMeshModel> m_sm;
         Pointer<StaticMeshEntity> m_entity;
+
+        Pointer<Texture2D> m_texture;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

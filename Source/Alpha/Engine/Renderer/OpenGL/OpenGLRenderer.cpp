@@ -16,13 +16,13 @@ namespace Alpha
         Logger::Info("(Renderer) Version: {0}", glGetString(GL_VERSION));
 
         GL_CHECK(glEnable(GL_DEPTH_TEST));
-        // GL_CHECK(glEnable(GL_BLEND));
+        GL_CHECK(glEnable(GL_BLEND));
         // GL_CHECK(glEnable(GL_CULL_FACE));
 
         // GL_CHECK(glFrontFace(GL_CW));
         // GL_CHECK(glCullFace(GL_FRONT));
 
-        // GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         Logger::Info("OpenGL Renderer initialized");
     }
 

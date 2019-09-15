@@ -11,7 +11,7 @@ namespace Alpha
     {
     public:
         /// The type of the texture.
-        enum TextureType
+        enum class ETextureType
         {
             TX_Diffuse,
             TX_Specular,
@@ -32,21 +32,21 @@ namespace Alpha
         virtual ~Material() { m_textures.clear(); }
 
         /// Bind this material.
-        virtual void Bind(Pointer<Shader> shader);
+        virtual void Bind(const Pointer<Shader>& shader);
 
         /// Unbind this material.
         virtual void Unbind();
 
     public:
         /// Add a new texture.
-        inline void AddTexture(const TextureType& type, const Pointer<Texture2D>& texture)
+        inline void AddTexture(const ETextureType& type, const Pointer<Texture2D>& texture)
         {
             m_textures.insert({type, texture});
         }
 
         /// Remove a texture.
         /// @return: False is texture not found.
-        inline bool RemoveTexture(const TextureType& type)
+        inline bool RemoveTexture(const ETextureType& type)
         {
             auto it = m_textures.find(type);
             bool isFound = (it != m_textures.end());
@@ -60,7 +60,7 @@ namespace Alpha
         inline void ClearTextures() { m_textures.clear(); }
 
         /// Get the texture that match the type in argument.
-        inline Pointer<Texture2D> GetTexture(const TextureType& type)
+        inline Pointer<Texture2D> GetTexture(const ETextureType& type)
         {
             auto it = m_textures.find(type);
             return (it != m_textures.end()) ? it->second : nullptr;
@@ -123,6 +123,6 @@ namespace Alpha
         float m_transparency = 1.0f;
 
         /// Textures Map.
-        std::map<TextureType, Pointer<Texture2D>> m_textures;
+        std::map<ETextureType, Pointer<Texture2D>> m_textures;
     };
 }

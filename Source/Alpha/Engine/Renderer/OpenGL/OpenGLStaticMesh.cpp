@@ -28,16 +28,17 @@ namespace Alpha
         }
         else
         {
-            Matrix4x4 mvp = transform.projection *  transform.view * transform.model;
-            shader->SetUniform("mvp", mvp);
+            shader->SetUniform("model", transform.model);
+            shader->SetUniform("view", transform.view);
+            shader->SetUniform("proj", transform.projection);
 
             GL_CHECK(glBindVertexArray(m_vao));
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
-            // GetMaterial()->Bind(shader);
+            GetMaterial()->Bind(shader);
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
 
-            // GetMaterial()->Unbind();
+            GetMaterial()->Unbind();
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
             GL_CHECK(glBindVertexArray(0));
         }
@@ -75,7 +76,7 @@ namespace Alpha
 
         // Vertex texture coords
         offsetOf = (void*) offsetof(Vertex, texCoords);
-        GL_CHECK(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetOf));
+        GL_CHECK(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetOf));
 
         GL_CHECK(glBindVertexArray(0));
     }
