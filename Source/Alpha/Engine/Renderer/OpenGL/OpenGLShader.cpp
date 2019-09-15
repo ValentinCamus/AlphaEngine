@@ -1,8 +1,7 @@
 #include "OpenGLShader.h"
 
+#include <regex>
 #include <fstream>
-
-#define UNDEFINED_UNIFORM_LOCATION -1
 
 namespace Alpha
 {
@@ -23,7 +22,7 @@ namespace Alpha
 
     OpenGLShader::~OpenGLShader()
     {
-        glDeleteProgram(m_id);
+        GL_CHECK(glDeleteProgram(m_id));
     }
 
     GLenum OpenGLShader::ShaderTypeFromString(const std::string& type)
@@ -33,6 +32,16 @@ namespace Alpha
 
         ALPHA_ASSERT(false, "Unknown shader type!");
         return 0;
+    }
+
+    std::string OpenGLShader::ShaderTypeToString(GLenum type)
+    {
+        switch (type)
+        {
+            case GL_VERTEX_SHADER: return "vertex";
+            case GL_FRAGMENT_SHADER: return "fragment";
+            default: return "undefined";
+        }
     }
 
     std::string OpenGLShader::ReadFile(const std::string& filepath)
@@ -47,13 +56,14 @@ namespace Alpha
             in.read(&result[0], result.size());
             in.close();
         }
-        else ALPHA_ASSERT("Could not open file '{0}'", filepath);
+        else ALPHA_ASSERT(false, "OpenGLShader::ReadFile: Could not open file '{0}'", filepath);
 
         return result;
     }
 
     std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
     {
+        // std::string defines = ReadFile(PROJECT_SOURCE_DIR + "Shaders/Defines.glsl");
         std::unordered_map<GLenum, std::string> shaderSources;
 
         const char* typeToken = "#type";
@@ -79,8 +89,11 @@ namespace Alpha
 
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
     {
+        OpenGL::ClearErrorBuffer();
         GLuint program = glCreateProgram();
-        std::vector<GLenum> glShaderIDs(shaderSources.size());
+        OpenGL::DumpErrorBuffer("OpenGLShader::Compile", __FILE__, __LINE__);
+
+        std::vector<GLenum> glShaderIDs;
 
         int glShaderIDIndex = 0;
         for (auto& kv : shaderSources)
@@ -88,77 +101,73 @@ namespace Alpha
             GLenum type = kv.first;
             const std::string& source = kv.second;
 
+            OpenGL::ClearErrorBuffer();
             GLuint shader = glCreateShader(type);
+            OpenGL::DumpErrorBuffer("OpenGLShader::Compile", __FILE__, __LINE__);
 
             const GLchar* sourceCStr = source.c_str();
-            glShaderSource(shader, 1, &sourceCStr, nullptr);
+            GL_CHECK(glShaderSource(shader, 1, &sourceCStr, nullptr));
 
-            glCompileShader(shader);
+            GL_CHECK(glCompileShader(shader));
 
             GLint isCompiled = 0;
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+            GL_CHECK(glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled));
             if (isCompiled == GL_FALSE)
             {
                 GLint maxLength = 0;
-                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+                GL_CHECK(glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength));
 
                 std::vector<GLchar> infoLog(maxLength);
-                glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+                GL_CHECK(glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]));
 
-                glDeleteShader(shader);
+                GL_CHECK(glDeleteShader(shader));
 
-                ALPHA_ASSERT("{0}", infoLog.data());
-                ALPHA_ASSERT(false, "Shader compilation failure!");
+                ALPHA_ASSERT(false, "Compilation Error ({0}): {1}", ShaderTypeToString(type), infoLog.data());
                 break;
             }
 
-            glAttachShader(program, shader);
-            glShaderIDs[glShaderIDIndex++] = shader;
+            GL_CHECK(glAttachShader(program, shader));
+            glShaderIDs.push_back(shader);
         }
 
         m_id = program;
 
         // Link our program
-        glLinkProgram(program);
+        GL_CHECK(glLinkProgram(program));
 
         // Note the different functions here: glGetProgram* instead of glGetShader*.
         GLint isLinked = 0;
-        glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+        GL_CHECK(glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked));
         if (isLinked == GL_FALSE)
         {
             GLint maxLength = 0;
-            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+            GL_CHECK(glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength));
 
             // The maxLength includes the NULL character
             std::vector<GLchar> infoLog(maxLength);
-            glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+            GL_CHECK(glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]));
 
             // We don't need the program anymore.
-            glDeleteProgram(program);
+            GL_CHECK(glDeleteProgram(program));
 
-            for (auto id : glShaderIDs) glDeleteShader(id);
+            for (auto id : glShaderIDs) { GL_CHECK(glDeleteShader(id)); }
 
             ALPHA_ASSERT("{0}", infoLog.data());
             ALPHA_ASSERT(false, "Shader link failure!");
             return;
         }
 
-        for (auto id : glShaderIDs) glDetachShader(program, id);
+        for (auto id : glShaderIDs) { GL_CHECK(glDetachShader(program, id)); }
     }
 
     int32 OpenGLShader::GetUniformLocation(const std::string& name)
     {
-        int32 location;
-        const char * cname = name.c_str();
+        const char * cname = ToCharArray(name);
 
-        location = glGetUniformLocation((GLuint)m_id, cname);
-
-
-        if (location == UNDEFINED_UNIFORM_LOCATION)
-        {
-            Logger::Error("Shader::GetUniformLocation, uniform : {0} not found.", name);
-            ALPHA_ASSERT(false, "Undefined uniform");
-        }
+        OpenGL::ClearErrorBuffer();
+        int32 location = glGetUniformLocation((GLuint)m_id, cname);
+        OpenGL::DumpErrorBuffer("OpenGLShader::Compile: glGetUniformLocation", __FILE__, __LINE__);
+        ALPHA_ASSERT(location > -1, "Shader::GetUniformLocation, uniform \"{0}\" not found.", name);
 
         return location;
     }
@@ -166,54 +175,42 @@ namespace Alpha
     void OpenGLShader::SetUniform(const std::string &name, bool v)
     {
         int32 location = GetUniformLocation(name);
-        glUniform1i(location, v);
+        GL_CHECK(glUniform1i(location, v));
     }
 
     void OpenGLShader::SetUniform(const std::string &name, int32 v)
     {
         int32 location = GetUniformLocation(name);
-        glUniform1i(location, v);
+        GL_CHECK(glUniform1i(location, v));
     }
 
     void OpenGLShader::SetUniform(const std::string &name, float v)
     {
         int32 location = GetUniformLocation(name);
-        glUniform1f(location, v);
+        GL_CHECK(glUniform1f(location, v));
     }
 
     void OpenGLShader::SetUniform(const std::string &name, const Vector2 &v)
     {
         int32 location = GetUniformLocation(name);
-        glUniform2f(location, v.x, v.y);
+        GL_CHECK(glUniform2f(location, v.x, v.y));
     }
 
     void OpenGLShader::SetUniform(const std::string &name, const Vector3 &v)
     {
         int32 location = GetUniformLocation(name);
-        glUniform3f(location, v.x, v.y, v.z);
+        GL_CHECK(glUniform3f(location, v.x, v.y, v.z));
     }
 
     void OpenGLShader::SetUniform(const std::string &name, const Vector4 &v)
     {
         int32 location = GetUniformLocation(name);
-        glUniform4f(location, v.x, v.y, v.z, v.a);
+        GL_CHECK(glUniform4f(location, v.x, v.y, v.z, v.a));
     }
 
     void OpenGLShader::SetUniform(const std::string &name, const Matrix4 &m)
     {
         int32 location = GetUniformLocation(name);
-        glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
-    }
-
-    void OpenGLShader::SetUniform(const std::string &name, const TransformMatrix &m)
-    {
-        int32 location = GetUniformLocation(name);
-
-        const Matrix4x4  mvp = m.projection * m.view * m.model;
-
-        SetUniform(name + ".model", m.model);
-        SetUniform(name + ".view",  m.view);
-        SetUniform(name + ".proj", m.projection);
-        SetUniform(name + ".mvp", mvp);
+        GL_CHECK(glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]));
     }
 }

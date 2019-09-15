@@ -3,6 +3,7 @@
 #include <Alpha/Core/CoreMinimal.h>
 
 #include <Alpha/Engine/Renderer/Texture.h>
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLTools.h>
 #include <Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.h>
 
 namespace Alpha
@@ -18,14 +19,14 @@ namespace Alpha
         explicit OpenGLTexture2D(const std::string& path) : m_filename(path) { Init(path); }
 
         /// Destructor.
-        ~OpenGLTexture2D() override { glDeleteTextures(1, &m_id); }
+        ~OpenGLTexture2D() override { GL_CHECK(glDeleteTextures(1, &m_id)); }
 
         /// Bind this texture.
         /// @slot: The texture slot, 1 slot per texture.
         void Bind(int32 slot) override;
 
         /// Unbind this texture.
-        inline void Unbind() override { glBindTexture(GL_TEXTURE_2D, 0); }
+        inline void Unbind() override { GL_CHECK(glBindTexture(GL_TEXTURE_2D, 0)); }
 
     public:
         /// @getter: The id of this texture.

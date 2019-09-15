@@ -121,6 +121,13 @@ namespace Alpha
         Vector position;
         Vector normal;
         Vector2 texCoords;
+
+        explicit Vertex(const Vector& inPosition   = {0, 0, 0},
+                        const Vector& inNormal     = {1, 0, 0},
+                        const Vector2& inTexCoords = {0, 0   })
+            : position(inPosition)
+            , normal(inNormal)
+            , texCoords(inTexCoords) {}
     };
 
     struct RawImage

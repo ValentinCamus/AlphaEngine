@@ -11,7 +11,7 @@ namespace Alpha
     {
         switch (Renderer::GetRendererAPI())
         {
-            case ERendererAPI::OpenGL:  return NewPointer<OpenGLStaticMesh>(vertices, indices);
+            case ERendererAPI::OpenGL: return NewPointer<OpenGLStaticMesh>(vertices, indices);
             default: break;
         }
 

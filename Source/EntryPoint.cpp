@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
 	application.PushLayer(sandboxLayer);
     application.PushLayer(sandboxGuiLayer);
 
+    Alpha::Logger::Info("AlphaEngine: Ready to run");
+
 	application.Run();
 
     Alpha::Logger::Info("Exiting with exit code 0 (No Error)");

@@ -4,6 +4,9 @@
 
 #include <Alpha/Engine/Renderer/StaticMesh.h>
 
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLTools.h>
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.h>
+
 namespace Alpha
 {
     class OpenGLStaticMesh : public StaticMesh

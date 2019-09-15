@@ -19,10 +19,10 @@
 #endif
 
 #ifdef ALPHA_ENABLE_ASSERT
-#define ALPHA_ASSERT(expr, msg) \
+#define ALPHA_ASSERT(expr, msg, ...) \
 	if (!(expr)) \
 	{ \
-		Alpha::Logger::Error(std::string("[Assert] ") + std::string(msg)); \
+		Alpha::Logger::Error(msg, __VA_ARGS__); \
 		Alpha::Logger::Info("Shutdown: AlphaEngine"); \
 		Alpha::ForceQuit(); \
 	} 
@@ -43,3 +43,5 @@
 #endif
 
 #define ALPHA_BIND_EVENT(fn, ref) std::bind(&fn, ref, std::placeholders::_1)
+
+#define PROJECT_SOURCE_DIR std::string("D:/AlphaEngine/")

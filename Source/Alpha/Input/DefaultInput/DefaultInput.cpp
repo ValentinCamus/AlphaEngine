@@ -2,6 +2,8 @@
 
 #include <Alpha/Application/Application.h>
 #include <GLFW/glfw3.h>
+#include <Alpha/Input/Input.h>
+
 
 namespace Alpha
 {

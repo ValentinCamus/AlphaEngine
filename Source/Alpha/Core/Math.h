@@ -80,6 +80,16 @@ namespace Alpha
 		return viewMatrix;
 	}
 
+	/// Create a view matrix from:
+	/// - The fovy (camera zoom for example)
+	/// - The aspect ratio
+	/// - The z near plane
+	/// - The z far plane
+    inline Matrix4x4 MakeProjectionMatrix(float fovy, float aspect, float zNear = 0, float zFar = 100)
+    {
+        return glm::perspective(fovy, aspect, 0.1f, 100.0f);
+    }
+
     inline Vector3 CalculateForwardVector(const Transform& transform)
     {
         const Vector& location = transform.location;

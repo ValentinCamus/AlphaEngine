@@ -38,8 +38,5 @@ namespace Alpha
 
         /// Set a uniform of the type : Matrix4x4.
         virtual void SetUniform(const std::string &name, const Matrix4 &m) = 0;
-
-        /// Set a uniform of the type : TransformMatrix.
-        virtual void SetUniform(const std::string &name, const TransformMatrix &m) = 0;
     };
 }

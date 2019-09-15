@@ -8,7 +8,7 @@ namespace Alpha
     class DefaultInput : public Input
     {
     public:
-        inline DefaultInput();
+        explicit DefaultInput();
 
     protected:
         bool IsKeyPressedImpl(int32 keyCode) override;

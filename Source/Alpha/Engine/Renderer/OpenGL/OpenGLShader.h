@@ -2,6 +2,7 @@
 
 #include <Alpha/Engine/Renderer/Shader.h>
 
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLTools.h>
 #include <Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.h>
 
 namespace Alpha
@@ -13,9 +14,9 @@ namespace Alpha
 
         ~OpenGLShader() override;
 
-        inline void Bind() const override { glUseProgram(m_id); }
+        inline void Bind() const override { GL_CHECK(glUseProgram(m_id)); }
 
-        inline void Unbind() const override { glUseProgram(0); }
+        inline void Unbind() const override { GL_CHECK(glUseProgram(0)); }
 
         /// @getter: The name of the shader.
         const std::string& GetName() const override { return m_name; };
@@ -42,11 +43,10 @@ namespace Alpha
         /// Set a uniform of the type : Matrix4x4.
         void SetUniform(const std::string &name, const Matrix4 &m) override;
 
-        /// Set a uniform of the type : TransformMatrix.
-        void SetUniform(const std::string &name, const TransformMatrix &m) override;
-
     private:
         static GLenum ShaderTypeFromString(const std::string& type);
+
+        static std::string ShaderTypeToString(GLenum type);
 
         static std::string ReadFile(const std::string& filepath);
 

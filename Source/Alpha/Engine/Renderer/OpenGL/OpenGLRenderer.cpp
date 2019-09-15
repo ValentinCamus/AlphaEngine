@@ -6,8 +6,6 @@ namespace Alpha
 {
     void OpenGLRendererAPI::InitImpl()
     {
-        // All glEnable functions
-
         Logger::Info("OpenGL Renderer initialization [OK]");
     }
 
@@ -18,16 +16,25 @@ namespace Alpha
         Logger::Info("(OpenGL) Vendor: {0}", glGetString(GL_VENDOR));
         Logger::Info("(OpenGL) Renderer: {0}", glGetString(GL_RENDERER));
         Logger::Info("(OpenGL) Version: {0}", glGetString(GL_VERSION));
+
+        GL_CHECK(glEnable(GL_DEPTH_TEST));
+        // GL_CHECK(glEnable(GL_BLEND));
+        // GL_CHECK(glEnable(GL_CULL_FACE));
+
+        // GL_CHECK(glFrontFace(GL_CW));
+        // GL_CHECK(glCullFace(GL_FRONT));
+
+        // GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     }
 
     void OpenGLRendererAPI::SetClearColorImpl(const Color4 &color)
     {
-        glClearColor(color.r, color.g, color.b, color.a);
+        GL_CHECK(glClearColor(color.r, color.g, color.b, color.a));
     }
 
     void OpenGLRendererAPI::ClearImpl()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        GL_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
 }
 

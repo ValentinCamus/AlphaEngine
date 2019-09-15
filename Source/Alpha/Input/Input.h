@@ -6,6 +6,7 @@ namespace Alpha
 {
     class Input
     {
+
     protected:
         Input() = default;
 

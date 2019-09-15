@@ -4,6 +4,8 @@
 
 #include <Alpha/Engine/Renderer/Framebuffer.h>
 #include <Alpha/Engine/Renderer/Texture.h>
+
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLTools.h>
 #include <Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.h>
 
 namespace Alpha
@@ -48,7 +50,7 @@ namespace Alpha
 
          void Bind() override;
 
-         inline void Unbind() override { glBindFramebuffer(GL_FRAMEBUFFER, 0); }
+         inline void Unbind() override { GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
 
          inline uint32 GetWidth() override { return m_width; }
          inline uint32 GetHeight() override { return m_height; }
@@ -60,7 +62,7 @@ namespace Alpha
     private:
         void Init(uint32 width, uint32 height);
 
-        inline void Destroy() { glDeleteFramebuffers(1, &m_fbo); }
+        inline void Destroy() { GL_CHECK(glDeleteFramebuffers(1, &m_fbo)); }
 
     private:
         uint32 m_fbo = 0;

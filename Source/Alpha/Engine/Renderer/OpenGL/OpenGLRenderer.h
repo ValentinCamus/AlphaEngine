@@ -6,6 +6,8 @@
 
 #include <Alpha/ThirdParty/glad/glad.h>
 
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLTools.h>
+
 namespace Alpha
 {
     class OpenGLRendererAPI : public Renderer
