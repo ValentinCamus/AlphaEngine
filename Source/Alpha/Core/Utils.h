@@ -28,6 +28,13 @@ namespace Alpha
 		return str.c_str();
 	}
 
+	inline void Exit(int32 code = EXIT_SUCCESS)
+    {
+        Alpha::Logger::Info("Exiting with exit code: {0}", code);
+        exit(code);
+        // return code;
+    }
+
 	/// Exit the application.
 	/// @code: The returned code.
 	inline void ForceQuit(int32 code = EXIT_FAILURE)

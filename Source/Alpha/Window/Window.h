@@ -17,6 +17,9 @@ namespace Alpha
 
     class Window
 	{
+    public:
+        static Pointer<Window> Create(const WindowProps& props);
+
 	public:
         using EventCallbackFn = std::function<void(Event&)>;
 

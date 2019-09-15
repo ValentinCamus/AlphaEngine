@@ -17,11 +17,7 @@ namespace Alpha
 
         static inline ERendererAPI GetRendererAPI() { return s_rendererAPI; }
 
-        static inline void Init()
-        {
-            ALPHA_ASSERT(s_instance, "Invalid renderer!");
-            s_instance->InitImpl();
-        }
+        static void Init();
 
         static inline void CreateContext()
         {

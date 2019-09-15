@@ -17,14 +17,15 @@
 
 namespace Alpha
 {
-    namespace Core
+    class Core
     {
-        inline void Init()
+    public:
+        static inline void Init()
         {
+            Alpha::Logger::Info("Initializing: AlphaEngine Core...");
             Alpha::SetAtExitCallback();
             Alpha::Logger::SetLogLevel(Alpha::ELogLevel::Debug);
-
-            Alpha::Logger::Info("AlphaEngine Core initialization [OK]");
+            Alpha::Logger::Info("AlphaEngine Core initialized");
         }
-    }
+    };
 }

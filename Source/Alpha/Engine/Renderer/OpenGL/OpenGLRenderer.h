@@ -13,7 +13,7 @@ namespace Alpha
     class OpenGLRendererAPI : public Renderer
     {
     public:
-        inline OpenGLRendererAPI() { Logger::Info("Renderer: Use OpenGL API"); }
+        inline OpenGLRendererAPI() { Logger::Info("(Renderer) Use OpenGL rendering API"); }
 
     protected:
         void InitImpl() override;

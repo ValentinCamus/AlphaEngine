@@ -9,22 +9,20 @@
 
 namespace Alpha
 {
-	class DefaultWindow : public Window
+	class GlfwWindow : public Window
 	{
 	public:
 		/// Constructor.
-		explicit DefaultWindow(const WindowProps& props = {"Main Window", 1280, 720 })
+		explicit GlfwWindow(const WindowProps& props)
 		{
 		    m_props.title = props.title;
 		    m_props.width = props.width;
 		    m_props.height = props.height;
 			Init();
-
-            Logger::Info("Window system: Use DefaultWindow");
 		}
 
 		/// Destructor.
-		~DefaultWindow() override { Shutdown(); }
+		~GlfwWindow() override { Shutdown(); }
 
         inline void SetEventCallback(const EventCallbackFn& callback) override { m_props.eventCallback = callback; }
 

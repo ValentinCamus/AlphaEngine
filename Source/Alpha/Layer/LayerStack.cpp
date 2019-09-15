@@ -15,7 +15,7 @@ namespace Alpha
         ++m_layerInsertIndex;
         layer->OnAttach();
 
-        Logger::Info("{0}: Pushing new layer: {1}", GetName(), layer->GetName());
+        Logger::Info("Pushing new layer in \"{0}\": {1}", GetName(), layer->GetName());
     }
 
     void LayerStack::PopLayer(const Pointer<Layer>& layer)

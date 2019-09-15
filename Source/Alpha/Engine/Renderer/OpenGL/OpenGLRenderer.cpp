@@ -4,18 +4,16 @@
 
 namespace Alpha
 {
-    void OpenGLRendererAPI::InitImpl()
-    {
-        Logger::Info("OpenGL Renderer initialization [OK]");
-    }
+    void OpenGLRendererAPI::InitImpl() {}
 
     void OpenGLRendererAPI::CreateContextImpl()
     {
+        Logger::Info("Initializing: OpenGL Renderer...");
         ALPHA_ASSERT(gladLoadGLLoader((GLADloadproc) glfwGetProcAddress), "Failed to initialize GLAD");
 
-        Logger::Info("(OpenGL) Vendor: {0}", glGetString(GL_VENDOR));
-        Logger::Info("(OpenGL) Renderer: {0}", glGetString(GL_RENDERER));
-        Logger::Info("(OpenGL) Version: {0}", glGetString(GL_VERSION));
+        Logger::Info("(Renderer) Vendor: {0}", glGetString(GL_VENDOR));
+        Logger::Info("(Renderer) Renderer: {0}", glGetString(GL_RENDERER));
+        Logger::Info("(Renderer) Version: {0}", glGetString(GL_VERSION));
 
         GL_CHECK(glEnable(GL_DEPTH_TEST));
         // GL_CHECK(glEnable(GL_BLEND));
@@ -25,6 +23,7 @@ namespace Alpha
         // GL_CHECK(glCullFace(GL_FRONT));
 
         // GL_CHECK(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        Logger::Info("OpenGL Renderer initialized");
     }
 
     void OpenGLRendererAPI::SetClearColorImpl(const Color4 &color)

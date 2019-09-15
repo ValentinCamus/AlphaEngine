@@ -1,9 +1,11 @@
 #include <iostream>
 
 #include <Alpha/Core/CoreMinimal.h>
+#include <Alpha/Engine/EngineMinimal.h>
+
+#include <Alpha/Input/Input.h>
 
 #include <Alpha/Application/Application.h>
-#include <Alpha/Engine/Renderer/Renderer.h>
 
 #include <Sandbox/Sandbox.h>
 
@@ -13,7 +15,8 @@ int main(int argc, char *argv[])
     ALPHA_UNUSED(argv);
 
     Alpha::Core::Init();
-    Alpha::Renderer::Init();
+    Alpha::Input::Init();
+    Alpha::Engine::Init();
 
 	Alpha::Application application;
 
@@ -23,10 +26,9 @@ int main(int argc, char *argv[])
 	application.PushLayer(sandboxLayer);
     application.PushLayer(sandboxGuiLayer);
 
-    Alpha::Logger::Info("AlphaEngine: Ready to run");
+    Alpha::Logger::Info("AlphaEngine: Running...");
 
 	application.Run();
 
-    Alpha::Logger::Info("Exiting with exit code 0 (No Error)");
-    return EXIT_SUCCESS;
+    Alpha::Exit(EXIT_SUCCESS);
 }

@@ -1,6 +1,6 @@
 #include "Application.h"
 
-#include <Alpha/Window/DefaultWindow/DefaultWindow.h>
+#include <Alpha/Window/Window.h>
 
 namespace Alpha
 {
@@ -11,8 +11,8 @@ namespace Alpha
         ALPHA_ASSERT(!s_instance, "Application already exists!");
         s_instance = this;
 
-        Pointer<DefaultWindow> window = NewPointer<DefaultWindow>();
-        SetWindow(window);
+        m_window = Window::Create({"Main Window", 1280, 720});
+        m_window->SetEventCallback(ALPHA_BIND_EVENT(Application::OnEvent, this));
     }
 
 	void Application::Run()

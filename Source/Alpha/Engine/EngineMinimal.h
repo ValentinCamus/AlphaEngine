@@ -2,6 +2,8 @@
 
 #include <Alpha/Core/CoreMinimal.h>
 
+#include <Alpha/Engine/Renderer/Renderer.h>
+
 #include <Alpha/Engine/Light/Light.h>
 #include <Alpha/Engine/Light/DirectionalLight.h>
 #include <Alpha/Engine/Light/PointLight.h>
@@ -14,9 +16,11 @@ namespace Alpha
     class Engine
     {
     public:
-        static inline Collection<Pointer<Light>> GetLights() { return s_lights; }
+        static void Init();
+
+        static inline const Collection<Pointer<Light>>& GetLights() { return *s_lights; }
 
     private:
-        static Collection<Pointer<Light>> s_lights;
+        static Collection<Pointer<Light>>* s_lights;
     };
 }
