@@ -8,6 +8,6 @@ namespace Alpha
     {
     public:
         /// Load an image from the disk.
-        static RawImage Load(const std::string& filepath);
+        static Pointer<RawImage> Load(const std::string& filepath);
     };
 }

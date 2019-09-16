@@ -64,8 +64,9 @@ namespace Alpha
 
             m_entity->SetMaterial(0, material);
 
-            // m_entity->SetWorldRotation({0, 0, 45});
+            m_entity->SetWorldRotation({0, 0, 45});
             m_entity->SetWorldLocation({0, 0, -2});
+            m_entity->SetWorldScale({3, 3, 3});
         }
 
         inline void OnUpdate() override
@@ -77,6 +78,7 @@ namespace Alpha
             if (Input::IsKeyPressed(ALPHA_KEY_D)) m_camera.MoveRight(1);
 
             if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_1)) m_camera.Look(Input::GetMousePosition());
+
 
             ALPHA_ASSERT(m_framebuffer01, "Invalid Framebuffer: 01");
 
