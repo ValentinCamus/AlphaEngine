@@ -32,7 +32,7 @@ namespace Alpha
         virtual ~Material() { m_textures.clear(); }
 
         /// Bind this material.
-        virtual void Bind(const Pointer<Shader>& shader);
+        virtual void Bind(const Pointer<Shader>& shader, const std::string& uniformName);
 
         /// Unbind this material.
         virtual void Unbind();

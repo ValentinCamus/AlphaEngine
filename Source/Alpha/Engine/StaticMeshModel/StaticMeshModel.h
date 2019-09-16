@@ -10,8 +10,10 @@ namespace Alpha
     class StaticMeshModel
     {
     public:
-        /// Load a static mesh.
-        /// @note: Will clear the collection of meshes.
+        /// Load a static mesh model from a file.
+        bool Load(const std::string& filename);
+
+        /// Load a static mesh model.
         /// @note: Use this constructor instead of using a static mesh.
         bool Load(const std::vector<Vertex>& vertices, const std::vector<uint32>& indices);
 

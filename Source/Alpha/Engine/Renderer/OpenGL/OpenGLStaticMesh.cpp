@@ -34,7 +34,7 @@ namespace Alpha
 
             GL_CHECK(glBindVertexArray(m_vao));
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
-            GetMaterial()->Bind(shader);
+            GetMaterial()->Bind(shader, "material");
 
             GL_CHECK(glDrawElements(GL_TRIANGLES, (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
 

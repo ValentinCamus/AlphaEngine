@@ -66,7 +66,7 @@ set(ENGINE_SRCS
         Alpha/Engine/Renderer/OpenGL/OpenGLFramebuffer.cpp
 
         Alpha/Gui/BuildInWidgets/DockerWidget.cpp
-        Alpha/Gui/BuildInWidgets/ViewportWidget.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.h Alpha/ThirdParty/stb/stb_image.cpp Alpha/ThirdParty/stb/stb_image.h Alpha/Engine/Camera/Camera.h Alpha/Engine/Camera/EulerCamera.cpp Alpha/Engine/Camera/EulerCamera.h Alpha/Engine/Renderer/Shader.cpp Alpha/Engine/Renderer/Shader.h Alpha/Engine/Renderer/OpenGL/OpenGLShader.cpp Alpha/Engine/Renderer/OpenGL/OpenGLShader.h Alpha/Engine/Material/Material.cpp Alpha/Engine/Material/Material.h Alpha/Engine/Loader/ImageLoader.cpp Alpha/Engine/Loader/ImageLoader.h Alpha/Engine/Renderer/StaticMesh.cpp Alpha/Engine/Renderer/StaticMesh.h Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.cpp Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.h Alpha/Engine/Renderer/OpenGL/OpenGLTools.h Alpha/Engine/StaticMeshModel/StaticMeshModel.cpp Alpha/Engine/StaticMeshModel/StaticMeshModel.h Alpha/Engine/StaticMeshModel/StaticMeshEntity.cpp Alpha/Engine/StaticMeshModel/StaticMeshEntity.h Alpha/Input/Input.cpp Alpha/Window/Window.cpp)
+        Alpha/Gui/BuildInWidgets/ViewportWidget.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.h Alpha/ThirdParty/stb/stb_image.cpp Alpha/ThirdParty/stb/stb_image.h Alpha/Engine/Camera/Camera.h Alpha/Engine/Camera/EulerCamera.cpp Alpha/Engine/Camera/EulerCamera.h Alpha/Engine/Renderer/Shader.cpp Alpha/Engine/Renderer/Shader.h Alpha/Engine/Renderer/OpenGL/OpenGLShader.cpp Alpha/Engine/Renderer/OpenGL/OpenGLShader.h Alpha/Engine/Material/Material.cpp Alpha/Engine/Material/Material.h Alpha/Engine/Loader/ImageLoader.cpp Alpha/Engine/Loader/ImageLoader.h Alpha/Engine/Renderer/StaticMesh.cpp Alpha/Engine/Renderer/StaticMesh.h Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.cpp Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.h Alpha/Engine/Renderer/OpenGL/OpenGLTools.h Alpha/Engine/StaticMeshModel/StaticMeshModel.cpp Alpha/Engine/StaticMeshModel/StaticMeshModel.h Alpha/Engine/StaticMeshModel/StaticMeshEntity.cpp Alpha/Engine/StaticMeshModel/StaticMeshEntity.h Alpha/Input/Input.cpp Alpha/Window/Window.cpp Alpha/Engine/Loader/MeshLoader.cpp Alpha/Engine/Loader/MeshLoader.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE
@@ -94,12 +94,13 @@ addRunAndDebugTargets(AlphaEngine)
 # Short convenience target from CMake/CleanCpppExtensions.cpp
 add_custom_target(run DEPENDS AlphaEngine-run)
 
+
 #-------------------------------------------------------------------------------
 # Target link libraries
 
 target_link_libraries(AlphaEngine spdlog)
 #target_link_libraries(AlphaEngine glm)
-#target_link_libraries(AlphaEngine assimp)
+target_link_libraries(AlphaEngine assimp)
 #target_link_libraries(AlphaEngine imgui)
 target_link_libraries(AlphaEngine glfw)
 

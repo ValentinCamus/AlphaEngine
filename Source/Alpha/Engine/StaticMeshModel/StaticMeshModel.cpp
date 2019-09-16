@@ -1,7 +1,22 @@
 #include "StaticMeshModel.h"
 
+#include <Alpha/Engine/Loader/MeshLoader.h>
+
 namespace Alpha
 {
+    bool StaticMeshModel::Load(const std::string &filename)
+    {
+        bool bIsValid = MeshLoader::Load(filename);
+
+        if (bIsValid)
+        {
+            m_meshes = MeshLoader::Get();
+            MeshLoader::Flush();
+        }
+
+        return bIsValid;
+    }
+
     bool StaticMeshModel::Load(const std::vector<Vertex> &vertices, const std::vector<uint32> &indices)
     {
         Pointer<StaticMesh> sm = StaticMesh::Create(vertices, indices);

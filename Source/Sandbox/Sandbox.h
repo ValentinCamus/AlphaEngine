@@ -38,35 +38,26 @@ namespace Alpha
 
             m_framebuffer01 = Framebuffer::Create(500, 500);
 
-            std::vector<Vertex> vertices = {
-                    Vertex({ 0.5f,  0.5f, 0.0f}, {1, 0, 0}, {1.0f, 1.0f}),
-                    Vertex({ 0.5f, -0.5f, 0.0f}, {1, 0, 0}, {1.0f, 0.0f}),
-                    Vertex({-0.5f, -0.5f, 0.0f}, {1, 0, 0}, {0.0f, 0.0f}),
-                    Vertex({-0.5f,  0.5f, 0.0f}, {1, 0, 0}, {0.0f, 1.0f}),
-            };
-
-            std::vector<uint32> indices = {
-                    0, 1, 3,   // first triangle
-                    1, 2, 3    // second triangle
-            };
-
             m_sm = NewPointer<StaticMeshModel>();
-            m_sm->Load(vertices, indices);
+            m_sm->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
 
             m_entity = NewPointer<StaticMeshEntity>("Entity", m_sm);
 
-            Pointer<Material> material = NewPointer<Material>("material");
-
             m_texture = Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg");
 
-            // material->SetKd(Vector4(1.0f));
-            material->AddTexture(Material::ETextureType::TX_Diffuse, m_texture);
+            Pointer<Material> material01 = NewPointer<Material>("Material_01");
+            Pointer<Material> material02 = NewPointer<Material>("Material_02");
 
-            m_entity->SetMaterial(0, material);
+            material01->SetKd(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            material02->AddTexture(Material::ETextureType::TX_Diffuse, m_texture);
 
-            m_entity->SetWorldRotation({0, 0, 45});
-            m_entity->SetWorldLocation({0, 0, -2});
-            m_entity->SetWorldScale({3, 3, 3});
+            m_entity->SetMaterial(0, material01);
+            m_entity->SetMaterial(1, material02);
+
+            // Fixme: Image in fbo upside down.
+            m_entity->SetWorldLocation({0, 1, -2});
+            m_entity->SetWorldRotation({0, 0, 180});
+            m_entity->SetWorldScale({0.1, 0.1, 0.1});
         }
 
         inline void OnUpdate() override

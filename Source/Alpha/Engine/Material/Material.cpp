@@ -2,19 +2,19 @@
 
 namespace Alpha
 {
-    void Material::Bind(const Pointer<Shader>& shader)
+    void Material::Bind(const Pointer<Shader>& shader, const std::string& uniformName)
     {
         Pointer<Texture2D> textureKd = GetTexture(ETextureType::TX_Diffuse);
         if (textureKd)
         {
             textureKd->Bind(0);
-            shader->SetUniform(m_name + ".tex.kd", textureKd->GetSlot());
-            shader->SetUniform(m_name + ".tex.hasKd", true);
+            shader->SetUniform(uniformName + ".tex.kd", textureKd->GetSlot());
+            shader->SetUniform(uniformName + ".tex.hasKd", true);
         }
         else
         {
-            shader->SetUniform(m_name + ".tex.hasKd", false);
-            shader->SetUniform(m_name + ".kd", m_kd);
+            shader->SetUniform(uniformName + ".tex.hasKd", false);
+            shader->SetUniform(uniformName + ".kd", m_kd);
         }
 
         /*
