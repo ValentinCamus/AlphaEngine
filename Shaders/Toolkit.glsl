@@ -1,5 +1,3 @@
-#version 330
-
 #ifndef __CORE_DEFINES__
 #define __CORE_DEFINES__
 

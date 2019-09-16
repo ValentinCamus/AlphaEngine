@@ -63,7 +63,6 @@ namespace Alpha
 
     std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
     {
-        // std::string defines = ReadFile(PROJECT_SOURCE_DIR + "Shaders/Toolkit.glsl");
         std::unordered_map<GLenum, std::string> shaderSources;
 
         const char* typeToken = "#type";

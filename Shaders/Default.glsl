@@ -59,8 +59,11 @@ struct Material
 
 vec3 GetKd(Material material, vec2 texCoord)
 {
-    if (material.tex.hasKd == 0) return material.kd.xyz;
-    else return vec3(texture(material.tex.kd, texCoord));
+    if (material.tex.hasKd == 1)
+    {
+        return vec3(texture(material.tex.kd, texCoord));
+    }
+    return material.kd.xyz;
 }
 
 vec3 GetKs(Material material, vec2 texCoord)

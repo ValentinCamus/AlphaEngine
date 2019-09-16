@@ -55,8 +55,7 @@ namespace Alpha
             m_entity->SetMaterial(1, material02);
 
             // Fixme: Image in fbo upside down.
-            m_entity->SetWorldLocation({0, 1, -2});
-            m_entity->SetWorldRotation({0, 0, 180});
+            m_entity->SetWorldLocation({0, -1, -2});
             m_entity->SetWorldScale({0.1, 0.1, 0.1});
         }
 
