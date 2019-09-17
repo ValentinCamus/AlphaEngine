@@ -17,8 +17,8 @@
 
 #include <Alpha/Engine/Camera/EulerCamera.h>
 
-#include <Alpha/Engine/StaticMeshModel/StaticMeshModel.h>
-#include <Alpha/Engine/StaticMeshModel/StaticMeshEntity.h>
+#include <Alpha/Engine/Mesh/StaticMeshModel.h>
+#include <Alpha/Engine/Mesh/StaticMeshEntity.h>
 
 #include <Alpha/Engine/Renderer/Texture.h>
 #include <Alpha/Engine/Material/Material.h>
@@ -34,9 +34,14 @@ namespace Alpha
 
         inline void Init()
         {
-            m_shader = Shader::Create(PROJECT_SOURCE_DIR + "Shaders/Default.glsl");
+            m_shader = Shader::Create("Pbr", {
+                {Shader::GLSL_VERTEX_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.vs.glsl"},
+                {Shader::GLSL_FRAGMENT_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.fs.glsl"}
+            });
 
             m_framebuffer01 = Framebuffer::Create(500, 500);
+
+            m_light = NewPointer<DirectionalLight>(Vector(-0.5f), Color4(1, 1, 1, 1));
 
             m_sm = NewPointer<StaticMeshModel>();
             m_sm->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
@@ -49,6 +54,9 @@ namespace Alpha
             Pointer<Material> material02 = NewPointer<Material>("Material_02");
 
             material01->SetKd(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            material01->SetKs(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            material01->SetRoughness(0.9f);
+
             material02->AddTexture(Material::ETextureType::TX_Diffuse, m_texture);
 
             m_entity->SetMaterial(0, material01);
@@ -78,11 +86,13 @@ namespace Alpha
             Renderer::Clear();
             Renderer::SetClearColor({0.2f, 0.3f, 0.3f, 1.0f});
 
+            m_shader->SetUniform("nLights", 1);
+            m_shader->SetUniform("lights[0]", m_light);
+
             float fb01AspectRatio = (float)m_framebuffer01->GetWidth() / (float)m_framebuffer01->GetHeight();
             Matrix4x4 projectionMatrix = MakeProjectionMatrix(m_camera.GetZoom(), fb01AspectRatio);
 
-            Vector3 upsideDownCameraView = m_camera.GetWorldRotation() + Vector3(0, 0, 180);
-            Matrix4x4 viewMatrix = MakeViewMatrix(m_camera.GetWorldLocation(), upsideDownCameraView);
+            Matrix4x4 viewMatrix = MakeViewMatrix(m_camera.GetWorldLocation(),  m_camera.GetWorldRotation());
 
             TransformMatrix transformMatrix = {Matrix4x4(1), viewMatrix, projectionMatrix};
 
@@ -100,6 +110,8 @@ namespace Alpha
         Pointer<StaticMeshEntity> m_entity;
 
         Pointer<Texture2D> m_texture;
+
+        Pointer<Light> m_light;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

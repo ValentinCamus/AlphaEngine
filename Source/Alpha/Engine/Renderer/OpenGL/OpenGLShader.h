@@ -10,7 +10,7 @@ namespace Alpha
     class OpenGLShader : public Shader
     {
     public:
-        explicit OpenGLShader(const std::string& filepath);
+        explicit OpenGLShader(const std::string& name, const std::map<int32, std::string>& sources);
 
         ~OpenGLShader() override;
 
@@ -43,14 +43,10 @@ namespace Alpha
         /// Set a uniform of the type : Matrix4x4.
         void SetUniform(const std::string &name, const Matrix4 &m) override;
 
+        /// Set a uniform of the type : Light.
+        void SetUniform(const std::string &name, const Pointer<Light>& light) override;
     private:
-        static GLenum ShaderTypeFromString(const std::string& type);
-
-        static std::string ShaderTypeToString(GLenum type);
-
-        static std::string ReadFile(const std::string& filepath);
-
-        static std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+        static std::string ReadFile(const std::string& filepath, uint32 level = 0);
 
         int32 GetUniformLocation(const std::string& name);
 
@@ -59,6 +55,5 @@ namespace Alpha
     private:
         uint32 m_id = 0;
         std::string m_name;
-        std::string m_filepath;
     };
 }

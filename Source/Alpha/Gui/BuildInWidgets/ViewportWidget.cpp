@@ -37,7 +37,7 @@ namespace Alpha
         }
         m_framebuffer->Unbind();
 
-        ImGui::Image((void*)(uintptr_t) m_framebuffer->GetTexture()->GetId(), m_framebufferSize);
+        ImGui::Image((void*)(uintptr_t) m_framebuffer->GetTexture()->GetId(), m_framebufferSize, ImVec2(0, 1), ImVec2(1, 0), ImVec4(1, 1, 1, 1), ImVec4(10, 10, 10, 10));
 
         ImGui::End();
     }

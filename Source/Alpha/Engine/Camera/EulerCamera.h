@@ -30,7 +30,7 @@ namespace Alpha
         /// Is pitch constrained ?
         bool m_isPitchConstrained = true;
 
-        float m_deltaTime = DEFAULT_DELTA_TIME;
+        float m_deltaTime = 0.01f;
 
         /// Camera options: Speed.
         float m_movementSpeed;
@@ -39,9 +39,9 @@ namespace Alpha
         float m_mouseSensitivity;
 
         /// Last mouse position on X-Axis.
-        float m_mouseX;
+        float m_mouseX = 0.0f;
 
         /// Last mouse position on Y-Axis.
-        float m_mouseY;
+        float m_mouseY = 0.0f;
     };
 }

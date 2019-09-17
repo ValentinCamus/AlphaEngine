@@ -9,11 +9,14 @@ namespace Alpha
         Resize(width, height);
         GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
         GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+        GL_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
     }
 
     void OpenGL::FramebufferTexture2D::Bind(int32 slot)
     {
         m_slot = slot;
+        GL_CHECK(glViewport(0, 0, m_width, m_height));
         GL_CHECK(glActiveTexture(GL_TEXTURE0 + (GLenum)slot));
         GL_CHECK(glBindTexture(GL_TEXTURE_2D, m_id));
     }
@@ -35,6 +38,7 @@ namespace Alpha
         m_width = width; m_height = height;
         m_texture->Resize(width, height);
 
+        GL_CHECK(glViewport(0, 0, width, height));
         GL_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, m_rbo));
         GL_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
     }

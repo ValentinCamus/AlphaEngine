@@ -3,21 +3,24 @@
 #include <regex>
 #include <fstream>
 
+#include <Alpha/Engine/Light/SpotLight.h>
+#include <Alpha/Engine/Light/PointLight.h>
+#include <Alpha/Engine/Light/DirectionalLight.h>
+
 namespace Alpha
 {
-    OpenGLShader::OpenGLShader(const std::string &filepath)
-            : m_filepath(filepath)
+    OpenGLShader::OpenGLShader(const std::string& name, const std::map<int32, std::string>& sources)
+        : m_name(name)
     {
-        std::string source = ReadFile(filepath);
-        auto shaderSources = PreProcess(source);
-        Compile(shaderSources);
+        std::unordered_map<GLenum, std::string> glSources;
+        for (auto& it: sources)
+        {
+            GLenum shaderId = it.first;
+            std::string shaderSource = ReadFile(it.second);
+            glSources.insert({shaderId, shaderSource});
+        }
 
-        // Extract name from filepath.
-        auto lastSlash = filepath.find_last_of("/\\");
-        lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-        auto lastDot = filepath.rfind('.');
-        auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-        m_name = filepath.substr(lastSlash, count);
+        Compile(glSources);
     }
 
     OpenGLShader::~OpenGLShader()
@@ -25,65 +28,38 @@ namespace Alpha
         GL_CHECK(glDeleteProgram(m_id));
     }
 
-    GLenum OpenGLShader::ShaderTypeFromString(const std::string& type)
+    std::string OpenGLShader::ReadFile(const std::string &path, uint32 level)
     {
-        if (type == "vertex") return GL_VERTEX_SHADER;
-        if (type == "fragment" || type == "pixel") return GL_FRAGMENT_SHADER;
+        ALPHA_ASSERT(level < 32, "OpenGLShader::IncludeFile: Include recursion went too deep");
 
-        ALPHA_ASSERT(false, "Unknown shader type!");
-        return 0;
-    }
+        std::ifstream fileStream(path);
 
-    std::string OpenGLShader::ShaderTypeToString(GLenum type)
-    {
-        switch (type)
+        if (!fileStream.is_open())
         {
-            case GL_VERTEX_SHADER: return "vertex";
-            case GL_FRAGMENT_SHADER: return "fragment";
-            default: return "undefined";
-        }
-    }
-
-    std::string OpenGLShader::ReadFile(const std::string& filepath)
-    {
-        std::string result;
-        std::ifstream in(filepath, std::ios::in | std::ios::binary);
-        if (in)
-        {
-            in.seekg(0, std::ios::end);
-            result.resize((uint32) in.tellg());
-            in.seekg(0, std::ios::beg);
-            in.read(&result[0], result.size());
-            in.close();
-        }
-        else ALPHA_ASSERT(false, "OpenGLShader::ReadFile: Could not open file '{0}'", filepath);
-
-        return result;
-    }
-
-    std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
-    {
-        std::unordered_map<GLenum, std::string> shaderSources;
-
-        const char* typeToken = "#type";
-        size_t typeTokenLength = strlen(typeToken);
-        size_t pos = source.find(typeToken, 0);
-        while (pos != std::string::npos)
-        {
-            size_t eol = source.find_first_of("\r\n", pos);
-            ALPHA_ASSERT(eol != std::string::npos, "Syntax error");
-            size_t begin = pos + typeTokenLength + 1;
-            std::string type = source.substr(begin, eol - begin);
-            ALPHA_ASSERT(ShaderTypeFromString(type), "Invalid shader type specified");
-
-            size_t nextLinePos = source.find_first_not_of("\r\n", eol);
-            pos = source.find(typeToken, nextLinePos);
-
-            uint32 sourceCount = pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos);
-            shaderSources[ShaderTypeFromString(type)] = source.substr(nextLinePos, sourceCount);
+            Logger::Error("OpenGLShader::IncludeFile: File not found: {0}", path);
+            ForceQuit(EXIT_FAILURE);
         }
 
-        return shaderSources;
+        std::string line;
+        std::stringstream ss;
+
+        std::regex reg("^[ ]*#[ ]*include[ ]+[\"<](.*)[\">].*");
+        size_t position = path.find_last_of('/');
+        std::string folder = path.substr(0, position + 1);
+
+        while (std::getline(fileStream, line))
+        {
+            std::smatch match;
+            if (std::regex_search(line, match, reg))
+            {
+                std::string includePath = folder + match[1].str();
+                ss << ReadFile(includePath, 0);
+            }
+            else ss << line << "\n";
+        }
+
+        return ss.str();
+
     }
 
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
@@ -121,7 +97,7 @@ namespace Alpha
 
                 GL_CHECK(glDeleteShader(shader));
 
-                ALPHA_ASSERT(false, "Compilation Error ({0}): {1}", ShaderTypeToString(type), infoLog.data());
+                ALPHA_ASSERT(false, "Compilation Error ({0}):\n{1}", type, infoLog.data());
                 break;
             }
 
@@ -166,7 +142,7 @@ namespace Alpha
         OpenGL::ClearErrorBuffer();
         int32 location = glGetUniformLocation((GLuint)m_id, cname);
         OpenGL::DumpErrorBuffer("OpenGLShader::Compile: glGetUniformLocation", __FILE__, __LINE__);
-        ALPHA_ASSERT(location > -1, "Shader::GetUniformLocation, uniform \"{0}\" not found.", name);
+        ALPHA_ASSERT(location > -1, "OpenGLShader::GetUniformLocation, uniform \"{0}\" not found.", name);
 
         return location;
     }
@@ -211,5 +187,66 @@ namespace Alpha
     {
         int32 location = GetUniformLocation(name);
         GL_CHECK(glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]));
+    }
+
+    void OpenGLShader::SetUniform(const std::string &name, const Pointer<Light> &light)
+    {
+        Pointer<DirectionalLight> dirLight = nullptr;
+        Pointer<PointLight> pointLight = nullptr;
+        Pointer<SpotLight> spotLight = nullptr;
+
+        SetUniform(name + ".type", light->GetType());
+        SetUniform(name + ".color", light->GetColor());
+
+        switch (light->GetType())
+        {
+            case Light::LightType::Directional:
+                dirLight = Cast<DirectionalLight>(light);
+
+                if (dirLight == nullptr)
+                {
+                    Logger::Error("OpenGLShader::SetUniform (Light --> Dir) : Invalid cast");
+                    ForceQuit(EXIT_FAILURE);
+                }
+
+                SetUniform(name + ".directional.direction", dirLight->GetDirection());
+
+                break;
+
+            case Light::LightType::Point:
+                pointLight = Cast<PointLight>(light);
+
+                if (pointLight == nullptr)
+                {
+                    Logger::Error("OpenGLShader::SetUniform (Light --> Point) : Invalid cast");
+                    ForceQuit(EXIT_FAILURE);
+                }
+
+                SetUniform(name + ".point.position", pointLight->GetWorldLocation());
+                SetUniform(name + ".point.attenuation.constant", pointLight->GetAttenuation().constant);
+                SetUniform(name + ".point.attenuation.linear", pointLight->GetAttenuation().linear );
+                SetUniform(name + ".point.attenuation.quadratic", pointLight->GetAttenuation().quadratic );
+
+                break;
+
+            case Light::LightType::Spot:
+                spotLight = Cast<SpotLight>(light);
+
+                if (spotLight == nullptr)
+                {
+                    Logger::Error("OpenGLShader::SetUniform (Light --> Spot) : Invalid cast");
+                    ForceQuit(EXIT_FAILURE);
+                }
+
+                SetUniform(name + ".spot.position", spotLight->GetWorldLocation());
+                SetUniform(name + ".spot.direction", spotLight->GetDirection());
+                SetUniform(name + ".spot.innerAngle", spotLight->GetInnerAngle());
+                SetUniform(name + ".spot.outerAngle", spotLight->GetOuterAngle());
+                SetUniform(name + ".spot.attenuation.constant", spotLight->GetAttenuation().constant);
+                SetUniform(name + ".spot.attenuation.linear", spotLight->GetAttenuation().linear );
+                SetUniform(name + ".spot.attenuation.quadratic", spotLight->GetAttenuation().quadratic );
+
+                break;
+        }
     }
 }

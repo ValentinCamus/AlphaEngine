@@ -17,6 +17,8 @@ namespace Alpha
             TX_Specular,
             TX_Normal,
             TX_Roughness,
+            TX_Metallic,
+            TX_AmbientOcclusion,
             TX_Transparency
         };
 
@@ -121,6 +123,10 @@ namespace Alpha
         /// Where 1 means opaque and 0 means totally transparent.
         /// @note: m_transparency has a lower priority than TX_Transparency.
         float m_transparency = 1.0f;
+
+        /// The metallic aspect of the material.
+        /// @note: m_transparency has a lower priority than TX_Transparency.
+        float m_metallic = 0.1f;
 
         /// Textures Map.
         std::map<ETextureType, Pointer<Texture2D>> m_textures;

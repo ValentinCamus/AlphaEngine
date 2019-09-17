@@ -2,12 +2,19 @@
 
 #include <Alpha/Core/CoreMinimal.h>
 
+#include <Alpha/Engine/Light/Light.h>
+
 namespace Alpha
 {
     class Shader
     {
     public:
-        static Pointer<Shader> Create(const std::string& filepath);
+        static const int32 GLSL_VERTEX_SHADER;
+        static const int32 GLSL_FRAGMENT_SHADER;
+        static const int32 GLSL_GEOMETRY_SHADER;
+
+    public:
+        static Pointer<Shader> Create(const std::string& name, const std::map<int32, std::string>& sources);
 
     public:
         virtual ~Shader() = default;
@@ -38,5 +45,8 @@ namespace Alpha
 
         /// Set a uniform of the type : Matrix4x4.
         virtual void SetUniform(const std::string &name, const Matrix4 &m) = 0;
+
+        /// Set a uniform of the type : Light.
+        virtual void SetUniform(const std::string &name, const Pointer<Light>& light) = 0;
     };
 }

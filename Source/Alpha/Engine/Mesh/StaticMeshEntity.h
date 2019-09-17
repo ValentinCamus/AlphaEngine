@@ -5,7 +5,7 @@
 #include <Alpha/Engine/Renderer/Shader.h>
 #include <Alpha/Engine/Material/Material.h>
 #include <Alpha/Engine/Component/SceneComponent.h>
-#include <Alpha/Engine/StaticMeshModel/StaticMeshModel.h>
+#include <Alpha/Engine/Mesh/StaticMeshModel.h>
 
 namespace Alpha
 {
