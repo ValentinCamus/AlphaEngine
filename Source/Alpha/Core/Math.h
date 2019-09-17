@@ -73,6 +73,7 @@ namespace Alpha
 		// Rotate the view matrix.
 		viewMatrix = glm::rotate(viewMatrix, glm::radians(rotation.x), Vector(1, 0, 0));
 		viewMatrix = glm::rotate(viewMatrix, glm::radians(rotation.y), Vector(0, 1, 0));
+        viewMatrix = glm::rotate(viewMatrix, glm::radians(rotation.z), Vector(0, 0, 1));
 
 		// Invert the view so when we move left, the view goes to the right.
 		viewMatrix = glm::translate(viewMatrix, -location);

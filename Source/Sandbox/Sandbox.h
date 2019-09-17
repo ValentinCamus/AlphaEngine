@@ -81,7 +81,10 @@ namespace Alpha
             float fb01AspectRatio = (float)m_framebuffer01->GetWidth() / (float)m_framebuffer01->GetHeight();
             Matrix4x4 projectionMatrix = MakeProjectionMatrix(m_camera.GetZoom(), fb01AspectRatio);
 
-            TransformMatrix transformMatrix = { Matrix4x4(1), m_camera.GetViewMatrix(), projectionMatrix };
+            Vector3 upsideDownCameraView = m_camera.GetWorldRotation() + Vector3(0, 0, 180);
+            Matrix4x4 viewMatrix = MakeViewMatrix(m_camera.GetWorldLocation(), upsideDownCameraView);
+
+            TransformMatrix transformMatrix = {Matrix4x4(1), viewMatrix, projectionMatrix};
 
             m_entity->Draw(m_shader, transformMatrix);
 

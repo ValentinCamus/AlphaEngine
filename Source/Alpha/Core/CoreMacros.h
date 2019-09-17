@@ -19,27 +19,27 @@
 #endif
 
 #ifdef ALPHA_ENABLE_ASSERT
-#define ALPHA_ASSERT(expr, msg, ...) \
+#define ALPHA_ASSERT(expr, ...) \
 	if (!(expr)) \
 	{ \
-		Alpha::Logger::Error(msg, __VA_ARGS__); \
+		Alpha::Logger::Error(__VA_ARGS__); \
 		Alpha::Logger::Info("Shutdown: AlphaEngine"); \
 		Alpha::ForceQuit(); \
 	} 
 #else
-#define ALPHA_ASSERT(expr, msg)
+#define ALPHA_ASSERT(expr, ...)
 #endif
 
 #ifdef ALPHA_ENABLE_CHECK
-#define ALPHA_CHECK(expr, msg) \
+#define ALPHA_CHECK(expr, ...) \
 	if (!(expr)) \
 	{ \
-		Alpha::Logger::Error(std::string("[Check] ") + std::string(msg)); \
+		Alpha::Logger::Error(__VA_ARGS__); \
 		Alpha::Logger::Info("Shutdown: AlphaEngine"); \
 		Alpha::ForceQuit(); \
 	} 
 #else
-#define ALPHA_CHECK(expr, msg) expr
+#define ALPHA_CHECK(expr, ...) expr
 #endif
 
 #define ALPHA_BIND_EVENT(fn, ref) std::bind(&fn, ref, std::placeholders::_1)

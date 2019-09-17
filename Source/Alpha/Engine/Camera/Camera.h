@@ -26,9 +26,6 @@ namespace Alpha
 
         ~Camera() override = default;
 
-        /// Calculate the view matrix.
-        inline Matrix4 GetViewMatrix() const { return MakeViewMatrix(GetWorldLocation(), GetWorldRotation()); }
-
     public:
         /// @getter : Camera zoom.
         inline float  GetZoom() const { return m_zoom; }
