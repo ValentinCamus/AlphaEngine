@@ -8,6 +8,7 @@
 #include <Alpha/Engine/Renderer/Renderer.h>
 #include <Alpha/Engine/Renderer/Framebuffer.h>
 
+#include <Alpha/Gui/BuildInWidgets/StatsWidget.h>
 #include <Alpha/Gui/BuildInWidgets/DockerWidget.h>
 #include <Alpha/Gui/BuildInWidgets/ViewportWidget.h>
 
@@ -55,14 +56,13 @@ namespace Alpha
 
             material01->SetKd(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
             material01->SetKs(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-            material01->SetRoughness(0.9f);
+            material01->SetRoughness(0.1f);
 
             material02->AddTexture(Material::ETextureType::TX_Diffuse, m_texture);
 
             m_entity->SetMaterial(0, material01);
             m_entity->SetMaterial(1, material02);
 
-            // Fixme: Image in fbo upside down.
             m_entity->SetWorldLocation({0, -1, -2});
             m_entity->SetWorldScale({0.1, 0.1, 0.1});
         }
@@ -126,16 +126,20 @@ namespace Alpha
         {
             m_docker.Render();
             m_viewport01.Render();
+            m_stats.Render();
+            // ImGui::ShowDemoWindow();
         }
 
         inline void OnEvent(Event& e) override
         {
             m_docker.OnEvent(e);
             m_viewport01.OnEvent(e);
+            m_stats.OnEvent(e);
         }
 
     private:
-        DockerWidget m_docker = DockerWidget("Docker");
-        ViewportWidget m_viewport01 = ViewportWidget("Viewport 01");
+        DockerWidget m_docker = DockerWidget("Docker Widget");
+        ViewportWidget m_viewport01 = ViewportWidget("Viewport-01");
+        StatsWidget m_stats = StatsWidget("Stats Widget");
     };
 }

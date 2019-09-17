@@ -98,7 +98,7 @@ namespace Alpha
         const Vector& scale = transform.scale;
         Matrix4x4 matrix = MakeModelMatrix(location, rotation, scale);
         Matrix4x4 inverted = glm::inverse(matrix);
-        Vector3 right = -Vector3(inverted[0]);
+        Vector3 right = Vector3(inverted[0]);
         return glm::normalize(right);
     }
 
