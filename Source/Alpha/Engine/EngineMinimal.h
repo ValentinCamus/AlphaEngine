@@ -9,6 +9,12 @@
 #include <Alpha/Engine/Light/PointLight.h>
 #include <Alpha/Engine/Light/SpotLight.h>
 
+#include <Alpha/Engine/Material/Material.h>
+
+#include <Alpha/Engine/Mesh/StaticMeshEntity.h>
+
+#include <Alpha/Engine/Camera/Camera.h>
+#include <Alpha/Engine/Camera/EulerCamera.h>
 
 namespace Alpha
 {
@@ -17,10 +23,6 @@ namespace Alpha
     {
     public:
         static void Init();
-
-        static inline const Collection<Pointer<Light>>& GetLights() { return *s_lights; }
-
     private:
-        static Collection<Pointer<Light>>* s_lights;
     };
 }

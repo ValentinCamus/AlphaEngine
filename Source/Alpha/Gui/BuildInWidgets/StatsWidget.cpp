@@ -12,7 +12,6 @@ namespace Alpha
         ImGui::SetWindowPos(ImVec2(64, 64), ImGuiCond_FirstUseEver);
         ImGui::SetWindowSize(ImVec2(512, 512), ImGuiCond_FirstUseEver);
 
-        // Main body of the Demo window starts here.
         if (!ImGui::Begin(ToCharArray(GetName()), &m_bIsVisible))
         {
             // Early out if the window is collapsed, as an optimization.

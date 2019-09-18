@@ -11,6 +11,7 @@
 #include <Alpha/Gui/BuildInWidgets/StatsWidget.h>
 #include <Alpha/Gui/BuildInWidgets/DockerWidget.h>
 #include <Alpha/Gui/BuildInWidgets/ViewportWidget.h>
+#include <Alpha/Gui/BuildInWidgets/SceneWidget.h>
 
 #include <Alpha/Input/Input.h>
 
@@ -35,7 +36,7 @@ namespace Alpha
 
         inline void Init()
         {
-            m_shader = Shader::Create("Pbr", {
+            m_shader = Shader::Create("Physical-Based-Rendering", {
                 {Shader::GLSL_VERTEX_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.fs.glsl"}
             });
@@ -64,7 +65,7 @@ namespace Alpha
             m_entity->SetMaterial(1, material02);
 
             m_entity->SetWorldLocation({0, -1, -2});
-            m_entity->SetWorldScale({0.1, 0.1, 0.1});
+            m_entity->SetWorldScale({0.05, 0.05, 0.05});
         }
 
         inline void OnUpdate() override
@@ -120,6 +121,10 @@ namespace Alpha
         explicit inline GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")
         {
             m_viewport01.SetFramebuffer(m_framebuffer01);
+
+            m_scene.PushEntity("Entity_A");
+            m_scene.PushEntity("Entity_B");
+            m_scene.PushEntity("Entity_C");
         }
 
         inline void OnImGuiRender() override
@@ -127,6 +132,7 @@ namespace Alpha
             m_docker.Render();
             m_viewport01.Render();
             m_stats.Render();
+            m_scene.Render();
             // ImGui::ShowDemoWindow();
         }
 
@@ -135,11 +141,14 @@ namespace Alpha
             m_docker.OnEvent(e);
             m_viewport01.OnEvent(e);
             m_stats.OnEvent(e);
+            m_scene.OnEvent(e);
         }
 
     private:
         DockerWidget m_docker = DockerWidget("Docker Widget");
         ViewportWidget m_viewport01 = ViewportWidget("Viewport-01");
         StatsWidget m_stats = StatsWidget("Stats Widget");
+        SceneWidget m_scene = SceneWidget("Scene Widget");
+
     };
 }
