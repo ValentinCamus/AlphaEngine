@@ -66,9 +66,6 @@ namespace Alpha
 
         /// The number of bits per pixel.
         int32 m_bitsPerPixel = 0;
-
-        /// Where the texture is stored.
-        uchar* m_localBuffer = nullptr;
     };
 
 }

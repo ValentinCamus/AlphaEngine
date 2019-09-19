@@ -20,7 +20,6 @@ namespace Alpha
         }
 
         float fps = ImGui::GetIO().Framerate;
-        float deltaTime = ImGui::GetIO().DeltaTime;
         m_fpsHistory[(m_cursor++) % MAX_HISTORY_SIZE] = fps;
 
         ImGui::Text("Frame per second: %f", fps);

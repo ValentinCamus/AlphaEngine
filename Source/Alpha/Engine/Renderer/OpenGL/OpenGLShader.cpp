@@ -64,21 +64,18 @@ namespace Alpha
 
     void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
     {
-        OpenGL::ClearErrorBuffer();
-        GLuint program = glCreateProgram();
-        OpenGL::DumpErrorBuffer("OpenGLShader::Compile", __FILE__, __LINE__);
-
+        GLuint program;
         std::vector<GLenum> glShaderIDs;
 
-        int glShaderIDIndex = 0;
+        GL_CHECK(program = glCreateProgram());
+
         for (auto& kv : shaderSources)
         {
             GLenum type = kv.first;
+            GLuint shader = 0;
             const std::string& source = kv.second;
 
-            OpenGL::ClearErrorBuffer();
-            GLuint shader = glCreateShader(type);
-            OpenGL::DumpErrorBuffer("OpenGLShader::Compile", __FILE__, __LINE__);
+            GL_CHECK(shader = glCreateShader(type));
 
             const GLchar* sourceCStr = source.c_str();
             GL_CHECK(glShaderSource(shader, 1, &sourceCStr, nullptr));
@@ -137,11 +134,10 @@ namespace Alpha
 
     int32 OpenGLShader::GetUniformLocation(const std::string& name)
     {
+        int32 location = -1; // Where: -1 is the OpenGL NULL uniform location.
         const char * cname = ToCharArray(name);
 
-        OpenGL::ClearErrorBuffer();
-        int32 location = glGetUniformLocation((GLuint)m_id, cname);
-        OpenGL::DumpErrorBuffer("OpenGLShader::Compile: glGetUniformLocation", __FILE__, __LINE__);
+        GL_CHECK(location = glGetUniformLocation((GLuint)m_id, cname));
         ALPHA_ASSERT(location > -1, "OpenGLShader::GetUniformLocation, uniform \"{0}\" not found.", name);
 
         return location;
