@@ -6,7 +6,6 @@ namespace Alpha
 {
     class Input
     {
-
     protected:
         Input() = default;
 
@@ -57,4 +56,4 @@ namespace Alpha
     private:
         static Input * s_instance;
     };
-};
+}

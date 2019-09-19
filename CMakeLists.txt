@@ -22,7 +22,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # We can use include() and find_package() for our scripts in there
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 
 # Use gold linker to speed up linking time, see cmake/useGoldLinker.cmake
 include(useGoldLinker)
