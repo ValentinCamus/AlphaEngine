@@ -44,29 +44,37 @@ set(THIRD_PARTY ${GLAD} ${IMGUI})
 
 set(ENGINE_SRCS
         EntryPoint.cpp
-
         Alpha/Application/Application.cpp
-
         Alpha/Engine/EngineMinimal.cpp
-
         Alpha/Window/GlfwWindow/GlfwWindow.cpp
         Alpha/Input/GlfwInput/GlfwInput.cpp
-
         Alpha/Layer/LayerStack.cpp
         Alpha/Gui/ImGuiLayer.cpp
-
         Alpha/Gui/ImGuiDetails/ImGuiImplGLFW.cpp
         Alpha/Gui/ImGuiDetails/ImGuiImplOpenGL3.cpp
-
         Alpha/Engine/Renderer/Renderer.cpp
         Alpha/Engine/Renderer/Framebuffer.cpp
         Alpha/Engine/Renderer/Texture.cpp
-
         Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLFramebuffer.cpp
-
         Alpha/Gui/BuildInWidgets/DockerWidget.cpp
-        Alpha/Gui/BuildInWidgets/ViewportWidget.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.cpp Alpha/Engine/Renderer/OpenGL/OpenGLTexture.h Alpha/ThirdParty/stb/stb_image.cpp Alpha/ThirdParty/stb/stb_image.h Alpha/Engine/Camera/Camera.h Alpha/Engine/Camera/EulerCamera.cpp Alpha/Engine/Camera/EulerCamera.h Alpha/Engine/Renderer/Shader.cpp Alpha/Engine/Renderer/Shader.h Alpha/Engine/Renderer/OpenGL/OpenGLShader.cpp Alpha/Engine/Renderer/OpenGL/OpenGLShader.h Alpha/Engine/Material/Material.cpp Alpha/Engine/Material/Material.h Alpha/Engine/Loader/ImageLoader.cpp Alpha/Engine/Loader/ImageLoader.h Alpha/Engine/Renderer/StaticMesh.cpp Alpha/Engine/Renderer/StaticMesh.h Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.cpp Alpha/Engine/Mesh/StaticMeshModel.cpp Alpha/Engine/Mesh/StaticMeshEntity.cpp Alpha/Input/Input.cpp Alpha/Window/Window.cpp Alpha/Engine/Loader/MeshLoader.cpp Alpha/Engine/Loader/MeshLoader.h Alpha/Gui/BuildInWidgets/StatsWidget.cpp Alpha/Gui/BuildInWidgets/SceneWidget.cpp)
+        Alpha/Gui/BuildInWidgets/ViewportWidget.cpp
+        Alpha/Engine/Renderer/OpenGL/OpenGLTexture.cpp
+        Alpha/ThirdParty/stb/stb_image.cpp
+        Alpha/Engine/Camera/EulerCamera.cpp
+        Alpha/Engine/Renderer/Shader.cpp
+        Alpha/Engine/Renderer/OpenGL/OpenGLShader.cpp
+        Alpha/Engine/Material/Material.cpp
+        Alpha/Engine/Loader/ImageLoader.cpp
+        Alpha/Engine/Renderer/StaticMesh.cpp
+        Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.cpp
+        Alpha/Engine/Mesh/StaticMeshModel.cpp
+        Alpha/Engine/Mesh/StaticMeshEntity.cpp
+        Alpha/Input/Input.cpp
+        Alpha/Window/Window.cpp
+        Alpha/Engine/Loader/MeshLoader.cpp
+        Alpha/Gui/BuildInWidgets/StatsWidget.cpp
+        Alpha/Gui/BuildInWidgets/SceneWidget.cpp)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

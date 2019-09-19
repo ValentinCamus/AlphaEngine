@@ -29,11 +29,9 @@ struct Material
 
     vec4 kd;
     vec4 ks;
-    vec3 normal;
 
     float roughness;
     float metallic;
-    float ao;
 
     float transparency;
 
@@ -52,9 +50,9 @@ vec3 GetKs(Material material, vec2 texCoord)
     return vec3(texture(material.tex.ks, texCoord));
 }
 
-vec3 GetNormal(Material material, vec2 texCoord)
+vec3 GetNormal(Material material, vec3 v_normal, vec2 texCoord)
 {
-    if (material.tex.hasNormal == 0) return material.normal;
+    if (material.tex.hasNormal == 0) return v_normal;
     else return vec3(texture(material.tex.normal, texCoord));
 }
 
@@ -72,7 +70,7 @@ float GetMetallic(Material material, vec2 texCoord)
 
 float GetAO(Material material, vec2 texCoord)
 {
-    if (material.tex.hasAO == 0) return material.ao;
+    if (material.tex.hasAO == 0) return 1.0f;
     return texture(material.tex.ao, texCoord).r;
 }
 

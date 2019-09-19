@@ -25,49 +25,46 @@ uniform Light lights[MAX_NB_LIGHTS];
 // ----------------------------------------------------------------------------
 void main()
 {
-    vec3 albedo     = GetKd(material, v_texcoord);
-    vec3 ks         = GetKs(material, v_texcoord);
-    vec3 N          = GetNormal(material, v_texcoord);
-    float metallic  = GetMetallic(material, v_texcoord);
+    vec3 kd = GetKd(material, v_texcoord);
+    vec3 ks = GetKs(material, v_texcoord);
+    vec3 normal = GetNormal(material, v_normal, v_texcoord);
+    float metallic = GetMetallic(material, v_texcoord);
     float roughness = GetRoughness(material, v_texcoord);
-    float ao        = GetAO(material, v_texcoord);
-    float trans     = GetTransparency(material, v_texcoord);
-
-    vec3 V = normalize(v_eye - v_position);
+    float ao = GetAO(material, v_texcoord);
+    float trans = GetTransparency(material, v_texcoord);
 
     // Calculate reflectance at normal incidence.
-    // If dia-electric (like plastic) use F0 of 0.04 and if it's a metal,
-    // use the albedo color as F0 (metallic workflow).
-    vec3 F0 = mix(vec3(0.04), albedo, metallic);
-
-    // Reflectance equation.
-    vec3 Lo = vec3(0.0);
-
-    vec3 lightView = vec3(0, 0, 0);
+    // If dia-electric (like plastic) use f0 of 0.04 and if it's a metal,
+    // use the albedo color as f0 (metallic workflow).
+    vec3 f0 = mix(vec3(0.04), kd, metallic);
+    vec3 viewDirection = normalize(v_eye - v_position);
+    vec3 light = vec3(0, 0, 0);
+    vec3 lo = vec3(0.0); // Reflectance equation.
 
     for(int i = 0; i < nLights; ++i)
     {
         // Calculate per-light radiance.
-        vec3 L = GetLightDirection(lights[i], v_position);
-        vec3 H = normalize(V + L);
+        vec3 lightDirection = GetLightDirection(lights[i], v_position);
+        vec3 halfVector = normalize(viewDirection + lightDirection);
 
-        float attenuation = LightAttenuationFrom(lights[i], v_position);
-        vec3 radiance = attenuation * lights[i].color.xyz;
+        float lightAttenuation = LightAttenuationFrom(lights[i], v_position);
+        vec3 lightRadiance = lightAttenuation * lights[i].color.xyz;
 
         // Cook-Torrance BRDF
-        float NDF = DistributionGGX(N, H, roughness);
-        float G   = GeometrySmith(N, V, L, roughness);
-        vec3  F   = FresnelSchlick(max(dot(H, V), 0.0), F0);
+        float ndf = DistributionGGX(normal, halfVector, roughness);
+        float g = GeometrySmith(normal, viewDirection, lightDirection, roughness);
+        vec3  fresnel = FresnelSchlick(max(dot(halfVector, viewDirection), 0.0), f0);
 
-        vec3  nominator   = NDF * G * F;
-        // Where: 0.001 to prevent divide by zero.
-        float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001;
-        vec3  specular    = nominator / denominator;
+        vec3  nominator = ndf * g * fresnel;
+        float nDotV = dot(normal, viewDirection);
+        float nDotL = dot(normal, lightDirection);
+        float denominator = 4 * max(nDotV, 0.0) * max(nDotL, 0.0);
+        vec3  specular = nominator / (denominator + 0.001); // Where: 0.001 to prevent divide by zero.
 
         // For energy conservation, the diffuse and specular light can't
-        // be above 1.0 (unless the surface emits light); to preserve this
+        // be above 1.0 (unless the surface emits light), to preserve this
         // relationship the diffuse component (kD) should equal 1.0 - kS.
-        vec3 kD = vec3(1.0) - (F * ks);
+        vec3 kD = vec3(1.0) - (fresnel * ks);
 
         // Multiply kD by the inverse metalness such that only non-metals
         // have diffuse lighting, or a linear blend if partly metal
@@ -75,22 +72,22 @@ void main()
         kD *= 1.0 - metallic;
 
         // Scale light by NdotL
-        float brightness = max(dot(N, L), 0.0);
+        float brightness = max(dot(normal, lightDirection), 0.0);
 
-        // Add to outgoing radiance Lo.
+        // Add to outgoing radiance lo.
         // Note that we already multiplied the BRDF by the Fresnel (kS),
         // so we won't multiply by kS again.
-        Lo += (kD * albedo / Pi + specular) * radiance * brightness;
+        lo += (kD * kd / Pi + specular) * lightRadiance * brightness;
 
-        lightView += attenuation * brightness;
+        light += lightAttenuation * brightness;
     }
 
     // Ambient lighting (note that the next IBL tutorial will replace
     // this ambient lighting with environment lighting).
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.03) * kd * ao;
+    vec3 color = ambient + lo;
 
-    vec3 color = ambient + Lo;
-
+    // Gamma correction.
     fragColor = vec4(color, trans);
     fragColor.rgb = pow(fragColor.rgb, vec3(1.0 / 2.2));
 }

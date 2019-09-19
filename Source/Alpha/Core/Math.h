@@ -86,11 +86,12 @@ namespace Alpha
 	/// - The aspect ratio
 	/// - The z near plane
 	/// - The z far plane
-    inline Matrix4x4 MakeProjectionMatrix(float fovy, float aspect, float zNear = 0, float zFar = 100)
+    inline Matrix4x4 MakeProjectionMatrix(float fovy, float aspect, float zNear = 0.1f, float zFar = 100.0f)
     {
-        return glm::perspective(fovy, aspect, 0.1f, 100.0f);
+        return glm::perspective(fovy, aspect, zNear, zFar);
     }
 
+    /// Calculate the right vector from a transform.
     inline Vector3 CalculateRightVector(const Transform& transform)
     {
         const Vector& location = transform.location;
@@ -102,6 +103,7 @@ namespace Alpha
         return glm::normalize(right);
     }
 
+    /// Calculate the up vector from a transform.
     inline Vector3 CalculateUpVector(const Transform& transform)
     {
         const Vector& location = transform.location;
@@ -113,6 +115,7 @@ namespace Alpha
         return glm::normalize(right);
     }
 
+    /// Calculate the forward vector from a transform.
     inline Vector3 CalculateForwardVector(const Transform& transform)
     {
         const Vector& location = transform.location;

@@ -52,7 +52,7 @@ namespace Alpha
         }
         else
         {
-            shader->SetUniform(uniformName + ".normal", m_normal);
+            // shader->SetUniform(uniformName + ".normal", m_normal);
             shader->SetUniform(uniformName + ".tex.hasNormal", false);
         }
 
@@ -78,7 +78,6 @@ namespace Alpha
         }
         else
         {
-            shader->SetUniform(uniformName + ".ao", 1.0f);
             shader->SetUniform(uniformName + ".tex.hasAO", false);
         }
 

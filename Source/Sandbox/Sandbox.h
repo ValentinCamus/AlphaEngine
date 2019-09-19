@@ -43,7 +43,7 @@ namespace Alpha
 
             m_framebuffer01 = Framebuffer::Create(500, 500);
 
-            m_light = NewPointer<DirectionalLight>(Vector(-0.5f), Color4(1, 1, 1, 1));
+            m_light = NewPointer<DirectionalLight>();
 
             m_sm = NewPointer<StaticMeshModel>();
             m_sm->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");

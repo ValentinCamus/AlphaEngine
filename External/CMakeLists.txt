@@ -2,7 +2,7 @@ include(ExternalProject)
 
 find_package(Git REQUIRED)
 
-include(CleanCppExtensions)
+include(cleanCppExtensions)
 
 #------------------------------------------------------------------------------
 # Convenience update all, dependencies are added in ExternalHeaderOnly_Add
