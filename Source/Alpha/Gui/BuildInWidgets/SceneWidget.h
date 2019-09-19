@@ -17,12 +17,10 @@ namespace Alpha
         void Init();
         void Render() override;
 
-        void PushEntity(const char* name);
-
-        inline int32 GetSelectedEntityIndex() const { return m_selectedEntityIndex; }
+        inline int32 GetSelectedEntityIndex() const { return m_selectedEntityIndex - 1; }
 
     private:
-        std::vector<const char*> m_entities = {};
+        std::vector<const char*> m_entities;
         int32 m_selectedEntityIndex = 0;
     };
 }

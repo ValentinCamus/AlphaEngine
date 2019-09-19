@@ -4,7 +4,7 @@ namespace Alpha
 {
     void SceneWidget::Init()
     {
-
+        m_entities.emplace_back("<No Selection>");
     }
 
     void SceneWidget::Render()
@@ -23,10 +23,5 @@ namespace Alpha
         ImGui::ListBox("", &m_selectedEntityIndex, m_entities.data(), m_entities.size(), 10);
 
         ImGui::End();
-    }
-
-    void SceneWidget::PushEntity(const char* name)
-    {
-        m_entities.push_back(name);
     }
 }

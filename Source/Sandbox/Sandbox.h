@@ -12,6 +12,7 @@
 #include <Alpha/Gui/BuildInWidgets/DockerWidget.h>
 #include <Alpha/Gui/BuildInWidgets/ViewportWidget.h>
 #include <Alpha/Gui/BuildInWidgets/SceneWidget.h>
+#include <Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h>
 
 #include <Alpha/Input/Input.h>
 
@@ -27,7 +28,9 @@
 
 namespace Alpha
 {
-    static Pointer<Framebuffer> m_framebuffer01 = nullptr;
+    static Pointer<Framebuffer> s_framebuffer01 = nullptr;
+
+    Pointer<StaticMeshEntity> s_entity = nullptr;
 
     class SandboxLayer : public Layer
     {
@@ -41,17 +44,17 @@ namespace Alpha
                 {Shader::GLSL_FRAGMENT_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.fs.glsl"}
             });
 
-            m_framebuffer01 = Framebuffer::Create(500, 500);
+            s_framebuffer01 = Framebuffer::Create(500, 500);
 
             m_light = NewPointer<DirectionalLight>();
 
             m_sm = NewPointer<StaticMeshModel>();
             m_sm->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
 
-            m_entity = NewPointer<StaticMeshEntity>("Entity", m_sm);
+            m_entity = NewPointer<StaticMeshEntity>("Stanford Dragon 01", m_sm);
+            s_entity = m_entity;
 
             m_texture = Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg");
-
             Pointer<Material> material01 = NewPointer<Material>("Material_01");
             Pointer<Material> material02 = NewPointer<Material>("Material_02");
 
@@ -63,7 +66,6 @@ namespace Alpha
 
             m_entity->SetMaterial(0, material01);
             m_entity->SetMaterial(1, material02);
-
             m_entity->SetWorldLocation({0, -1, -2});
             m_entity->SetWorldScale({0.05, 0.05, 0.05});
         }
@@ -79,9 +81,9 @@ namespace Alpha
             if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_1)) m_camera.Look(Input::GetMousePosition());
 
 
-            ALPHA_ASSERT(m_framebuffer01, "Invalid Framebuffer: 01");
+            ALPHA_ASSERT(s_framebuffer01, "Invalid Framebuffer: 01");
 
-            m_framebuffer01->Bind();
+            s_framebuffer01->Bind();
             m_shader->Bind();
 
             Renderer::Clear();
@@ -90,7 +92,7 @@ namespace Alpha
             m_shader->SetUniform("nLights", 1);
             m_shader->SetUniform("lights[0]", m_light);
 
-            float fb01AspectRatio = (float)m_framebuffer01->GetWidth() / (float)m_framebuffer01->GetHeight();
+            float fb01AspectRatio = (float)s_framebuffer01->GetWidth() / (float)s_framebuffer01->GetHeight();
             Matrix4x4 projectionMatrix = MakeProjectionMatrix(m_camera.GetZoom(), fb01AspectRatio);
 
             Matrix4x4 viewMatrix = MakeViewMatrix(m_camera.GetWorldLocation(),  m_camera.GetWorldRotation());
@@ -100,7 +102,7 @@ namespace Alpha
             m_entity->Draw(m_shader, transformMatrix);
 
             m_shader->Unbind();
-            m_framebuffer01->Unbind();
+            s_framebuffer01->Unbind();
         }
 
     private:
@@ -120,19 +122,23 @@ namespace Alpha
     public:
         explicit inline GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")
         {
-            m_viewport01.SetFramebuffer(m_framebuffer01);
-
-            m_scene.PushEntity("Entity_A");
-            m_scene.PushEntity("Entity_B");
-            m_scene.PushEntity("Entity_C");
+            m_viewport01.SetFramebuffer(s_framebuffer01);
         }
 
         inline void OnImGuiRender() override
         {
+            static bool doOnce = true;
+            if (s_entity && doOnce)
+            {
+                m_materialEditor.InitFromStaticMeshEntity(s_entity);
+                doOnce = false;
+            }
+
             m_docker.Render();
             m_viewport01.Render();
             m_stats.Render();
             m_scene.Render();
+            if (s_entity) m_materialEditor.Render();
             // ImGui::ShowDemoWindow();
         }
 
@@ -142,6 +148,7 @@ namespace Alpha
             m_viewport01.OnEvent(e);
             m_stats.OnEvent(e);
             m_scene.OnEvent(e);
+            m_materialEditor.OnEvent(e);
         }
 
     private:
@@ -149,6 +156,7 @@ namespace Alpha
         ViewportWidget m_viewport01 = ViewportWidget("Viewport-01");
         StatsWidget m_stats = StatsWidget("Stats Widget");
         SceneWidget m_scene = SceneWidget("Scene Widget");
+        MaterialEditorWidget m_materialEditor = MaterialEditorWidget("Material Editor");
 
     };
 }

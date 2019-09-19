@@ -74,7 +74,7 @@ set(ENGINE_SRCS
         Alpha/Window/Window.cpp
         Alpha/Engine/Loader/MeshLoader.cpp
         Alpha/Gui/BuildInWidgets/StatsWidget.cpp
-        Alpha/Gui/BuildInWidgets/SceneWidget.cpp)
+        Alpha/Gui/BuildInWidgets/SceneWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

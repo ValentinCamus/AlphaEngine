@@ -69,6 +69,9 @@ namespace Alpha
         }
 
     public:
+        /// @getter: The name of the material.
+        inline const std::string& GetName() const { return m_name; }
+
         /// @getter: The Kd color of the material.
         inline const Vector4& GetKd() const { return m_kd; }
 
@@ -80,12 +83,6 @@ namespace Alpha
 
         /// @setter: The Ks color of the material.
         inline const Vector4& SetKs(const Vector4& ks) { return m_ks = ks; }
-
-        /// @getter: The roughness of the material.
-        inline const Vector3& GetNormal() const { return m_normal; }
-
-        /// @setter: The roughness of the material.
-        inline const Vector3& SetNormal(const Vector3& normal) { return m_normal = normal; }
 
         /// @getter: The roughness of the material.
         inline float GetRoughness() const { return m_roughness; }
@@ -111,22 +108,18 @@ namespace Alpha
         /// @note: m_ks color has a lower priority than TX_Specular.
         Vector4 m_ks = Vector4(1);
 
-        /// The normal color.
-        /// @note: m_normal color has a lower priority than TX_Normal.
-        Vector3 m_normal = Vector3(1);
-
         /// The roughness.
         /// @note: m_roughness has a lower priority than TX_Roughness.
         float m_roughness = 0.0f;
+
+        /// The metallic aspect of the material.
+        /// @note: m_transparency has a lower priority than TX_Transparency.
+        float m_metallic = 0.1f;
 
         /// The transparency of the material.
         /// Where 1 means opaque and 0 means totally transparent.
         /// @note: m_transparency has a lower priority than TX_Transparency.
         float m_transparency = 1.0f;
-
-        /// The metallic aspect of the material.
-        /// @note: m_transparency has a lower priority than TX_Transparency.
-        float m_metallic = 0.1f;
 
         /// Textures Map.
         std::map<ETextureType, Pointer<Texture2D>> m_textures;
