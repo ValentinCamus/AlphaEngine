@@ -68,6 +68,14 @@ namespace Alpha
             m_entity->SetMaterial(1, material02);
             m_entity->SetWorldLocation({0, -1, -2});
             m_entity->SetWorldScale({0.05, 0.05, 0.05});
+
+            Logger::Info("(Tips) To move forward: Press W (Qwerty keyboard)");
+            Logger::Info("(Tips) To move backward: Press S (Qwerty keyboard)");
+            Logger::Info("(Tips) To move left: Press A (Qwerty keyboard)");
+            Logger::Info("(Tips) To move right: Press D (Qwerty keyboard)");
+            Logger::Info("(Tips) To zoom in: Press P (Qwerty keyboard)");
+            Logger::Info("(Tips) To zoom out: Press M (Qwerty keyboard)");
+            Logger::Info("(Tips) To reset the zoom: Press C (Qwerty keyboard)");
         }
 
         inline void OnUpdate() override
@@ -78,8 +86,13 @@ namespace Alpha
             if (Input::IsKeyPressed(ALPHA_KEY_A)) m_camera.MoveRight(-1);
             if (Input::IsKeyPressed(ALPHA_KEY_D)) m_camera.MoveRight(1);
 
-            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_3)) m_camera.Look(Input::GetMousePosition());
+            if (Input::IsKeyPressed(ALPHA_KEY_C)) m_camera.SetZoom(ZOOM);
+            if (Input::IsKeyPressed(ALPHA_KEY_P)) m_camera.SetZoom(m_camera.GetZoom() + 0.1f);
+            if (Input::IsKeyPressed(ALPHA_KEY_M)) m_camera.SetZoom(m_camera.GetZoom() - 0.1f);
 
+            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_3)) m_camera.Look(Input::GetMousePosition());
+            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_4)) m_camera.SetZoom(m_camera.GetZoom() + 0.1f);
+            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_5)) m_camera.SetZoom(m_camera.GetZoom() - 0.1f);
 
             ALPHA_ASSERT(s_framebuffer01, "Invalid Framebuffer: 01");
 
