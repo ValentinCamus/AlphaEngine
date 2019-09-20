@@ -26,6 +26,9 @@
 #include <Alpha/Engine/Renderer/Texture.h>
 #include <Alpha/Engine/Material/Material.h>
 
+#include <Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.h>
+
+
 namespace Alpha
 {
     static Pointer<Framebuffer> s_framebuffer01 = nullptr;
