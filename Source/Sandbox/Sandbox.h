@@ -62,7 +62,7 @@ namespace Alpha
             material01->SetKs(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
             material01->SetRoughness(0.1f);
 
-            material02->AddTexture(Material::ETextureType::TX_Diffuse, m_texture);
+            material02->AddTexture(ETextureType::TX_Diffuse, m_texture);
 
             m_entity->SetMaterial(0, material01);
             m_entity->SetMaterial(1, material02);
@@ -78,7 +78,7 @@ namespace Alpha
             if (Input::IsKeyPressed(ALPHA_KEY_A)) m_camera.MoveRight(-1);
             if (Input::IsKeyPressed(ALPHA_KEY_D)) m_camera.MoveRight(1);
 
-            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_1)) m_camera.Look(Input::GetMousePosition());
+            if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_3)) m_camera.Look(Input::GetMousePosition());
 
 
             ALPHA_ASSERT(s_framebuffer01, "Invalid Framebuffer: 01");
@@ -127,10 +127,10 @@ namespace Alpha
 
         inline void OnImGuiRender() override
         {
-            static bool doOnce = true;
-            if (s_entity && doOnce)
+            static bool doOnce = false;
+            if (doOnce)
             {
-                m_materialEditor.InitFromStaticMeshEntity(s_entity);
+                m_materialEditor.SetEntity(s_entity);
                 doOnce = false;
             }
 
@@ -138,7 +138,7 @@ namespace Alpha
             m_viewport01.Render();
             m_stats.Render();
             m_scene.Render();
-            if (s_entity) m_materialEditor.Render();
+            m_materialEditor.Render();
             // ImGui::ShowDemoWindow();
         }
 

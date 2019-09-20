@@ -7,21 +7,26 @@
 
 namespace Alpha
 {
+    enum class EMaterialType
+    {
+        Opaque = 0,
+        Transparent = 1
+    };
+
+    /// The type of the texture.
+    enum class ETextureType
+    {
+        TX_Diffuse,
+        TX_Specular,
+        TX_Normal,
+        TX_Roughness,
+        TX_Metallic,
+        TX_AmbientOcclusion,
+        TX_Transparency
+    };
+
     class Material
     {
-    public:
-        /// The type of the texture.
-        enum class ETextureType
-        {
-            TX_Diffuse,
-            TX_Specular,
-            TX_Normal,
-            TX_Roughness,
-            TX_Metallic,
-            TX_AmbientOcclusion,
-            TX_Transparency
-        };
-
     public:
         /// Constructor.
         /// @name: The uniform name.
@@ -72,33 +77,46 @@ namespace Alpha
         /// @getter: The name of the material.
         inline const std::string& GetName() const { return m_name; }
 
+        inline EMaterialType GetType() const { return m_type; }
+
+        inline void SetType(const EMaterialType& type) { m_type = type; }
+
         /// @getter: The Kd color of the material.
         inline const Vector4& GetKd() const { return m_kd; }
 
         /// @setter: The Kd color of the material.
-        inline const Vector4& SetKd(const Vector4& kd) { return m_kd = kd; }
+        inline void SetKd(const Vector4& kd) { m_kd = kd; }
 
         /// @getter: The Ks color of the material.
         inline const Vector4& GetKs() const { return m_ks; }
 
         /// @setter: The Ks color of the material.
-        inline const Vector4& SetKs(const Vector4& ks) { return m_ks = ks; }
+        inline void SetKs(const Vector4& ks) { m_ks = ks; }
 
         /// @getter: The roughness of the material.
         inline float GetRoughness() const { return m_roughness; }
 
         /// @setter: The roughness of the material.
-        inline float SetRoughness(float roughness) { return m_roughness = roughness; }
+        inline void SetRoughness(float roughness) { m_roughness = roughness; }
+
+        /// @getter: The metallic of the material.
+        inline float GetMetallic() const { return m_metallic; }
+
+        /// @setter: The metallic of the material.
+        inline void SetMetallic(float metallic) { m_metallic = metallic; }
 
         /// @getter: The transparency of the material.
         inline float GetTransparency() const { return m_transparency; }
 
         /// @setter: The transparency of the material.
-        inline float SetTransparency(float transparency) { return m_transparency = transparency; }
+        inline void SetTransparency(float transparency) { m_transparency = transparency; }
 
     private:
         /// The name of the uniform.
         std::string m_name;
+
+        /// Is this material opaque or transparent?
+        EMaterialType m_type = EMaterialType::Transparent;
 
         /// The Kd (diffuse) color.
         /// @note: m_kd color has a lower priority than TX_Diffuse.
@@ -110,7 +128,7 @@ namespace Alpha
 
         /// The roughness.
         /// @note: m_roughness has a lower priority than TX_Roughness.
-        float m_roughness = 0.0f;
+        float m_roughness = 0.2f;
 
         /// The metallic aspect of the material.
         /// @note: m_transparency has a lower priority than TX_Transparency.

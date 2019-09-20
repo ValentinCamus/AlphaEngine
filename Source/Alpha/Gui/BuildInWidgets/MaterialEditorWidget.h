@@ -15,22 +15,38 @@ namespace Alpha
     class MaterialEditorWidget : public ImGuiWidget
     {
     public:
-        explicit MaterialEditorWidget(const std::string &name) : ImGuiWidget(name) { Init(); }
+        struct MaterialInfo
+        {
+            int32 type = 0;
 
-        void Init();
+            ImVec4 kd = ImVec4(1, 1, 1, 1);
+            ImVec4 ks = ImVec4(1, 1, 1, 1);
+            float roughness = 0.2f;
+            float metallic = 0.1f;
+            float transparency = 1.0f;
+        };
+
+    public:
+        explicit MaterialEditorWidget(const std::string &name) : ImGuiWidget(name) {}
+
         void Render() override;
 
         void Clear();
-        void InitFromStaticMeshEntity(const Pointer<StaticMeshEntity>& entity);
+
+        inline const Pointer<StaticMeshEntity>& GetEntity() const { return m_entity; }
+        void SetEntity(const Pointer<StaticMeshEntity>& entity);
 
         inline bool IsOccupied() const { return m_bIsOccupied; }
 
     private:
-        static void RenderMaterialNode(const Pointer<Material>& material);
+        void RenderMaterialNode(const Pointer<Material>& material);
 
     private:
         bool m_bIsOccupied = false;
+        bool m_bNeedUpdate = false;
 
-        std::vector<Pointer<Material>> m_materials = {};
+        Pointer<StaticMeshEntity> m_entity = nullptr;
+        std::vector<Pointer<Material>> m_materials;
+        MaterialInfo m_materialInfo;
     };
 }
