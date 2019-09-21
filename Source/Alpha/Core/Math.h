@@ -7,6 +7,7 @@
 #include <Alpha/ThirdParty/glm/glm/gtx/matrix_decompose.hpp>
 
 #include <Alpha/Core/Types.h>
+#include <Alpha/Core/BSpline/BSpline.h>
 
 namespace Alpha
 {

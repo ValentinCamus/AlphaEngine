@@ -42,35 +42,39 @@ namespace Alpha
 
         inline void Init()
         {
-            m_shader = Shader::Create("Physical-Based-Rendering", {
+            m_pbrShader = Shader::Create("Physical-Based-Rendering", {
                 {Shader::GLSL_VERTEX_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, PROJECT_SOURCE_DIR + "Shaders/Pbr.fs.glsl"}
             });
 
             s_framebuffer01 = Framebuffer::Create(500, 500);
 
-            m_light = NewPointer<DirectionalLight>();
+            m_directionalLight = NewPointer<DirectionalLight>();
 
-            m_sm = NewPointer<StaticMeshModel>();
-            m_sm->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
+            m_brickTexture = Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg");
 
-            m_entity = NewPointer<StaticMeshEntity>("Stanford Dragon 01", m_sm);
-            s_entity = m_entity;
+            Pointer<Material> defaultMaterial = NewPointer<Material>("DefaultMaterial");
+            Pointer<Material> redMaterial = NewPointer<Material>("RedMaterial");
+            Pointer<Material> brickMaterial = NewPointer<Material>("BrickMaterial");
 
-            m_texture = Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg");
-            Pointer<Material> material01 = NewPointer<Material>("Material_01");
-            Pointer<Material> material02 = NewPointer<Material>("Material_02");
+            defaultMaterial->SetKd(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            redMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+            brickMaterial->AddTexture(ETextureType::TX_Diffuse, m_brickTexture);
 
-            material01->SetKd(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-            material01->SetKs(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-            material01->SetRoughness(0.1f);
+            m_cube = NewPointer<StaticMeshModel>();
+            m_cube->Load(PROJECT_SOURCE_DIR + "Assets/Cube.fbx");
 
-            material02->AddTexture(ETextureType::TX_Diffuse, m_texture);
+            m_stanfordDragon = NewPointer<StaticMeshModel>();
+            m_stanfordDragon->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
 
-            m_entity->SetMaterial(0, material01);
-            m_entity->SetMaterial(1, material02);
-            m_entity->SetWorldLocation({0, -1, -2});
-            m_entity->SetWorldScale({0.05, 0.05, 0.05});
+            m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Stanford Dragon 01", m_stanfordDragon);
+            s_entity = m_stanfordDragonInstance;
+
+            m_stanfordDragonInstance->SetMaterial(0, defaultMaterial);
+            m_stanfordDragonInstance->SetMaterial(1, brickMaterial);
+
+            m_stanfordDragonInstance->SetWorldLocation({0, -1, -2});
+            m_stanfordDragonInstance->SetWorldScale({0.05, 0.05, 0.05});
 
             Logger::Info("(Tips) To move forward: Press W (Qwerty keyboard)");
             Logger::Info("(Tips) To move backward: Press S (Qwerty keyboard)");
@@ -79,6 +83,66 @@ namespace Alpha
             Logger::Info("(Tips) To zoom in: Press P (Qwerty keyboard)");
             Logger::Info("(Tips) To zoom out: Press M (Qwerty keyboard)");
             Logger::Info("(Tips) To reset the zoom: Press C (Qwerty keyboard)");
+
+            m_spline.SetDegree(3);
+            m_spline.SetNbPoints(16);
+            m_spline.ResetKnotsVector();
+            for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
+            {
+                Vector3 point = Vector3(float(i), std::cosf(float(i * 2) / float(PI)) * float(HALF_PI), 0);
+                m_spline.SetPointAt(i, point);
+            }
+
+            for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
+            {
+                const std::string name = "Spline Node " + ToString(i);
+                Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+
+                node->SetMaterial(0, redMaterial);
+                node->SetMaterial(1, redMaterial);
+
+                node->SetWorldScale(Vector3(0.1f));
+                node->SetWorldLocation(m_spline.GetPointAt(i));
+
+                m_splineControlPoints.push_back(node);
+            }
+
+            std::vector<Vector3> samples = m_spline.Sample(0.25f);
+
+            for (uint32 i = 0; i < samples.size(); ++i)
+            {
+                const std::string name = "Spline Node " + ToString(i);
+                Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+
+                node->SetMaterial(0, defaultMaterial);
+                node->SetMaterial(1, defaultMaterial);
+
+                node->SetWorldScale(Vector3(0.1f));
+                node->SetWorldLocation(samples[i]);
+
+                m_splineNodes.push_back(node);
+            }
+
+            /*
+            Logger::Debug("Degree: {0}", m_spline.GetDegree());
+            Logger::Debug("Order: {0}", m_spline.GetOrder());
+            Logger::Debug("Nb Points: {0}", m_spline.GetNbPoints());
+            Logger::Debug("Nb Knots: {0}", m_spline.GetNbKnots());
+
+            Logger::Debug("Domain of def: x={0}, y={1}", m_spline.GetDomainOfDefinition().x, m_spline.GetDomainOfDefinition().y);
+
+            for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
+            {
+                Vector3 p = m_spline.GetPointAt(i);
+                Logger::Debug("Spline point at {0}: x={1}, y={2}, z={3}", i, p.x, p.y, p.z);
+            }
+
+            for (uint32 i = 0; i < m_spline.GetNbKnots(); ++i)
+            {
+                float knot = m_spline.GetKnotAt(i);
+                Logger::Debug("Spline knot at {0}: scalar={1}", i, knot);
+            }
+            */
         }
 
         inline void OnUpdate() override
@@ -100,13 +164,13 @@ namespace Alpha
             ALPHA_ASSERT(s_framebuffer01, "Invalid Framebuffer: 01");
 
             s_framebuffer01->Bind();
-            m_shader->Bind();
+            m_pbrShader->Bind();
 
             Renderer::Clear();
             Renderer::SetClearColor({0.2f, 0.3f, 0.3f, 1.0f});
 
-            m_shader->SetUniform("nLights", 1);
-            m_shader->SetUniform("lights[0]", m_light);
+            m_pbrShader->SetUniform("nLights", 1);
+            m_pbrShader->SetUniform("lights[0]", m_directionalLight);
 
             float fb01AspectRatio = (float)s_framebuffer01->GetWidth() / (float)s_framebuffer01->GetHeight();
             Matrix4x4 projectionMatrix = MakeProjectionMatrix(m_camera.GetZoom(), fb01AspectRatio);
@@ -115,22 +179,33 @@ namespace Alpha
 
             TransformMatrix transformMatrix = {Matrix4x4(1), viewMatrix, projectionMatrix};
 
-            m_entity->Draw(m_shader, transformMatrix);
+            m_stanfordDragonInstance->Draw(m_pbrShader, transformMatrix);
 
-            m_shader->Unbind();
+            for (auto& splineNode : m_splineNodes) splineNode->Draw(m_pbrShader, transformMatrix);
+            for (auto& controlPoint : m_splineControlPoints) controlPoint->Draw(m_pbrShader, transformMatrix);
+
+
+            m_pbrShader->Unbind();
             s_framebuffer01->Unbind();
         }
 
     private:
         EulerCamera m_camera;
-        Pointer<Shader> m_shader;
+        Pointer<Shader> m_pbrShader;
 
-        Pointer<StaticMeshModel> m_sm;
-        Pointer<StaticMeshEntity> m_entity;
+        Pointer<Texture2D> m_brickTexture;
 
-        Pointer<Texture2D> m_texture;
+        Pointer<StaticMeshModel> m_cube;
+        Pointer<StaticMeshModel> m_stanfordDragon;
 
-        Pointer<Light> m_light;
+        Pointer<StaticMeshEntity> m_stanfordDragonInstance;
+
+        Pointer<Light> m_directionalLight;
+
+        BSpline m_spline;
+        std::vector<Pointer<StaticMeshEntity>> m_splineNodes;
+        std::vector<Pointer<StaticMeshEntity>> m_splineControlPoints;
+
     };
 
     class GuiSandboxLayer : public ImGuiLayer

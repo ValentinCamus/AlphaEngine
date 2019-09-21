@@ -13,6 +13,9 @@
 #define SMALL_NUMBER (1.e-8f)
 #define BIG_NUMBER (3.4e+38f)
 
+#ifndef PI
+#define PI (3.14159265359)
+#endif
 #define INV_PI (0.31830988618f)
 #define HALF_PI (1.57079632679f)
 
