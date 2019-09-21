@@ -29,7 +29,7 @@ namespace Alpha
         inline uint32 GetDegree() const { return m_degree; }
         inline uint32 GetOrder() const { return m_order; }
 
-        std::vector<Vector3> Sample(float delta);
+        std::vector<Vector3> GetSamples(float delta);
 
     private:
         uint32 GetInterestPointsOffset(float u);

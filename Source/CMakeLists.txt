@@ -74,7 +74,7 @@ set(ENGINE_SRCS
         Alpha/Window/Window.cpp
         Alpha/Engine/Loader/MeshLoader.cpp
         Alpha/Gui/BuildInWidgets/StatsWidget.cpp
-        Alpha/Gui/BuildInWidgets/SceneWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h Alpha/Gui/BuildInWidgets/BSplineEditorWidget.cpp Alpha/Gui/BuildInWidgets/BSplineEditorWidget.h Alpha/Core/BSpline/BSpline.cpp Alpha/Core/BSpline/BSpline.h)
+        Alpha/Gui/BuildInWidgets/SceneWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h Alpha/Gui/BuildInWidgets/BSplineEditorWidget.cpp Alpha/Gui/BuildInWidgets/BSplineEditorWidget.h Alpha/Core/Math/BSpline/BSpline.cpp Alpha/Core/Math/BSpline/BSpline.h Sandbox/Sandbox.cpp Alpha/Core/Math/Math.cpp Alpha/Core/Math/Random.cpp Alpha/Core/Math/Random.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE
@@ -115,6 +115,8 @@ target_link_libraries(AlphaEngine glfw)
 target_link_libraries(AlphaEngine ${OPENGL_gl_LIBRARY})
 target_link_libraries(AlphaEngine ${OPENGL_glu_LIBRARY})
 target_link_libraries(AlphaEngine ${OPENGL_LIBRARIES})
+
+target_link_libraries(AlphaEngine ${CMAKE_DL_LIBS})
 
 #-------------------------------------------------------------------------------
 # Copy MINGW needed libraries for building on windows

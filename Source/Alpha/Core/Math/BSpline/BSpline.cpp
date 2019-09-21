@@ -98,7 +98,7 @@ namespace Alpha
         for (uint32 i = 0; i < GetNbKnots(); ++i) m_knots[i] = float(i);
     }
 
-    std::vector<Vector3> BSpline::Sample(float delta)
+    std::vector<Vector3> BSpline::GetSamples(float delta)
     {
         std::vector<Vector3> sampledSplinePoints;
 
