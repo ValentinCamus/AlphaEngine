@@ -1,32 +1,30 @@
 #include "Random.h"
 
 #include <ctime>
+#include <algorithm>
+#include <functional>
 
 namespace Alpha
 {
-    static std::mt19937 s_rng;
-
     void Random::SetSeed()
     {
-        std::random_device dev;
-        s_rng.seed(dev());
+        srand(unsigned(time(nullptr)));
     }
 
     void Random::SetSeed(int32 seed)
     {
-        s_rng.seed(seed);
+        srand(seed);
     }
 
     int32 Random::GetInt(int32 min, int32 max)
     {
-        std::uniform_int_distribution<>dist(min, max);
-        return dist(s_rng);
+        return (rand() % (max - min + 1)) + min;
     }
 
     float Random::GetFloat(float min, float max)
     {
-        std::uniform_real_distribution<>dist(min, max);
-        return float(dist(s_rng));
+        float scale = rand() / (float) RAND_MAX; // [0, 1.0]
+        return min + scale * (max - min);        // [min, max]
     }
 }
 

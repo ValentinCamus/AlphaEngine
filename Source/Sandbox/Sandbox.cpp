@@ -23,7 +23,6 @@ namespace Alpha
         Pointer<Material> redMaterial = NewPointer<Material>("RedMaterial");
         Pointer<Material> brickMaterial = NewPointer<Material>("BrickMaterial");
 
-        defaultMaterial->SetKd(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
         redMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
         brickMaterial->AddTexture(ETextureType::TX_Diffuse, m_brickTexture);
 
@@ -33,11 +32,9 @@ namespace Alpha
         m_stanfordDragon = NewPointer<StaticMeshModel>();
         m_stanfordDragon->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
 
-        m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Stanford Dragon 01", m_stanfordDragon);
-
+        m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Dragon", m_stanfordDragon);
         m_stanfordDragonInstance->SetMaterial(0, defaultMaterial);
         m_stanfordDragonInstance->SetMaterial(1, brickMaterial);
-
         m_stanfordDragonInstance->SetWorldLocation({0, -1, -2});
         m_stanfordDragonInstance->SetWorldScale({0.05, 0.05, 0.05});
 
@@ -54,7 +51,10 @@ namespace Alpha
         m_spline.ResetKnotsVector();
         for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
         {
-            Vector3 point = Vector3(i - m_spline.GetNbPoints() / 2.0f, Random::GetFloat(-float(PI), float(PI)), Random::GetFloat(-6, -4));
+            float xPos = i - m_spline.GetNbPoints() / 2.0f;
+            float yPos = Random::GetFloat(-float(PI), float(PI));
+            float zPos = Random::GetFloat(-6, -4);
+            Vector3 point = Vector3(xPos, yPos, zPos);
             m_spline.SetPointAt(i, point);
         }
 

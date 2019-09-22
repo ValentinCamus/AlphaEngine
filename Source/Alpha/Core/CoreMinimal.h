@@ -13,7 +13,7 @@
 #include <Alpha/Core/Types.h>
 #include <Alpha/Core/Utils.h>
 #include <Alpha/Core/Math/Math.h>
-#include <Alpha/Core/Collection.h>
+#include <Alpha/Core/Library.h>
 
 namespace Alpha
 {
@@ -25,6 +25,7 @@ namespace Alpha
             Alpha::Logger::Info("Initializing: AlphaEngine Core...");
             Alpha::SetAtExitCallback();
             Alpha::Logger::SetLogLevel(Alpha::ELogLevel::Debug);
+            Random::SetSeed();
             Alpha::Logger::Info("AlphaEngine Core initialized");
         }
     };

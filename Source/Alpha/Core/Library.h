@@ -6,7 +6,7 @@
 namespace Alpha
 {
     template<typename T>
-    class Collection
+    class Library
     {
     public:
         inline void Push(const std::string& name, T& obj)
