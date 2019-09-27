@@ -46,47 +46,8 @@ namespace Alpha
         Logger::Info("(Tips) To zoom out: Press M (Qwerty keyboard)");
         Logger::Info("(Tips) To reset the zoom: Press C (Qwerty keyboard)");
 
-        m_spline.SetDegree(3);
-        m_spline.SetNbPoints(16);
-        m_spline.ResetKnotsVector();
-        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
-        {
-            float xPos = i - m_spline.GetNbPoints() / 2.0f;
-            float yPos = Random::GetFloat(-float(PI), float(PI));
-            float zPos = Random::GetFloat(-6, -4);
-            Vector3 point = Vector3(xPos, yPos, zPos);
-            m_spline.SetPointAt(i, point);
-        }
-
-        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
-        {
-            const std::string name = "Spline Node " + ToString(i);
-            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
-
-            node->SetMaterial(0, redMaterial);
-            node->SetMaterial(1, redMaterial);
-
-            node->SetWorldScale(Vector3(0.1f));
-            node->SetWorldLocation(m_spline.GetPointAt(i));
-
-            m_splineControlPoints.push_back(node);
-        }
-
-        std::vector<Vector3> samples = m_spline.GetSamples(0.1f);
-
-        for (uint32 i = 0; i < samples.size(); ++i)
-        {
-            const std::string name = "Spline Node " + ToString(i);
-            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
-
-            node->SetMaterial(0, defaultMaterial);
-            node->SetMaterial(1, defaultMaterial);
-
-            node->SetWorldScale(Vector3(0.1f));
-            node->SetWorldLocation(samples[i]);
-
-            m_splineNodes.push_back(node);
-        }
+        InitBSplineExample();
+        InitTensorProductExample();
     }
 
     void SandboxLayer::OnUpdate()
@@ -125,12 +86,131 @@ namespace Alpha
 
         m_stanfordDragonInstance->Draw(m_pbrShader, transformMatrix);
 
-        for (auto& splineNode : m_splineNodes) splineNode->Draw(m_pbrShader, transformMatrix);
-        for (auto& controlPoint : m_splineControlPoints) controlPoint->Draw(m_pbrShader, transformMatrix);
+        for (auto& splineNode : m_splineNodes)
+            splineNode->Draw(m_pbrShader, transformMatrix);
+        for (auto& controlPoint : m_splineControlPoints)
+            controlPoint->Draw(m_pbrShader, transformMatrix);
 
+        for (auto& tensorNode : m_tensorProductNodes)
+            tensorNode->Draw(m_pbrShader, transformMatrix);
+        for (auto& tensorControlPoint : m_tensorProductControlPoints)
+            tensorControlPoint->Draw(m_pbrShader, transformMatrix);
 
         m_pbrShader->Unbind();
         s_framebuffer01->Unbind();
+    }
+
+    void SandboxLayer::InitBSplineExample()
+    {
+        Pointer<Material> samplesMaterial = NewPointer<Material>("BSplineSamples");
+        Pointer<Material> nodesMaterial = NewPointer<Material>("BSplineNodes");
+        nodesMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+
+        m_spline.SetDegree(3);
+        m_spline.SetNbPoints(16);
+        m_spline.ResetKnotsVector();
+        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
+        {
+            float xPos = i - m_spline.GetNbPoints() / 2.0f;
+            float yPos = Random::GetFloat(-float(PI), float(PI));
+            float zPos = Random::GetFloat(-6, -4);
+            Vector3 point = Vector3(xPos, yPos, zPos);
+            m_spline.SetPointAt(i, point);
+        }
+
+        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
+        {
+            const std::string name = "Spline Node " + ToString(i);
+            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+
+            node->SetMaterial(0, nodesMaterial);
+            node->SetMaterial(1, nodesMaterial);
+
+            node->SetWorldScale(Vector3(0.1f));
+            node->SetWorldLocation(m_spline.GetPointAt(i));
+
+            m_splineControlPoints.push_back(node);
+        }
+
+        std::vector<Vector3> samples = m_spline.GetSamples(0.1f);
+
+        for (uint32 i = 0; i < samples.size(); ++i)
+        {
+            const std::string name = "Spline Sample " + ToString(i);
+            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+
+            node->SetMaterial(0, samplesMaterial);
+            node->SetMaterial(1, samplesMaterial);
+
+            node->SetWorldScale(Vector3(0.1f));
+            node->SetWorldLocation(samples[i]);
+
+            m_splineNodes.push_back(node);
+        }
+    }
+
+    void SandboxLayer::InitTensorProductExample()
+    {
+        m_tensorProduct.SetDegree(3);
+        m_tensorProduct.Resize(10, 10);
+
+        for (uint32 i = 0; i < 10; ++i)
+        {
+            for (uint32 j = 0; j < 10; ++j)
+            {
+                m_tensorProduct.SetPointAt(i, j, Vector(float(i), Random::GetFloat(-1, 1), float(j)));
+            }
+        }
+
+        Vector2 xDef = m_tensorProduct.GetValidRangeWidth();
+        Vector2 yDef = m_tensorProduct.GetValidRangeHeight();
+
+        std::vector<Vector3> samples;
+
+        for (float u = xDef.x; u < xDef.y; u += 0.5f)
+        {
+            for (float v = yDef.x; v < yDef.y; v += 0.5f)
+            {
+                samples.push_back(m_tensorProduct.Evaluate(u, v));
+            }
+        }
+
+        Pointer<Material> samplesMaterial = NewPointer<Material>("TensorProductSamples");
+        Pointer<Material> nodesMaterial = NewPointer<Material>("TensorProductNodes");
+
+        samplesMaterial->SetKd(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+        nodesMaterial->SetKd(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+
+        for (uint32 i = 0; i < m_tensorProduct.GetSurface().width; ++i)
+        {
+            for (uint32 j = 0; j < m_tensorProduct.GetSurface().height; ++j)
+            {
+                const std::string name = "TensorProduct Node " + ToString(i) + ToString(j);
+                Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+
+                node->SetMaterial(0, nodesMaterial);
+                node->SetMaterial(1, nodesMaterial);
+
+                node->SetWorldScale(Vector3(0.1f));
+                node->SetWorldLocation(m_tensorProduct.GetPointAt(i, j));
+
+                m_tensorProductControlPoints.push_back(node);
+            }
+        }
+
+        for (uint32 i = 0; i < samples.size(); ++i)
+        {
+            const std::string name = "TensorProduct Sample " + ToString(i);
+            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+
+            node->SetMaterial(0, samplesMaterial);
+            node->SetMaterial(1, samplesMaterial);
+
+            node->SetWorldScale(Vector3(0.1f));
+            node->SetWorldLocation(samples[i]);
+
+            m_tensorProductNodes.push_back(node);
+        }
     }
 
     GuiSandboxLayer::GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")

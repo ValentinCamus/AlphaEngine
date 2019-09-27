@@ -2,7 +2,7 @@
 
 namespace Alpha
 {
-    Vector3 BSpline::GetSplinePointAt(float u)
+    Vector3 BSpline::Evaluate(float u)
     {
         std::vector<Vector3> pts; // The points which will influence the curve.
 
@@ -102,11 +102,11 @@ namespace Alpha
     {
         std::vector<Vector3> sampledSplinePoints;
 
-        float u = GetDomainOfDefinition().x;
+        float u = GetValidRange().x;
 
-        while (u <= GetDomainOfDefinition().y)
+        while (u <= GetValidRange().y)
         {
-            Vector3 p = GetSplinePointAt(u);
+            Vector3 p = Evaluate(u);
             sampledSplinePoints.push_back(p);
 
             u += delta;

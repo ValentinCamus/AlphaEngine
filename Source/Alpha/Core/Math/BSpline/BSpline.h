@@ -7,7 +7,7 @@ namespace Alpha
     class BSpline
     {
     public:
-        Vector3 GetSplinePointAt(float u);
+        Vector3 Evaluate(float u);
 
         void ResetKnotsVector();
 
@@ -24,7 +24,7 @@ namespace Alpha
 
         inline uint32 GetNbKnots() const { return m_knots.size(); }
 
-        inline Vector2 GetDomainOfDefinition() const { return Vector2(m_order, m_points.size()); }
+        inline Vector2 GetValidRange() const { return Vector2(m_order, m_points.size()); }
 
         inline uint32 GetDegree() const { return m_degree; }
         inline uint32 GetOrder() const { return m_order; }

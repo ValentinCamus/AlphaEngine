@@ -10,6 +10,7 @@
 #include <Alpha/Core/Types.h>
 #include <Alpha/Core/Math/Random.h>
 #include <Alpha/Core/Math/BSpline/BSpline.h>
+#include <Alpha/Core/Math/BSpline/TensorProduct.h>
 
 
 namespace Alpha

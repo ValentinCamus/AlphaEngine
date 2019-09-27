@@ -40,6 +40,9 @@ namespace Alpha
 
         void OnUpdate() override;
 
+        void InitBSplineExample();
+
+        void InitTensorProductExample();
     private:
         EulerCamera m_camera;
         Pointer<Shader> m_pbrShader;
@@ -57,6 +60,9 @@ namespace Alpha
         std::vector<Pointer<StaticMeshEntity>> m_splineNodes;
         std::vector<Pointer<StaticMeshEntity>> m_splineControlPoints;
 
+        TensorProduct m_tensorProduct;
+        std::vector<Pointer<StaticMeshEntity>> m_tensorProductNodes;
+        std::vector<Pointer<StaticMeshEntity>> m_tensorProductControlPoints;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

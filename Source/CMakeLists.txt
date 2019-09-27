@@ -74,7 +74,7 @@ set(ENGINE_SRCS
         Alpha/Window/Window.cpp
         Alpha/Engine/Loader/MeshLoader.cpp
         Alpha/Gui/BuildInWidgets/StatsWidget.cpp
-        Alpha/Gui/BuildInWidgets/SceneWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h Alpha/Core/Math/BSpline/BSpline.cpp Alpha/Core/Math/BSpline/BSpline.h Sandbox/Sandbox.cpp Alpha/Core/Math/Math.cpp Alpha/Core/Math/Random.cpp Alpha/Core/Math/Random.h Alpha/Engine/Scene/Scene.cpp Alpha/Engine/Scene/Scene.h)
+        Alpha/Gui/BuildInWidgets/SceneWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h Alpha/Core/Math/BSpline/BSpline.cpp Alpha/Core/Math/BSpline/BSpline.h Sandbox/Sandbox.cpp Alpha/Core/Math/Math.cpp Alpha/Core/Math/Random.cpp Alpha/Core/Math/Random.h Alpha/Engine/Scene/Scene.cpp Alpha/Engine/Scene/Scene.h Alpha/Core/Math/BSpline/TensorProduct.cpp Alpha/Core/Math/BSpline/TensorProduct.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE
