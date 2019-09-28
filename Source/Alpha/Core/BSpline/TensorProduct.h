@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Alpha/Core/CoreMinimal.h>
-#include <Alpha/Core/Math/BSpline/BSpline.h>
+#include <Alpha/Core/BSpline/BSpline.h>
 
 namespace Alpha
 {

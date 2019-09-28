@@ -44,4 +44,4 @@
 
 #define ALPHA_BIND_EVENT(fn, ref) std::bind(&fn, ref, std::placeholders::_1)
 
-#define PROJECT_SOURCE_DIR std::string("D:/AlphaEngine/")
+#define PROJECT_SOURCE_DIR GetProjectSourceDir()

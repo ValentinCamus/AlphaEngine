@@ -14,6 +14,8 @@
 #include <Alpha/Core/Utils.h>
 #include <Alpha/Core/Math/Math.h>
 #include <Alpha/Core/Library.h>
+#include <Alpha/Core/BSpline/BSpline.h>
+#include <Alpha/Core/BSpline/TensorProduct.h>
 
 namespace Alpha
 {
