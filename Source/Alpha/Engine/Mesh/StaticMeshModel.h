@@ -18,7 +18,7 @@ namespace Alpha
         bool Load(const std::vector<Vertex>& vertices, const std::vector<uint32>& indices);
 
         /// Render the model.
-        void Draw(const Pointer<Shader>& shader, TransformMatrix& transform);
+        void Draw(const Pointer<Shader>& shader, TransformMatrix& transform, EDrawMode drawMode);
 
         /// Getter: The mesh's material.
         Pointer<Material> GetMaterial(uint32 index);

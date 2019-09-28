@@ -86,15 +86,15 @@ namespace Alpha
 
         m_stanfordDragonInstance->Draw(m_pbrShader, transformMatrix);
 
-        for (auto& splineNode : m_splineNodes)
-            splineNode->Draw(m_pbrShader, transformMatrix);
-        for (auto& controlPoint : m_splineControlPoints)
-            controlPoint->Draw(m_pbrShader, transformMatrix);
+        m_splineLineEntity->Draw(m_pbrShader, transformMatrix);
+        m_splinePointsEntity->Draw(m_pbrShader, transformMatrix);
 
+        /*
         for (auto& tensorNode : m_tensorProductNodes)
             tensorNode->Draw(m_pbrShader, transformMatrix);
         for (auto& tensorControlPoint : m_tensorProductControlPoints)
             tensorControlPoint->Draw(m_pbrShader, transformMatrix);
+        */
 
         m_pbrShader->Unbind();
         s_framebuffer01->Unbind();
@@ -102,6 +102,9 @@ namespace Alpha
 
     void SandboxLayer::InitBSplineExample()
     {
+        std::vector<Vertex> verticesPoints, verticesCurve;
+        std::vector<uint32> indicesPoints, indicesCurve;
+
         Pointer<Material> samplesMaterial = NewPointer<Material>("BSplineSamples");
         Pointer<Material> nodesMaterial = NewPointer<Material>("BSplineNodes");
         nodesMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -118,35 +121,35 @@ namespace Alpha
             m_spline.SetPointAt(i, point);
         }
 
-        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
-        {
-            const std::string name = "Spline Node " + ToString(i);
-            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
-
-            node->SetMaterial(0, nodesMaterial);
-            node->SetMaterial(1, nodesMaterial);
-
-            node->SetWorldScale(Vector3(0.1f));
-            node->SetWorldLocation(m_spline.GetPointAt(i));
-
-            m_splineControlPoints.push_back(node);
-        }
-
         std::vector<Vector3> samples = m_spline.GetSamples(0.1f);
 
-        for (uint32 i = 0; i < samples.size(); ++i)
+        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
+            verticesPoints.emplace_back(m_spline.GetPointAt(i), Vector(1), Vector2(0));
+
+        for (uint32 i = 0; i < m_spline.GetNbPoints() - 1; ++i) indicesPoints.emplace_back(i);
+
+        m_splinePointsModel = NewPointer<StaticMeshModel>();
+        m_splinePointsModel->Load(verticesPoints, indicesPoints);
+
+        m_splinePointsEntity = NewPointer<StaticMeshEntity>("Spline Entity", m_splinePointsModel);
+        m_splinePointsEntity->SetMaterial(0, samplesMaterial);
+        m_splinePointsEntity->SetDrawMode(EDrawMode::Points);
+
+        for (auto & sample : samples)
+            verticesCurve.emplace_back(sample, Vector(1), Vector2(0));
+
+        for (uint32 i = 0; i < samples.size() - 1; ++i)
         {
-            const std::string name = "Spline Sample " + ToString(i);
-            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
-
-            node->SetMaterial(0, samplesMaterial);
-            node->SetMaterial(1, samplesMaterial);
-
-            node->SetWorldScale(Vector3(0.1f));
-            node->SetWorldLocation(samples[i]);
-
-            m_splineNodes.push_back(node);
+            indicesCurve.emplace_back(i);
+            indicesCurve.emplace_back(i + 1);
         }
+
+        m_splineLineModel = NewPointer<StaticMeshModel>();
+        m_splineLineModel->Load(verticesCurve, indicesCurve);
+
+        m_splineLineEntity = NewPointer<StaticMeshEntity>("Spline Entity", m_splineLineModel);
+        m_splineLineEntity->SetMaterial(0, nodesMaterial);
+        m_splineLineEntity->SetDrawMode(EDrawMode::Lines);
     }
 
     void SandboxLayer::InitTensorProductExample()

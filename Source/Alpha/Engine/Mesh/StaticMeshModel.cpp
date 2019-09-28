@@ -34,8 +34,8 @@ namespace Alpha
         return m_meshes.at(index)->SetMaterial(mat);
     }
 
-    void StaticMeshModel::Draw(const Pointer<Shader>& shader, TransformMatrix& transform)
+    void StaticMeshModel::Draw(const Pointer<Shader>& shader, TransformMatrix& transform, EDrawMode drawMode)
     {
-        for (Pointer<StaticMesh>& sm : GetMeshes()) sm->Draw(shader, transform);
+        for (Pointer<StaticMesh>& sm : GetMeshes()) sm->Draw(shader, transform, drawMode);
     }
 }

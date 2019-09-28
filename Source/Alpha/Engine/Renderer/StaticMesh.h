@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Alpha/Core/CoreMinimal.h>
+#include <Alpha/Engine/Renderer/Renderer.h>
 
 #include <Alpha/Engine/Renderer/Shader.h>
 #include <Alpha/Engine/Renderer/Texture.h>
@@ -22,7 +23,7 @@ namespace Alpha
         virtual void Destroy() = 0;
 
         /// Render the mesh.
-        virtual void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform) = 0;
+        virtual void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform, EDrawMode drawMode) = 0;
 
         /// @getter: The mesh's vertices
         virtual const std::vector<Vertex>& GetVertices() const = 0;

@@ -21,6 +21,11 @@ namespace Alpha
             m_model->SetMaterial(i, mat);
         }
 
-        m_model->Draw(shader, transform);
+        m_model->Draw(shader, transform, m_drawMode);
+    }
+
+    Matrix4x4 StaticMeshEntity::GetModelMatrix() const
+    {
+        return MakeModelMatrix(GetWorldLocation(), GetWorldRotation(), GetWorldScale());
     }
 }

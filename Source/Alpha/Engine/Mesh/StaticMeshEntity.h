@@ -33,13 +33,10 @@ namespace Alpha
 
         /// @getter: The model matrix.
         /// @warning: Perform a calculation.
-        inline Matrix4x4 GetModelMatrix() const
-        {
-            Vector location = GetWorldLocation();
-            Vector rotation = GetWorldRotation();
-            Vector scale = GetWorldScale();
-            return MakeModelMatrix(location, rotation, scale);
-        }
+        Matrix4x4 GetModelMatrix() const;
+
+        inline EDrawMode GetDrawMode() const { return m_drawMode; }
+        inline void SetDrawMode(EDrawMode drawMode) { m_drawMode = drawMode; }
 
     private:
         /// The entity name.
@@ -50,5 +47,7 @@ namespace Alpha
 
         /// The list of material to apply to the entity when it will be drawn.
         std::vector<Pointer<Material>> m_materials;
+
+        EDrawMode m_drawMode = EDrawMode::Triangles;
     };
 }

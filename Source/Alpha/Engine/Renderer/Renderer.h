@@ -4,6 +4,13 @@
 
 namespace Alpha
 {
+    enum class EDrawMode
+    {
+        Points,
+        Lines,
+        Triangles
+    };
+
     enum class ERendererAPI
     {
         None,

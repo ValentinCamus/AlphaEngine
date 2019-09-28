@@ -20,7 +20,7 @@ namespace Alpha
         GL_CHECK(glDeleteVertexArrays(1, &m_vao));
     }
 
-    void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform)
+    void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform, EDrawMode drawMode)
     {
         if (!IsMaterialValid())
         {
@@ -36,7 +36,7 @@ namespace Alpha
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
             GetMaterial()->Bind(shader, "material");
 
-            GL_CHECK(glDrawElements(GL_TRIANGLES, (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
+            GL_CHECK(glDrawElements(CastDrawMode(drawMode), (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
 
             GetMaterial()->Unbind();
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
@@ -79,5 +79,17 @@ namespace Alpha
         GL_CHECK(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetOf));
 
         GL_CHECK(glBindVertexArray(0));
+    }
+
+    GLenum OpenGLStaticMesh::CastDrawMode(EDrawMode drawMode) const
+    {
+        switch (drawMode)
+        {
+            case EDrawMode::Points: return GL_POINTS;
+            case EDrawMode::Lines: return GL_LINES;
+            case EDrawMode::Triangles: return GL_TRIANGLES;
+        }
+        ALPHA_ASSERT(false, "OpenGLStaticMesh::CastDrawMode: Invalid DrawMode");
+        return GL_TRIANGLES;
     }
 }

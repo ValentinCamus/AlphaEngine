@@ -57,8 +57,13 @@ namespace Alpha
         Pointer<Light> m_directionalLight;
 
         BSpline m_spline;
-        std::vector<Pointer<StaticMeshEntity>> m_splineNodes;
-        std::vector<Pointer<StaticMeshEntity>> m_splineControlPoints;
+
+
+        Pointer<StaticMeshModel> m_splineLineModel;
+        Pointer<StaticMeshEntity> m_splineLineEntity;
+
+        Pointer<StaticMeshModel> m_splinePointsModel;
+        Pointer<StaticMeshEntity> m_splinePointsEntity;
 
         TensorProduct m_tensorProduct;
         std::vector<Pointer<StaticMeshEntity>> m_tensorProductNodes;
