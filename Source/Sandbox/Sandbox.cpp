@@ -89,12 +89,8 @@ namespace Alpha
         m_splineLineEntity->Draw(m_pbrShader, transformMatrix);
         m_splinePointsEntity->Draw(m_pbrShader, transformMatrix);
 
-        /*
-        for (auto& tensorNode : m_tensorProductNodes)
-            tensorNode->Draw(m_pbrShader, transformMatrix);
-        for (auto& tensorControlPoint : m_tensorProductControlPoints)
-            tensorControlPoint->Draw(m_pbrShader, transformMatrix);
-        */
+        m_tensorPointsEntity->Draw(m_pbrShader, transformMatrix);
+        m_tensorMeshEntity->Draw(m_pbrShader, transformMatrix);
 
         m_pbrShader->Unbind();
         s_framebuffer01->Unbind();
@@ -123,10 +119,8 @@ namespace Alpha
 
         std::vector<Vector3> samples = m_spline.GetSamples(0.1f);
 
-        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i)
-            verticesPoints.emplace_back(m_spline.GetPointAt(i), Vector(1), Vector2(0));
-
-        for (uint32 i = 0; i < m_spline.GetNbPoints() - 1; ++i) indicesPoints.emplace_back(i);
+        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i) verticesPoints.emplace_back(m_spline.GetPointAt(i));
+        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i) indicesPoints.emplace_back(i);
 
         m_splinePointsModel = NewPointer<StaticMeshModel>();
         m_splinePointsModel->Load(verticesPoints, indicesPoints);
@@ -135,8 +129,7 @@ namespace Alpha
         m_splinePointsEntity->SetMaterial(0, samplesMaterial);
         m_splinePointsEntity->SetDrawMode(EDrawMode::Points);
 
-        for (auto & sample : samples)
-            verticesCurve.emplace_back(sample, Vector(1), Vector2(0));
+        for (auto & sample : samples) verticesCurve.emplace_back(sample);
 
         for (uint32 i = 0; i < samples.size() - 1; ++i)
         {
@@ -157,26 +150,11 @@ namespace Alpha
         m_tensorProduct.SetDegree(3);
         m_tensorProduct.Resize(10, 10);
 
-        for (uint32 i = 0; i < 10; ++i)
-        {
-            for (uint32 j = 0; j < 10; ++j)
-            {
-                m_tensorProduct.SetPointAt(i, j, Vector(float(i), Random::GetFloat(-1, 1), float(j)));
-            }
-        }
+        for (uint32 i = 0; i < m_tensorProduct.GetSurface().width; ++i)
+            for (uint32 j = 0; j < m_tensorProduct.GetSurface().height; ++j)
+                m_tensorProduct.SetPointAt(i, j, {i, Random::GetFloat(-1, 1), j});
 
-        Vector2 xDef = m_tensorProduct.GetValidRangeWidth();
-        Vector2 yDef = m_tensorProduct.GetValidRangeHeight();
-
-        std::vector<Vector3> samples;
-
-        for (float u = xDef.x; u < xDef.y; u += 0.5f)
-        {
-            for (float v = yDef.x; v < yDef.y; v += 0.5f)
-            {
-                samples.push_back(m_tensorProduct.Evaluate(u, v));
-            }
-        }
+        std::vector<Vector3> samples = m_tensorProduct.GetSamples(0.1f, 0.1f);
 
         Pointer<Material> samplesMaterial = NewPointer<Material>("TensorProductSamples");
         Pointer<Material> nodesMaterial = NewPointer<Material>("TensorProductNodes");
@@ -184,36 +162,38 @@ namespace Alpha
         samplesMaterial->SetKd(Vector4(0.0f, 0.0f, 1.0f, 1.0f));
         nodesMaterial->SetKd(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 
+        std::vector<uint32> indicesPoints;
+        std::vector<Vertex> verticesPoints;
+
         for (uint32 i = 0; i < m_tensorProduct.GetSurface().width; ++i)
         {
             for (uint32 j = 0; j < m_tensorProduct.GetSurface().height; ++j)
             {
-                const std::string name = "TensorProduct Node " + ToString(i) + ToString(j);
-                Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
-
-                node->SetMaterial(0, nodesMaterial);
-                node->SetMaterial(1, nodesMaterial);
-
-                node->SetWorldScale(Vector3(0.1f));
-                node->SetWorldLocation(m_tensorProduct.GetPointAt(i, j));
-
-                m_tensorProductControlPoints.push_back(node);
+                verticesPoints.emplace_back(m_tensorProduct.GetPointAt(i, j));
+                indicesPoints.emplace_back(i + j * m_tensorProduct.GetSurface().width);
             }
         }
 
-        for (uint32 i = 0; i < samples.size(); ++i)
-        {
-            const std::string name = "TensorProduct Sample " + ToString(i);
-            Pointer<StaticMeshEntity> node = NewPointer<StaticMeshEntity>(name, m_cube);
+        m_tensorPointsModel = NewPointer<StaticMeshModel>();
+        m_tensorPointsModel->Load(verticesPoints, indicesPoints);
 
-            node->SetMaterial(0, samplesMaterial);
-            node->SetMaterial(1, samplesMaterial);
+        m_tensorPointsEntity = NewPointer<StaticMeshEntity>("Tensor Point Entity", m_tensorPointsModel);
+        m_tensorPointsEntity->SetMaterial(0, nodesMaterial);
+        m_tensorPointsEntity->SetDrawMode(EDrawMode::Points);
 
-            node->SetWorldScale(Vector3(0.1f));
-            node->SetWorldLocation(samples[i]);
+        std::vector<uint32> indicesCurve;
+        std::vector<Vertex> verticesCurve;
 
-            m_tensorProductNodes.push_back(node);
-        }
+        verticesCurve.reserve(samples.size());
+        for (auto & sample : samples) verticesCurve.emplace_back(sample);
+        for (uint32 i = 0; i < samples.size(); ++i) indicesCurve.emplace_back(i);
+
+        m_tensorMeshModel = NewPointer<StaticMeshModel>();
+        m_tensorMeshModel->Load(verticesCurve, indicesCurve);
+
+        m_tensorMeshEntity = NewPointer<StaticMeshEntity>("Tensor Mesh Entity", m_tensorMeshModel);
+        m_tensorMeshEntity->SetMaterial(0, samplesMaterial);
+        m_tensorMeshEntity->SetDrawMode(EDrawMode::Points);
     }
 
     GuiSandboxLayer::GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")

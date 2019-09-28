@@ -57,17 +57,16 @@ namespace Alpha
         Pointer<Light> m_directionalLight;
 
         BSpline m_spline;
-
-
         Pointer<StaticMeshModel> m_splineLineModel;
         Pointer<StaticMeshEntity> m_splineLineEntity;
-
         Pointer<StaticMeshModel> m_splinePointsModel;
         Pointer<StaticMeshEntity> m_splinePointsEntity;
 
         TensorProduct m_tensorProduct;
-        std::vector<Pointer<StaticMeshEntity>> m_tensorProductNodes;
-        std::vector<Pointer<StaticMeshEntity>> m_tensorProductControlPoints;
+        Pointer<StaticMeshModel> m_tensorMeshModel;
+        Pointer<StaticMeshEntity> m_tensorMeshEntity;
+        Pointer<StaticMeshModel> m_tensorPointsModel;
+        Pointer<StaticMeshEntity> m_tensorPointsEntity;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

@@ -28,6 +28,7 @@ namespace Alpha
 
     public:
         Vector3 Evaluate(float u, float v) const;
+        std::vector<Vector3> GetSamples(float deltaU, float deltaV);
 
         inline uint32 GetDegree() const { return m_degree; }
         inline void SetDegree(uint32 degree) { m_degree = degree; }
