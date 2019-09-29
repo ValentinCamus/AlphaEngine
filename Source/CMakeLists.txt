@@ -42,8 +42,7 @@ set(GLAD Alpha/ThirdParty/glad/glad.cpp
 
 set(THIRD_PARTY ${GLAD} ${IMGUI})
 
-set(ENGINE_SRCS
-        EntryPoint.cpp
+set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Application/Application.cpp
         Alpha/Engine/EngineMinimal.cpp
         Alpha/Window/GlfwWindow/GlfwWindow.cpp
@@ -74,7 +73,15 @@ set(ENGINE_SRCS
         Alpha/Window/Window.cpp
         Alpha/Engine/Loader/MeshLoader.cpp
         Alpha/Gui/BuildInWidgets/StatsWidget.cpp
-        Alpha/Gui/BuildInWidgets/SceneWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h Alpha/Core/BSpline/BSpline.cpp Alpha/Core/BSpline/BSpline.h Sandbox/Sandbox.cpp Alpha/Core/Math/Math.cpp Alpha/Core/Math/Random.cpp Alpha/Core/Math/Random.h Alpha/Engine/Scene/Scene.cpp Alpha/Engine/Scene/Scene.h Alpha/Core/BSpline/TensorProduct.cpp Alpha/Core/BSpline/TensorProduct.h)
+        Alpha/Gui/BuildInWidgets/SceneWidget.cpp
+        Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp
+        Alpha/Core/BSpline/BSpline.cpp
+        Sandbox/Sandbox.cpp
+        Alpha/Core/Math/Math.cpp
+        Alpha/Core/Math/Random.cpp
+        Alpha/Engine/Scene/Scene.cpp
+        Alpha/Core/BSpline/TensorProduct.cpp
+        Alpha/Engine/GlobalStorage/GlobalStorage.cpp)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

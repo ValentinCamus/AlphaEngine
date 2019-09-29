@@ -26,17 +26,6 @@ namespace Alpha
         public:
             static void Init();
 
-            static const Pointer<Library<Pointer<Scene>>>& GetSceneLibrary() { return s_scenes; }
-            static const Pointer<Library<Pointer<Texture2D>>>& GetTexture2DLibrary() { return s_textures; }
-            static const Pointer<Library<Pointer<Material>>>& GetMaterialLibrary() { return s_materials; }
-            static const Pointer<Library<Pointer<Shader>>>& GetShaderLibrary() { return s_shaders; }
-            static const Pointer<Library<Pointer<StaticMeshModel>>>& GetStaticMeshModelLibrary() { return s_models; }
-
         private:
-            static Pointer<Library<Pointer<Scene>>> s_scenes;
-            static Pointer<Library<Pointer<Texture2D>>> s_textures;
-            static Pointer<Library<Pointer<Material>>> s_materials;
-            static Pointer<Library<Pointer<Shader>>> s_shaders;
-            static Pointer<Library<Pointer<StaticMeshModel>>> s_models;
     };
 }
