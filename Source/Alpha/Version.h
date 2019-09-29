@@ -8,7 +8,7 @@ namespace Alpha
 	{
 		constexpr uint32 MAJOR    = 0;
 		constexpr uint32 MINOR    = 0;
-		constexpr uint32 REVISION = 1;
+		constexpr uint32 REVISION = 2;
 
 		inline std::string AsString()
 		{
