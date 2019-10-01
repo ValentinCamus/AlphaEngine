@@ -1,9 +1,9 @@
 #pragma once
 
 // FIXME: Fix assimp!
-#include "../../../../External/assimp/include/assimp/Importer.hpp"
-#include "../../../../External/assimp/include/assimp/scene.h"
-#include "../../../../External/assimp/include/assimp/postprocess.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 
 #include <Alpha/Core/CoreMinimal.h>
 

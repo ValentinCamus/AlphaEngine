@@ -114,9 +114,7 @@ add_custom_target(run DEPENDS AlphaEngine-run)
 # Target link libraries
 
 target_link_libraries(AlphaEngine spdlog)
-#target_link_libraries(AlphaEngine glm)
 target_link_libraries(AlphaEngine assimp)
-#target_link_libraries(AlphaEngine imgui)
 target_link_libraries(AlphaEngine glfw)
 
 target_link_libraries(AlphaEngine ${OPENGL_gl_LIBRARY})

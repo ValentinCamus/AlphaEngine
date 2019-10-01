@@ -3,7 +3,6 @@ Build/*
 tags/
 External/*
 !External/CMakeLists.txt
-!External/assimp
 *.sublime-workspace
 *.tags
 *.pyc
@@ -11,3 +10,4 @@ External/*
 *.swo
 *.iml
 *.DS_Store
+*.vs

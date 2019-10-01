@@ -12,6 +12,11 @@
 #define PLATFORM_UNKNOW
 #endif
 
+#ifdef PLATFORM_WINDOWS
+// Warning: Conversion size_t to Alpha::uint32 - Possible lose of data: [Disable]
+#pragma warning(disable: 4267) 
+#endif
+
 #ifdef ALPHA_WARN_UNUSED
 #define ALPHA_UNUSED(var) Alpha::Logger::Warn("Unused variable {0}", #var);
 #else
