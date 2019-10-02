@@ -13,8 +13,11 @@
 #endif
 
 #ifdef PLATFORM_WINDOWS
-// Warning: Conversion size_t to Alpha::uint32 - Possible lose of data: [Disable]
+// Warning: Conversion 'size_t' to 'Alpha::uint32', Possible lose of data: [Disable]
 #pragma warning(disable: 4267) 
+
+// Warning: Conversion from 'T' to 'Alpha::uint32', possible loss of data: [Disable]
+#pragma warning(disable: 4244) 
 #endif
 
 #ifdef ALPHA_WARN_UNUSED

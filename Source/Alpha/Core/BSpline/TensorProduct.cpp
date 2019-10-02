@@ -11,23 +11,16 @@ namespace Alpha
 
         for (uint32 i = 0; i < m_surface.width; ++i)
         {
-            Vector3 ySample;
+            BSpline ySpline;
+            ySpline.SetDegree(m_degree);
+            ySpline.SetNbPoints(m_surface.height);
 
             for (uint32 j = 0; j < m_surface.height; ++j)
-            {
-                BSpline ySpline;
-                ySpline.SetDegree(m_degree);
-                ySpline.SetNbPoints(m_surface.height);
+                ySpline.SetPointAt(j, m_surface.GetPointAt(i, j));
 
-                for (uint32 k = 0; k < m_surface.height; ++k)
-                    ySpline.SetPointAt(k, m_surface.GetPointAt(i, k));
+            ySpline.ResetKnotsVector();
 
-                ySpline.ResetKnotsVector();
-
-                ySample = ySpline.Evaluate(v);
-            }
-
-            xSpline.SetPointAt(i, ySample);
+            xSpline.SetPointAt(i, ySpline.Evaluate(v));
         }
 
         xSpline.ResetKnotsVector();
@@ -37,19 +30,19 @@ namespace Alpha
 
     std::vector<Vector3> TensorProduct::GetSamples(float deltaU, float deltaV)
     {
-        std::vector<Vector3> samples;
+		std::vector<Vector3> samples;
 
-        Vector2 xDef = GetValidRangeWidth();
-        Vector2 yDef =  GetValidRangeHeight();
+		Vector2 xDef = GetValidRangeWidth();
+		Vector2 yDef = GetValidRangeHeight();
 
-        for (float u = xDef.x; u < xDef.y; u += deltaU)
-        {
-            for (float v = yDef.x; v < yDef.y; v += deltaV)
-            {
-                samples.push_back(Evaluate(u, v));
-            }
-        }
+		for (float u = xDef.x; u < xDef.y; u += deltaU)
+		{
+			for (float v = yDef.x; v < yDef.y; v += deltaV)
+			{
+				samples.push_back(Evaluate(u, v));
+			}
+		}
 
-        return samples;
+		return samples;
     }
 }

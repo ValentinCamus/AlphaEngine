@@ -51,9 +51,9 @@ namespace Alpha
 
 	inline void AtExitCallback()
 	{
-#ifdef ALPHA_DO_QUIT_CONFIRMATION
+#ifdef PLATFORM_WINDOWS
 		std::cout << std::endl; // Esthetic only
-		std::cout << ">> Press any touch to quit" << std::endl;
+		std::cout << ">> Press any touch to quit: ";
 		std::cin.get();
 #endif
 	}
