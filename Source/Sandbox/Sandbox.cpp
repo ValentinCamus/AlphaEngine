@@ -17,37 +17,38 @@ namespace Alpha
 
         m_directionalLight = NewPointer<DirectionalLight>();
 
-        m_brickTexture = Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg");
+		GlobalStorage::Add<Texture2D>("Brick", Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg"));
 
         Pointer<Material> defaultMaterial = NewPointer<Material>("DefaultMaterial");
         Pointer<Material> redMaterial = NewPointer<Material>("RedMaterial");
         Pointer<Material> brickMaterial = NewPointer<Material>("BrickMaterial");
 
         redMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-        brickMaterial->AddTexture(ETextureType::TX_Diffuse, m_brickTexture);
+        brickMaterial->AddTexture(ETextureType::TX_Diffuse, GlobalStorage::Get<Texture2D>("Brick"));
 
-        m_cube = NewPointer<StaticMeshModel>();
-        m_cube->Load(PROJECT_SOURCE_DIR + "Assets/Cube.fbx");
+		GlobalStorage::Add<Material>("Default", defaultMaterial);
+		GlobalStorage::Add<Material>("Red", redMaterial);
+		GlobalStorage::Add<Material>("Brick", brickMaterial);
 
-        m_stanfordDragon = NewPointer<StaticMeshModel>();
-        m_stanfordDragon->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
+        Pointer<StaticMeshModel> cubeModel = NewPointer<StaticMeshModel>();
+		cubeModel->Load(PROJECT_SOURCE_DIR + "Assets/Cube.fbx");
+		GlobalStorage::Add<StaticMeshModel>("Cube", cubeModel);
 
-        m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Dragon", m_stanfordDragon);
+		Pointer<StaticMeshModel> stanfordDragonModel = NewPointer<StaticMeshModel>();
+		stanfordDragonModel->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
+		GlobalStorage::Add<StaticMeshModel>("StanfordDragon", stanfordDragonModel);
+
+
+        m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Dragon", GlobalStorage::Get<StaticMeshModel>("StanfordDragon"));
         m_stanfordDragonInstance->SetMaterial(0, defaultMaterial);
         m_stanfordDragonInstance->SetMaterial(1, brickMaterial);
         m_stanfordDragonInstance->SetWorldLocation({0, -1, -2});
         m_stanfordDragonInstance->SetWorldScale({0.05, 0.05, 0.05});
 
-        Logger::Info("(Tips) To move forward: Press W (Qwerty keyboard)");
-        Logger::Info("(Tips) To move backward: Press S (Qwerty keyboard)");
-        Logger::Info("(Tips) To move left: Press A (Qwerty keyboard)");
-        Logger::Info("(Tips) To move right: Press D (Qwerty keyboard)");
-        Logger::Info("(Tips) To zoom in: Press P (Qwerty keyboard)");
-        Logger::Info("(Tips) To zoom out: Press M (Qwerty keyboard)");
-        Logger::Info("(Tips) To reset the zoom: Press C (Qwerty keyboard)");
-
         InitBSplineExample();
         InitTensorProductExample();
+
+		LogTips();
     }
 
     void SandboxLayer::OnUpdate()
@@ -125,14 +126,18 @@ namespace Alpha
         std::vector<Vector3> samples = m_spline.GetSamples(0.1f);
 
         for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i) verticesPoints.emplace_back(m_spline.GetPointAt(i));
-        for (uint32 i = 0; i < m_spline.GetNbPoints(); ++i) indicesPoints.emplace_back(i);
+		for (uint32 i = 0; i < m_spline.GetNbPoints() - 1; ++i)
+		{
+			indicesPoints.emplace_back(i);
+			indicesPoints.emplace_back(i + 1);
+		}
 
         m_splinePointsModel = NewPointer<StaticMeshModel>();
         m_splinePointsModel->Load(verticesPoints, indicesPoints);
 
         m_splinePointsEntity = NewPointer<StaticMeshEntity>("Spline Entity", m_splinePointsModel);
         m_splinePointsEntity->SetMaterial(0, samplesMaterial);
-        m_splinePointsEntity->SetDrawMode(EDrawMode::Points);
+        m_splinePointsEntity->SetDrawMode(EDrawMode::Lines);
 
         for (auto & sample : samples) verticesCurve.emplace_back(sample);
 
@@ -200,6 +205,17 @@ namespace Alpha
         m_tensorMeshEntity->SetMaterial(0, samplesMaterial);
         m_tensorMeshEntity->SetDrawMode(EDrawMode::Points);
     }
+
+	void SandboxLayer::LogTips()
+	{
+		Logger::Info("(Tips) To move forward: Press W (Qwerty keyboard)");
+		Logger::Info("(Tips) To move backward: Press S (Qwerty keyboard)");
+		Logger::Info("(Tips) To move left: Press A (Qwerty keyboard)");
+		Logger::Info("(Tips) To move right: Press D (Qwerty keyboard)");
+		Logger::Info("(Tips) To zoom in: Press P (Qwerty keyboard)");
+		Logger::Info("(Tips) To zoom out: Press M (Qwerty keyboard)");
+		Logger::Info("(Tips) To reset the zoom: Press C (Qwerty keyboard)");
+	}
 
     GuiSandboxLayer::GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")
     {

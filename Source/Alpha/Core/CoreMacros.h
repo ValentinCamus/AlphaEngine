@@ -9,15 +9,14 @@
 #elif __linux
 #define PLATFORM_LINUX
 #else
-#define PLATFORM_UNKNOW
+#define PLATFORM_UNKNOWN
 #endif
 
-#ifdef PLATFORM_WINDOWS
-// Warning: Conversion 'size_t' to 'Alpha::uint32', Possible lose of data: [Disable]
-#pragma warning(disable: 4267) 
-
-// Warning: Conversion from 'T' to 'Alpha::uint32', possible loss of data: [Disable]
-#pragma warning(disable: 4244) 
+#ifdef PLATFORM_WINDOWS 
+#ifdef _MSC_VER
+#pragma warning(disable: 4267) // Warning: Conversion 'size_t' to 'Alpha::uint32', Possible lose of data: [Disable]
+#pragma warning(disable: 4244) // Warning: Conversion from 'T' to 'Alpha::uint32', possible loss of data: [Disable]
+#endif
 #endif
 
 #ifdef ALPHA_WARN_UNUSED

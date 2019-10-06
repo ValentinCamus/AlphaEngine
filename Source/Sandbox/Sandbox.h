@@ -1,12 +1,10 @@
 #pragma once
 
-#include <Alpha/ThirdParty/imgui/imgui.h>
-
 #include <Alpha/Layer/Layer.h>
 #include <Alpha/Gui/ImGuiLayer.h>
 
-#include <Alpha/Engine/Renderer/Renderer.h>
-#include <Alpha/Engine/Renderer/Framebuffer.h>
+#include <Alpha/Core/CoreMinimal.h>
+#include <Alpha/Engine/EngineMinimal.h>
 
 #include <Alpha/Gui/BuildInWidgets/StatsWidget.h>
 #include <Alpha/Gui/BuildInWidgets/DockerWidget.h>
@@ -15,19 +13,6 @@
 #include <Alpha/Gui/BuildInWidgets/MaterialEditorWidget.h>
 
 #include <Alpha/Input/Input.h>
-
-#include <Alpha/Engine/Renderer/Shader.h>
-
-#include <Alpha/Engine/Camera/EulerCamera.h>
-
-#include <Alpha/Engine/Mesh/StaticMeshModel.h>
-#include <Alpha/Engine/Mesh/StaticMeshEntity.h>
-
-#include <Alpha/Engine/Renderer/Texture.h>
-#include <Alpha/Engine/Material/Material.h>
-
-#include <Alpha/Engine/Renderer/OpenGL/OpenGLRenderer.h>
-
 
 namespace Alpha
 {
@@ -41,8 +26,11 @@ namespace Alpha
         void OnUpdate() override;
 
         void InitBSplineExample();
-
         void InitTensorProductExample();
+
+	private:
+		void LogTips();
+
     private:
         EulerCamera m_camera;
         Pointer<Shader> m_pbrShader;

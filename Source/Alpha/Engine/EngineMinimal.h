@@ -18,6 +18,8 @@
 
 #include <Alpha/Engine/Scene/Scene.h>
 
+#include <Alpha/Engine/GlobalStorage/GlobalStorage.h>
+
 namespace Alpha
 {
     /// Use to store all the engine's global variables and functions.
