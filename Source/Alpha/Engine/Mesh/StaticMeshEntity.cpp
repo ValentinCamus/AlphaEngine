@@ -3,7 +3,7 @@
 namespace Alpha
 {
     StaticMeshEntity::StaticMeshEntity(std::string name, const Pointer<StaticMeshModel> &model)
-            : SceneComponent(Transform())
+            : SceneComponent(Transform(), name)
             , m_name(std::move(name))
             , m_model(model)
     {

@@ -22,6 +22,8 @@ namespace Alpha
         virtual uint32 GetWidth() = 0;
         virtual uint32 GetHeight() = 0;
 
+		virtual float GetAspectRatio() = 0;
+
         virtual void Resize(uint32 width, uint32 height) = 0;
 
         virtual Pointer<Texture2D> GetTexture() = 0;

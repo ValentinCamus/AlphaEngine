@@ -32,28 +32,17 @@ namespace Alpha
 		void LogTips();
 
     private:
-        EulerCamera m_camera;
-        Pointer<Shader> m_pbrShader;
-
-        Pointer<Texture2D> m_brickTexture;
-
-        Pointer<StaticMeshModel> m_cube;
-        Pointer<StaticMeshModel> m_stanfordDragon;
+		Pointer<Scene> m_scene;
+        Pointer<Shader> m_shader;
 
         Pointer<StaticMeshEntity> m_stanfordDragonInstance;
 
-        Pointer<Light> m_directionalLight;
-
         BSpline m_spline;
-        Pointer<StaticMeshModel> m_splineLineModel;
         Pointer<StaticMeshEntity> m_splineLineEntity;
-        Pointer<StaticMeshModel> m_splinePointsModel;
         Pointer<StaticMeshEntity> m_splinePointsEntity;
 
         TensorProduct m_tensorProduct;
-        Pointer<StaticMeshModel> m_tensorMeshModel;
         Pointer<StaticMeshEntity> m_tensorMeshEntity;
-        Pointer<StaticMeshModel> m_tensorPointsModel;
         Pointer<StaticMeshEntity> m_tensorPointsEntity;
     };
 
@@ -67,10 +56,10 @@ namespace Alpha
         void OnEvent(Event& e) override;
 
     private:
-        DockerWidget m_docker = DockerWidget("Docker Widget");
-        ViewportWidget m_viewport01 = ViewportWidget("Viewport-01");
-        StatsWidget m_stats = StatsWidget("Stats Widget");
-        SceneWidget m_scene = SceneWidget("Scene Widget");
+        DockerWidget m_dockerWidget = DockerWidget("Docker Widget");
+        ViewportWidget m_viewportWidget01 = ViewportWidget("Viewport-01");
+        StatsWidget m_statWidget = StatsWidget("Stats Widget");
+        SceneWidget m_sceneWidget = SceneWidget("Scene Widget");
         MaterialEditorWidget m_materialEditor = MaterialEditorWidget("Material Editor");
 
     };

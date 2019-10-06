@@ -7,6 +7,8 @@
 
 #include <Alpha/Event/ApplicationEvent.h>
 
+#include <Alpha/Engine/Scene/Scene.h>
+
 namespace Alpha
 {
     class SceneWidget : public ImGuiWidget
@@ -18,9 +20,16 @@ namespace Alpha
         void Render() override;
 
         inline int32 GetSelectedEntityIndex() const { return m_selectedEntityIndex - 1; }
+		inline bool IsSelectedEntityValid() const { return m_selectedEntityIndex > 0; }
+
+
+		inline const Pointer<Scene>& GetScene() const { return m_scene; }
+		inline void SetScene(const Pointer<Scene>& scene) { m_scene = scene; }
 
     private:
-        std::vector<const char*> m_entities;
+		Pointer<Scene> m_scene = nullptr;
+
+        std::vector<const char*> m_components;
         int32 m_selectedEntityIndex = 0;
     };
 }

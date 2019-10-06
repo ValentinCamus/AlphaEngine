@@ -4,7 +4,7 @@ namespace Alpha
 {
     void SceneWidget::Init()
     {
-        m_entities.emplace_back("<No Selection>");
+
     }
 
     void SceneWidget::Render()
@@ -20,7 +20,19 @@ namespace Alpha
         }
 
         ImGui::Text("Scene Entities: ");
-        ImGui::ListBox("", &m_selectedEntityIndex, m_entities.data(), m_entities.size(), 10);
+
+		m_components = { "<No Selection>" };
+
+		if (m_scene && m_scene->GetNbComponents() > 0)
+		{
+			for (uint32 i = 0; i < m_scene->GetNbComponents(); ++i)
+			{
+				const std::string& name = m_scene->GetComponentAt(i)->GetName();
+				m_components.push_back(ToCharArray(name));
+			}
+		}  
+
+        ImGui::ListBox("", &m_selectedEntityIndex, m_components.data(), m_components.size(), 10);
 
         ImGui::End();
     }

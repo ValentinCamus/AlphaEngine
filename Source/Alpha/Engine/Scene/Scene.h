@@ -22,11 +22,13 @@ namespace Alpha
         inline const Pointer<Framebuffer>& GetFramebuffer() const { return m_framebuffer; }
         inline void SetFramebuffer(const Pointer<Framebuffer>& fb) { m_framebuffer = fb; }
 
+		inline void PushLight(const Pointer<Light>& light) { m_lights.push_back(light); }
         inline const std::vector<Pointer<Light>>& GetLights() const { return m_lights; }
         inline const Pointer<Light>& GetLightAt(uint32 index) const { return m_lights[index]; }
         inline void SetLightAt(uint32 index, const Pointer<Light>& light) { m_lights[index] = light; }
         inline uint32 GetNbLights() const { return m_lights.size(); }
 
+		inline void PushComponent(const Pointer<SceneComponent>& sc) { m_components.push_back(sc); }
         inline const std::vector<Pointer<SceneComponent>>& GetComponents() const { return m_components; }
         inline const Pointer<SceneComponent>& GetComponentAt(uint32 index) const { return m_components[index]; }
         inline void SetComponentAt(uint32 index, const Pointer<SceneComponent>& sc) { m_components[index] = sc; }

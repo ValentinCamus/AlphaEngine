@@ -55,6 +55,8 @@ namespace Alpha
          inline uint32 GetWidth() override { return m_width; }
          inline uint32 GetHeight() override { return m_height; }
 
+		 inline float GetAspectRatio() override { return float(m_width) / float(m_height); }
+
          void Resize(uint32 width, uint32 height) override;
 
          inline Pointer<Texture2D> GetTexture() override { return m_texture; }

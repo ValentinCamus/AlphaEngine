@@ -4,18 +4,19 @@
 
 namespace Alpha
 {
-    static Pointer<Framebuffer> s_framebuffer01 = nullptr;
-
     void SandboxLayer::Init()
     {
-        m_pbrShader = Shader::Create("Physical-Based-Rendering", {
+		m_scene = NewPointer<Scene>();
+		GlobalStorage::Add<Scene>("Scene_01", m_scene);
+		m_scene->PushLight(NewPointer<DirectionalLight>());
+		m_scene->SetFramebuffer(Framebuffer::Create(500, 500));
+		m_scene->SetCamera(NewPointer<EulerCamera>());
+
+		m_shader = Shader::Create("Physical-Based-Rendering", {
                 {Shader::GLSL_VERTEX_SHADER, PROJECT_SOURCE_DIR + "Shaders/Forward.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, PROJECT_SOURCE_DIR + "Shaders/Forward.fs.glsl"}
         });
-
-        s_framebuffer01 = Framebuffer::Create(500, 500);
-
-        m_directionalLight = NewPointer<DirectionalLight>();
+		GlobalStorage::Add<Shader>("Forward", m_shader);
 
 		GlobalStorage::Add<Texture2D>("Brick", Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg"));
 
@@ -38,12 +39,13 @@ namespace Alpha
 		stanfordDragonModel->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
 		GlobalStorage::Add<StaticMeshModel>("StanfordDragon", stanfordDragonModel);
 
-
-        m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Dragon", GlobalStorage::Get<StaticMeshModel>("StanfordDragon"));
+        m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Dragon", stanfordDragonModel);
         m_stanfordDragonInstance->SetMaterial(0, defaultMaterial);
         m_stanfordDragonInstance->SetMaterial(1, brickMaterial);
         m_stanfordDragonInstance->SetWorldLocation({0, -1, -2});
         m_stanfordDragonInstance->SetWorldScale({0.05, 0.05, 0.05});
+
+		m_scene->PushComponent(m_stanfordDragonInstance);
 
         InitBSplineExample();
         InitTensorProductExample();
@@ -53,53 +55,57 @@ namespace Alpha
 
     void SandboxLayer::OnUpdate()
     {
-        // AlphaEngine supports only US keyboard binding (aka QWERTY)
-        if (Input::IsKeyPressed(ALPHA_KEY_W)) m_camera.MoveForward(1);
-        if (Input::IsKeyPressed(ALPHA_KEY_S)) m_camera.MoveForward(-1);
-        if (Input::IsKeyPressed(ALPHA_KEY_A)) m_camera.MoveRight(-1);
-        if (Input::IsKeyPressed(ALPHA_KEY_D)) m_camera.MoveRight(1);
+		auto camera = Cast<EulerCamera>(m_scene->GetCamera());
 
-        if (Input::IsKeyPressed(ALPHA_KEY_C)) m_camera.SetZoom(ZOOM);
-        if (Input::IsKeyPressed(ALPHA_KEY_P)) m_camera.SetZoom(m_camera.GetZoom() + 0.1f);
-        if (Input::IsKeyPressed(ALPHA_KEY_M)) m_camera.SetZoom(m_camera.GetZoom() - 0.1f);
+        // AlphaEngine supports only US keyboard binding (aka QWERTY)
+        if (Input::IsKeyPressed(ALPHA_KEY_W)) camera->MoveForward(1);
+        if (Input::IsKeyPressed(ALPHA_KEY_S)) camera->MoveForward(-1);
+        if (Input::IsKeyPressed(ALPHA_KEY_A)) camera->MoveRight(-1);
+        if (Input::IsKeyPressed(ALPHA_KEY_D)) camera->MoveRight(1);
+
+        if (Input::IsKeyPressed(ALPHA_KEY_C)) camera->SetZoom(ZOOM);
+        if (Input::IsKeyPressed(ALPHA_KEY_P)) camera->SetZoom(camera->GetZoom() + 0.1f);
+        if (Input::IsKeyPressed(ALPHA_KEY_M)) camera->SetZoom(camera->GetZoom() - 0.1f);
 
 #ifdef PLATFORM_APPLE
-		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_2)) m_camera.Look(Input::GetMousePosition());
+		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_2)) camera->Look(Input::GetMousePosition());
 #else
-		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_3)) m_camera.Look(Input::GetMousePosition());
-		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_4)) m_camera.SetZoom(m_camera.GetZoom() + 0.1f);
-		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_5)) m_camera.SetZoom(m_camera.GetZoom() - 0.1f);
+		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_3)) camera->Look(Input::GetMousePosition());
+		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_4)) camera->SetZoom(camera->GetZoom() + 0.1f);
+		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_5)) camera->SetZoom(camera->GetZoom() - 0.1f);
 #endif
 
 
-        ALPHA_ASSERT(s_framebuffer01, "Invalid Framebuffer: 01");
+        ALPHA_ASSERT(m_scene->GetFramebuffer(), "Invalid Framebuffer");
 
-        s_framebuffer01->Bind();
-        m_pbrShader->Bind();
+		m_scene->Bind();
+        m_shader->Bind();
 
         Renderer::Clear();
         Renderer::SetClearColor({0.2f, 0.3f, 0.3f, 1.0f});
 
-        m_pbrShader->SetUniform("nLights", 1);
-        m_pbrShader->SetUniform("lights[0]", m_directionalLight);
+		uint32 nLights = m_scene->GetLights().size();
+		m_shader->SetUniform("nLights", static_cast<int32>(nLights));
+		for (uint32 i = 0; i < nLights; ++i)
+		{
+			Pointer<Light> light = m_scene->GetLights()[i];
+			std::string uniformName = "lights[" + ToString(i) + "]";
+			m_shader->SetUniform(uniformName, light);
+		}
 
-        float fb01AspectRatio = (float)s_framebuffer01->GetWidth() / (float)s_framebuffer01->GetHeight();
-        Matrix4x4 projectionMatrix = MakeProjectionMatrix(m_camera.GetZoom(), fb01AspectRatio);
-
-        Matrix4x4 viewMatrix = MakeViewMatrix(m_camera.GetWorldLocation(),  m_camera.GetWorldRotation());
-
+		float aspectRatio = m_scene->GetFramebuffer()->GetAspectRatio();
+        Matrix4x4 projectionMatrix = MakeProjectionMatrix(camera->GetZoom(), aspectRatio);
+        Matrix4x4 viewMatrix = MakeViewMatrix(camera->GetWorldLocation(), camera->GetWorldRotation());
         TransformMatrix transformMatrix = {Matrix4x4(1), viewMatrix, projectionMatrix};
 
-        m_stanfordDragonInstance->Draw(m_pbrShader, transformMatrix);
+        m_stanfordDragonInstance->Draw(m_shader, transformMatrix);
+        m_splineLineEntity->Draw(m_shader, transformMatrix);
+        m_splinePointsEntity->Draw(m_shader, transformMatrix);
+        m_tensorPointsEntity->Draw(m_shader, transformMatrix);
+        m_tensorMeshEntity->Draw(m_shader, transformMatrix);
 
-        m_splineLineEntity->Draw(m_pbrShader, transformMatrix);
-        m_splinePointsEntity->Draw(m_pbrShader, transformMatrix);
-
-        m_tensorPointsEntity->Draw(m_pbrShader, transformMatrix);
-        m_tensorMeshEntity->Draw(m_pbrShader, transformMatrix);
-
-        m_pbrShader->Unbind();
-        s_framebuffer01->Unbind();
+        m_shader->Unbind();
+        m_scene->Unbind();
     }
 
     void SandboxLayer::InitBSplineExample()
@@ -132,10 +138,9 @@ namespace Alpha
 			indicesPoints.emplace_back(i + 1);
 		}
 
-        m_splinePointsModel = NewPointer<StaticMeshModel>();
-        m_splinePointsModel->Load(verticesPoints, indicesPoints);
-
-        m_splinePointsEntity = NewPointer<StaticMeshEntity>("Spline Entity", m_splinePointsModel);
+        Pointer<StaticMeshModel> splinePointsModel = NewPointer<StaticMeshModel>();
+		splinePointsModel->Load(verticesPoints, indicesPoints);
+        m_splinePointsEntity = NewPointer<StaticMeshEntity>("Spline Entity", splinePointsModel);
         m_splinePointsEntity->SetMaterial(0, samplesMaterial);
         m_splinePointsEntity->SetDrawMode(EDrawMode::Lines);
 
@@ -147,10 +152,9 @@ namespace Alpha
             indicesCurve.emplace_back(i + 1);
         }
 
-        m_splineLineModel = NewPointer<StaticMeshModel>();
-        m_splineLineModel->Load(verticesCurve, indicesCurve);
-
-        m_splineLineEntity = NewPointer<StaticMeshEntity>("Spline Entity", m_splineLineModel);
+        Pointer<StaticMeshModel> splineLineModel = NewPointer<StaticMeshModel>();
+		splineLineModel->Load(verticesCurve, indicesCurve);
+        m_splineLineEntity = NewPointer<StaticMeshEntity>("Spline Entity", splineLineModel);
         m_splineLineEntity->SetMaterial(0, nodesMaterial);
         m_splineLineEntity->SetDrawMode(EDrawMode::Lines);
     }
@@ -184,10 +188,9 @@ namespace Alpha
             }
         }
 
-        m_tensorPointsModel = NewPointer<StaticMeshModel>();
-        m_tensorPointsModel->Load(verticesPoints, indicesPoints);
-
-        m_tensorPointsEntity = NewPointer<StaticMeshEntity>("Tensor Point Entity", m_tensorPointsModel);
+        Pointer<StaticMeshModel> tensorPointsModel = NewPointer<StaticMeshModel>();
+		tensorPointsModel->Load(verticesPoints, indicesPoints);
+        m_tensorPointsEntity = NewPointer<StaticMeshEntity>("Tensor Point Entity", tensorPointsModel);
         m_tensorPointsEntity->SetMaterial(0, nodesMaterial);
         m_tensorPointsEntity->SetDrawMode(EDrawMode::Points);
 
@@ -198,10 +201,9 @@ namespace Alpha
         for (auto & sample : samples) verticesCurve.emplace_back(sample);
         for (uint32 i = 0; i < samples.size(); ++i) indicesCurve.emplace_back(i);
 
-        m_tensorMeshModel = NewPointer<StaticMeshModel>();
-        m_tensorMeshModel->Load(verticesCurve, indicesCurve);
-
-        m_tensorMeshEntity = NewPointer<StaticMeshEntity>("Tensor Mesh Entity", m_tensorMeshModel);
+        Pointer<StaticMeshModel> tensorMeshModel = NewPointer<StaticMeshModel>();
+		tensorMeshModel->Load(verticesCurve, indicesCurve);
+        m_tensorMeshEntity = NewPointer<StaticMeshEntity>("Tensor Mesh Entity", tensorMeshModel);
         m_tensorMeshEntity->SetMaterial(0, samplesMaterial);
         m_tensorMeshEntity->SetDrawMode(EDrawMode::Points);
     }
@@ -219,25 +221,39 @@ namespace Alpha
 
     GuiSandboxLayer::GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")
     {
-        m_viewport01.SetFramebuffer(s_framebuffer01);
+		Pointer<Framebuffer> fb = GlobalStorage::Get<Scene>("Scene_01")->GetFramebuffer(); 
+        m_viewportWidget01.SetFramebuffer(fb);
     }
 
     void GuiSandboxLayer::OnImGuiRender()
     {
-        m_docker.Render();
-        m_viewport01.Render();
-        m_stats.Render();
-        m_scene.Render();
+		Pointer<Scene> scene = GlobalStorage::Get<Scene>("Scene_01");
+		m_sceneWidget.SetScene(scene);
+
+		if (m_sceneWidget.IsSelectedEntityValid())
+		{
+			uint32 index = m_sceneWidget.GetSelectedEntityIndex();
+			Pointer<SceneComponent> component = scene->GetComponentAt(index);
+
+			auto entity = Cast<StaticMeshEntity>(component);
+			if (entity != m_materialEditor.GetEntity()) m_materialEditor.SetEntity(entity);
+		} 
+		else m_materialEditor.Clear();
+
+        m_dockerWidget.Render();
+        m_viewportWidget01.Render();
+        m_statWidget.Render();
+        m_sceneWidget.Render();
         m_materialEditor.Render();
         // ImGui::ShowDemoWindow();
     }
 
     void GuiSandboxLayer::OnEvent(Event &e)
     {
-        m_docker.OnEvent(e);
-        m_viewport01.OnEvent(e);
-        m_stats.OnEvent(e);
-        m_scene.OnEvent(e);
+        m_dockerWidget.OnEvent(e);
+        m_viewportWidget01.OnEvent(e);
+        m_statWidget.OnEvent(e);
+        m_sceneWidget.OnEvent(e);
         m_materialEditor.OnEvent(e);
     }
 }

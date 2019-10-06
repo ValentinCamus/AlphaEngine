@@ -4,10 +4,23 @@
 
 namespace Alpha
 {
+	static uint32 nComponents = 0;
+
     class SceneComponent
     {
     public:
-        inline explicit SceneComponent(const Transform& transform) : m_transform(transform) {}
+		inline explicit SceneComponent(const Transform& transform)
+			: m_transform(transform)
+		{
+			m_name = "NoName_" + ToString(nComponents++);
+		}
+
+		inline explicit SceneComponent(const Transform& transform, const std::string& name)
+			: m_transform(transform)
+			, m_name(name)
+		{
+			++nComponents;
+		}
 
         virtual ~SceneComponent() = default;
 
@@ -38,7 +51,13 @@ namespace Alpha
         /// @getter: The right vector.
         inline Vector3 GetRightVector() const { return CalculateRightVector(m_transform); }
 
+		inline const std::string& GetName() const { return m_name; }
+
+		inline void SetName(const std::string& name) { m_name = name; }
+
     private:
-        Transform m_transform;
+		Transform m_transform;
+
+		std::string m_name;
     };
 }
