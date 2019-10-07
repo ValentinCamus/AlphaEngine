@@ -13,15 +13,7 @@ namespace Alpha
     class GlobalStorage
     {
     public:
-		template<typename T>
-		static inline Pointer<T>& Get(const std::string& name)
-		{
-			ALPHA_ASSERT(false, "GlobalStorage::Get: Invalid template");
-			return nullptr;
-		}
-
-		template<>
-		static inline Pointer<Scene>& Get(const std::string& name)
+		static inline Pointer<Scene>& GetScene(const std::string& name)
 		{
 			static Pointer<Scene> output = nullptr;
 			ALPHA_ASSERT(s_scenes.Contains(name), "GlobalStorage::Get<Scene>: Invalid name");
@@ -30,8 +22,7 @@ namespace Alpha
 			return output;
 		}
 
-		template<>
-		static inline Pointer<Texture2D>& Get(const std::string& name)
+		static inline Pointer<Texture2D>& GetTexture2D(const std::string& name)
 		{
 			static Pointer<Texture2D> output = nullptr;
 			ALPHA_ASSERT(s_textures.Contains(name), "GlobalStorage::Get<Texture2D>: Invalid name");
@@ -40,8 +31,7 @@ namespace Alpha
 			return output;
 		}
 
-		template<>
-		static inline Pointer<Material>& Get(const std::string& name)
+		static inline Pointer<Material>& GetMaterial(const std::string& name)
 		{
 			static Pointer<Material> output = nullptr;
 			ALPHA_ASSERT(s_materials.Contains(name), "GlobalStorage::Get<Material>: Invalid name");
@@ -50,8 +40,7 @@ namespace Alpha
 			return output;
 		}
 
-		template<>
-		static inline Pointer<Shader>& Get(const std::string& name)
+		static inline Pointer<Shader>& GetShader(const std::string& name)
 		{
 			static Pointer<Shader> output = nullptr;
 			ALPHA_ASSERT(s_shaders.Contains(name), "GlobalStorage::Get<Shader>: Invalid name");
@@ -60,8 +49,7 @@ namespace Alpha
 			return output;
 		}
 
-		template<>
-		static inline Pointer<StaticMeshModel>& Get(const std::string& name)
+		static inline Pointer<StaticMeshModel>& GetStaticMeshModel(const std::string& name)
 		{
 			static Pointer<StaticMeshModel> output = nullptr;
 			ALPHA_ASSERT(s_models.Contains(name), "GlobalStorage::Get<StaticMeshModel>: Invalid name");
@@ -71,82 +59,62 @@ namespace Alpha
 		}
 
 	public:
-		template<typename T>
-		static inline Pointer<T>& Remove(const std::string& name)
-		{
-			ALPHA_ASSERT(false, "GlobalStorage::Get: Invalid template");
-			return nullptr;
-		}
-
-		template<>
-		static inline Pointer<Scene>& Remove(const std::string& name)
+		static inline Pointer<Scene>& RemoveScene(const std::string& name)
 		{
 			static Pointer<Scene> output = nullptr;
-			output = Get<Scene>(name);
+			output = GetScene(name);
 			s_scenes.Remove(name);
 
 			return output;
 		}
 
-		template<>
-		static inline Pointer<Texture2D>& Remove(const std::string& name)
+		static inline Pointer<Texture2D>& RemoveTexture2D(const std::string& name)
 		{
 			static Pointer<Texture2D> output = nullptr;
-			output = Get<Texture2D>(name);
+			output = GetTexture2D(name);
 			s_textures.Remove(name);
 
 			return output;
 		}
 
-		template<>
-		static inline Pointer<Material>& Remove(const std::string& name)
+		static inline Pointer<Material>& RemoveMaterial(const std::string& name)
 		{
 			static Pointer<Material> output = nullptr;
-			output = Get<Material>(name);
+			output = GetMaterial(name);
 			s_materials.Remove(name);
 
 			return output;
 		}
 
-		template<>
-		static inline Pointer<Shader>& Remove(const std::string& name)
+		static inline Pointer<Shader>& RemoveShader(const std::string& name)
 		{
 			static Pointer<Shader> output = nullptr;
-			output = Get<Shader>(name);
+			output = GetShader(name);
 			s_shaders.Remove(name);
 
 			return output;
 		}
 
-		template<>
-		static inline Pointer<StaticMeshModel>& Remove(const std::string& name)
+		static inline Pointer<StaticMeshModel>& RemoveStaticMeshModel(const std::string& name)
 		{
 			static Pointer<StaticMeshModel> output = nullptr;
-			output = Get<StaticMeshModel>(name);
+			output = GetStaticMeshModel(name);
 			s_models.Remove(name);
 
 			return output;
 		}
 
 	public:
-		template<typename T>
-		static inline void Add(const std::string& name, Pointer<T> ptr)
-		{
-			ALPHA_ASSERT(false, "GlobalStorage::Add: Invalid template");
-		}
-
-		template<>
-		static inline void Add(const std::string& name, Pointer<Scene> ptr)
+		static inline void AddScene(const std::string& name, Pointer<Scene> ptr)
 		{
 #ifdef DEBUG
-			if (s_scenes.Contains(name)) 
+			if (s_scenes.Contains(name))
 				Logger::Warn("GlobalStorage::Add<Scene>: {0} already exists, Action = [Clear]", name);
 #endif
 			return s_scenes.Push(name, ptr);
 		}
 
-		template<>
-		static inline void Add(const std::string& name, Pointer<Texture2D> ptr)
+		static inline void AddTexture2D(const std::string& name, Pointer<Texture2D> ptr)
 		{
 #ifdef DEBUG
 			if (s_scenes.Contains(name)) 
@@ -155,8 +123,7 @@ namespace Alpha
 			return s_textures.Push(name, ptr);
 		}
 
-		template<>
-		static inline void Add(const std::string& name, Pointer<Material> ptr)
+		static inline void AddMaterial(const std::string& name, Pointer<Material> ptr)
 		{
 #ifdef DEBUG
 			if (s_scenes.Contains(name)) 
@@ -165,8 +132,7 @@ namespace Alpha
 			return s_materials.Push(name, ptr);
 		}
 
-		template<>
-		static inline void Add(const std::string& name, Pointer<Shader> ptr)
+		static inline void AddShader(const std::string& name, Pointer<Shader> ptr)
 		{
 #ifdef DEBUG
 			if (s_scenes.Contains(name)) 
@@ -175,8 +141,7 @@ namespace Alpha
 			return s_shaders.Push(name, ptr);
 		}
 
-		template<>
-		static inline void Add(const std::string& name, Pointer<StaticMeshModel> ptr)
+		static inline void AddStaticMeshModel(const std::string& name, Pointer<StaticMeshModel> ptr)
 		{
 #ifdef DEBUG
 			if (s_scenes.Contains(name)) 

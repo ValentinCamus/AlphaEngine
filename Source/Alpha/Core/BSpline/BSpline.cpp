@@ -45,8 +45,6 @@ namespace Alpha
 
     void BSpline::SetDegree(uint32 degree)
     {
-        bool bIsIncreasing = degree > m_degree;
-
         m_degree = degree;
         m_order = degree + 1;
 
@@ -86,9 +84,6 @@ namespace Alpha
 
     void BSpline::ResizeKnotsVector(uint32 size)
     {
-        uint32 knotsOldSize = m_knots.size();
-        uint32 knotsNewSize = size;
-
         m_knots.resize(size);
         ResetKnotsVector();
     }

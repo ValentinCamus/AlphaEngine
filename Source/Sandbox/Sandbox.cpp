@@ -7,7 +7,7 @@ namespace Alpha
     void SandboxLayer::Init()
     {
 		m_scene = NewPointer<Scene>();
-		GlobalStorage::Add<Scene>("Scene_01", m_scene);
+		GlobalStorage::AddScene("Scene_01", m_scene);
 		m_scene->PushLight(NewPointer<DirectionalLight>());
 		m_scene->SetFramebuffer(Framebuffer::Create(500, 500));
 		m_scene->SetCamera(NewPointer<EulerCamera>());
@@ -16,28 +16,28 @@ namespace Alpha
                 {Shader::GLSL_VERTEX_SHADER, PROJECT_SOURCE_DIR + "Shaders/Forward.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, PROJECT_SOURCE_DIR + "Shaders/Forward.fs.glsl"}
         });
-		GlobalStorage::Add<Shader>("Forward", m_shader);
+		GlobalStorage::AddShader("Forward", m_shader);
 
-		GlobalStorage::Add<Texture2D>("Brick", Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg"));
+		GlobalStorage::AddTexture2D("Brick", Texture2D::Create(PROJECT_SOURCE_DIR + "Assets/Brick.jpg"));
 
         Pointer<Material> defaultMaterial = NewPointer<Material>("DefaultMaterial");
         Pointer<Material> redMaterial = NewPointer<Material>("RedMaterial");
         Pointer<Material> brickMaterial = NewPointer<Material>("BrickMaterial");
 
         redMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-        brickMaterial->AddTexture(ETextureType::TX_Diffuse, GlobalStorage::Get<Texture2D>("Brick"));
+        brickMaterial->AddTexture(ETextureType::TX_Diffuse, GlobalStorage::GetTexture2D("Brick"));
 
-		GlobalStorage::Add<Material>("Default", defaultMaterial);
-		GlobalStorage::Add<Material>("Red", redMaterial);
-		GlobalStorage::Add<Material>("Brick", brickMaterial);
+		GlobalStorage::AddMaterial("Default", defaultMaterial);
+		GlobalStorage::AddMaterial("Red", redMaterial);
+		GlobalStorage::AddMaterial("Brick", brickMaterial);
 
         Pointer<StaticMeshModel> cubeModel = NewPointer<StaticMeshModel>();
 		cubeModel->Load(PROJECT_SOURCE_DIR + "Assets/Cube.fbx");
-		GlobalStorage::Add<StaticMeshModel>("Cube", cubeModel);
+		GlobalStorage::AddStaticMeshModel("Cube", cubeModel);
 
 		Pointer<StaticMeshModel> stanfordDragonModel = NewPointer<StaticMeshModel>();
 		stanfordDragonModel->Load(PROJECT_SOURCE_DIR + "Assets/StanfordDragon.fbx");
-		GlobalStorage::Add<StaticMeshModel>("StanfordDragon", stanfordDragonModel);
+		GlobalStorage::AddStaticMeshModel("StanfordDragon", stanfordDragonModel);
 
         m_stanfordDragonInstance = NewPointer<StaticMeshEntity>("Dragon", stanfordDragonModel);
         m_stanfordDragonInstance->SetMaterial(0, defaultMaterial);
@@ -221,18 +221,18 @@ namespace Alpha
 
     GuiSandboxLayer::GuiSandboxLayer() : ImGuiLayer("Gui Sandbox Layer")
     {
-		Pointer<Framebuffer> fb = GlobalStorage::Get<Scene>("Scene_01")->GetFramebuffer(); 
+		Pointer<Framebuffer> fb = GlobalStorage::GetScene("Scene_01")->GetFramebuffer();
         m_viewportWidget01.SetFramebuffer(fb);
     }
 
     void GuiSandboxLayer::OnImGuiRender()
     {
-		Pointer<Scene> scene = GlobalStorage::Get<Scene>("Scene_01");
+		Pointer<Scene> scene = GlobalStorage::GetScene("Scene_01");
 		m_sceneWidget.SetScene(scene);
 
 		if (m_sceneWidget.IsSelectedEntityValid())
 		{
-			uint32 index = m_sceneWidget.GetSelectedEntityIndex();
+			int32 index = m_sceneWidget.GetSelectedEntityIndex();
 			Pointer<SceneComponent> component = scene->GetComponentAt(index);
 
 			auto entity = Cast<StaticMeshEntity>(component);
