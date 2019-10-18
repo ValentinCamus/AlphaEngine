@@ -2,6 +2,26 @@
 
 namespace Alpha
 {
+    GLenum FramebufferFormatToGLFormat(Framebuffer::EFormat fmt)
+    {
+        switch (fmt)
+        {
+            case Framebuffer::EFormat::FF_RGB: return GL_RGB;
+            case Framebuffer::EFormat::FF_RGBA: return GL_RGBA;
+            case Framebuffer::EFormat::FF_Depth: return GL_DEPTH_COMPONENT;
+        }
+    }
+
+
+
+    OpenGL::FramebufferTexture2D::FramebufferTexture2D(uint32 width, uint32 height, Framebuffer::EFormat fmt)
+        : m_format(fmt)
+        , m_width(width)
+        , m_height(height)
+    {
+        Init(width, height);
+    }
+
     void OpenGL::FramebufferTexture2D::Init(uint32 width, uint32 height)
     {
         GL_CHECK(glGenTextures(1, &m_id));
@@ -29,8 +49,22 @@ namespace Alpha
 
     void OpenGL::FramebufferTexture2D::Resize(uint32 width, uint32 height)
     {
-        m_width = width; m_height = height;
-        GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr));
+        m_width = width;
+        m_height = height;
+        GLenum fmt = FramebufferFormatToGLFormat(m_format);
+
+        GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, fmt, width, height, 0, fmt, GL_UNSIGNED_BYTE, nullptr));
+    }
+
+
+
+
+    OpenGLFramebuffer::OpenGLFramebuffer(uint32 width, uint32 height, Framebuffer::EFormat fmt)
+            : m_format(fmt)
+            , m_width(width)
+            , m_height(height)
+    {
+        Init(width, height);
     }
 
     void OpenGLFramebuffer::Resize(uint32 width, uint32 height)
@@ -63,7 +97,7 @@ namespace Alpha
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 
         // Create a color attachment texture
-        m_texture = NewPointer<OpenGL::FramebufferTexture2D>(width, height);
+        m_texture = NewPointer<OpenGL::FramebufferTexture2D>(width, height, m_format);
         GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture->GetId(), 0));
 
         // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)

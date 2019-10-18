@@ -9,7 +9,14 @@ namespace Alpha
     class Framebuffer
     {
     public:
-        static Pointer<Framebuffer> Create(uint32 width, uint32 height);
+        enum class EFormat
+        {
+            FF_RGB,
+            FF_RGBA,
+            FF_Depth
+        };
+
+        static Pointer<Framebuffer> Create(uint32 width, uint32 height, EFormat fmt = EFormat::FF_RGBA);
 
     public:
         virtual ~Framebuffer() = default;

@@ -75,7 +75,6 @@ namespace Alpha
 		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_5)) camera->SetZoom(camera->GetZoom() - 0.1f);
 #endif
 
-
         ALPHA_ASSERT(m_scene->GetFramebuffer(), "Invalid Framebuffer");
 
 		m_scene->Bind();
@@ -84,7 +83,7 @@ namespace Alpha
         Renderer::Clear();
         Renderer::SetClearColor({0.2f, 0.3f, 0.3f, 1.0f});
 
-		uint32 nLights = m_scene->GetLights().size();
+		auto nLights = static_cast<uint32>(m_scene->GetLights().size());
 		m_shader->SetUniform("nLights", static_cast<int32>(nLights));
 		for (uint32 i = 0; i < nLights; ++i)
 		{
@@ -232,12 +231,11 @@ namespace Alpha
 
 		if (m_sceneWidget.IsSelectedEntityValid())
 		{
-			int32 index = m_sceneWidget.GetSelectedEntityIndex();
-			Pointer<SceneComponent> component = scene->GetComponentAt(index);
-
+            auto index = static_cast<uint32>(m_sceneWidget.GetSelectedEntityIndex());
+            Pointer<SceneComponent> component = scene->GetComponentAt(index);
 			auto entity = Cast<StaticMeshEntity>(component);
 			if (entity != m_materialEditor.GetEntity()) m_materialEditor.SetEntity(entity);
-		} 
+		}
 		else m_materialEditor.Clear();
 
         m_dockerWidget.Render();

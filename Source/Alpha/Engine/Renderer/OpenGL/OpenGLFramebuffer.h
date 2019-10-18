@@ -15,7 +15,7 @@ namespace Alpha
         class FramebufferTexture2D : public Texture2D
         {
         public:
-            FramebufferTexture2D(uint32 width, uint32 height) { Init(width, height); }
+            FramebufferTexture2D(uint32 width, uint32 height, Framebuffer::EFormat fmt);
             ~FramebufferTexture2D() override = default;
 
             void Init(uint32 width, uint32 height);
@@ -31,7 +31,10 @@ namespace Alpha
 
             inline uint32 GetId() const override { return m_id; }
             inline int32 GetSlot() const override { return m_slot; }
+
         private:
+            Framebuffer::EFormat m_format;
+
             uint32 m_width = 0;
             uint32 m_height = 0;
 
@@ -43,7 +46,7 @@ namespace Alpha
     class OpenGLFramebuffer : public Framebuffer
     {
     public:
-         OpenGLFramebuffer(uint32 width, uint32 height) { Init(width, height); }
+         OpenGLFramebuffer(uint32 width, uint32 height, EFormat format);
          ~OpenGLFramebuffer() override { Destroy(); }
 
          inline bool IsValid() override { return m_fbo > 0; }
@@ -67,6 +70,8 @@ namespace Alpha
         inline void Destroy() { GL_CHECK(glDeleteFramebuffers(1, &m_fbo)); }
 
     private:
+        EFormat m_format;
+
         uint32 m_fbo = 0;
         uint32 m_rbo = 0;
 

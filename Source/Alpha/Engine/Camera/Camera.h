@@ -8,12 +8,12 @@ namespace Alpha
 {
     constexpr float DEFAULT_DELTA_TIME = 0.1f;
 
-    // From LearnOpenGL tutorial : default camera values
-    constexpr float YAW        = -90.0f;
-    constexpr float PITCH      =  0.0f;
-    constexpr float SPEED      =  10.0f;
-    constexpr float SENSITIVTY =  0.25f;
-    constexpr float ZOOM       =  45.0f;
+    // From LearnOpenGL tutorial: default camera values
+    constexpr float YAW = -90.0f;
+    constexpr float PITCH =  0.0f;
+    constexpr float SPEED =  10.0f;
+    constexpr float SENSITIVITY =  0.25f;
+    constexpr float ZOOM =  45.0f;
 
     class Camera : public SceneComponent
     {

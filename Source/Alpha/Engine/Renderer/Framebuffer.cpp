@@ -6,12 +6,12 @@
 namespace Alpha
 {
 
-    Pointer<Framebuffer> Framebuffer::Create(uint32 width, uint32 height)
+    Pointer<Framebuffer> Framebuffer::Create(uint32 width, uint32 height, EFormat fmt)
     {
         switch (Renderer::GetRendererAPI())
         {
             case ERendererAPI::OpenGL:
-                return NewPointer<OpenGLFramebuffer>(width, height);
+                return NewPointer<OpenGLFramebuffer>(width, height, fmt);
             default:
                 break;
         }
