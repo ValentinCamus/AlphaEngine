@@ -2,21 +2,8 @@
 
 namespace Alpha
 {
-    GLenum FramebufferFormatToGLFormat(Framebuffer::EFormat fmt)
-    {
-        switch (fmt)
-        {
-            case Framebuffer::EFormat::FF_RGB: return GL_RGB;
-            case Framebuffer::EFormat::FF_RGBA: return GL_RGBA;
-            case Framebuffer::EFormat::FF_Depth: return GL_DEPTH_COMPONENT;
-        }
-    }
-
-
-
-    OpenGL::FramebufferTexture2D::FramebufferTexture2D(uint32 width, uint32 height, Framebuffer::EFormat fmt)
-        : m_format(fmt)
-        , m_width(width)
+    OpenGL::FramebufferTexture2D::FramebufferTexture2D(uint32 width, uint32 height)
+        : m_width(width)
         , m_height(height)
     {
         Init(width, height);
@@ -51,17 +38,15 @@ namespace Alpha
     {
         m_width = width;
         m_height = height;
-        GLenum fmt = FramebufferFormatToGLFormat(m_format);
 
-        GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, fmt, width, height, 0, fmt, GL_UNSIGNED_BYTE, nullptr));
+        GL_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
     }
 
 
 
 
-    OpenGLFramebuffer::OpenGLFramebuffer(uint32 width, uint32 height, Framebuffer::EFormat fmt)
-            : m_format(fmt)
-            , m_width(width)
+    OpenGLFramebuffer::OpenGLFramebuffer(uint32 width, uint32 height)
+            : m_width(width)
             , m_height(height)
     {
         Init(width, height);
@@ -97,7 +82,7 @@ namespace Alpha
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 
         // Create a color attachment texture
-        m_texture = NewPointer<OpenGL::FramebufferTexture2D>(width, height, m_format);
+        m_texture = NewPointer<OpenGL::FramebufferTexture2D>(width, height);
         GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture->GetId(), 0));
 
         // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)

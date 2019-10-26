@@ -1,13 +1,13 @@
 #version 330
 
 // Resulting Fragment Shader
-#include "AlphaShaders/Material.glsl"
+#include "Alpha/Material.glsl"
 
 // Include all the ligh-type interfaces.
-#include "AlphaShaders/Light.glsl"
+#include "Alpha/Light.glsl"
 
 // All pbr function.
-#include "AlphaShaders/Pbr/PbrFunction.glsl"
+#include "Alpha/Pbr/PbrFunction.glsl"
 
 out vec4 fragColor;
 

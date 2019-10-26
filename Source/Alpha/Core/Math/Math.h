@@ -52,12 +52,16 @@ namespace Alpha
 	/// - The rotation (Euler angle)
 	Matrix4x4 MakeViewMatrix(Vector location, Vector rotation);
 
-	/// Create a view matrix from:
+	/// Create a projection matrix from:
+	/// - TODO
+	Matrix4x4 MakeOrthographicMatrix(float left, float right, float bottom, float top, float zNear = 0.1f, float zFar = 100.0f);
+
+	/// Create a projection matrix from:
 	/// - The fovy (camera zoom for example)
 	/// - The aspect ratio
 	/// - The z near plane
 	/// - The z far plane
-    Matrix4x4 MakeProjectionMatrix(float fovy, float aspect, float zNear = 0.1f, float zFar = 100.0f);
+    Matrix4x4 MakePerspectiveMatrix(float fovY, float aspect, float zNear = 0.1f, float zFar = 100.0f);
 
     /// Calculate the right vector from a transform.
     Vector3 CalculateRightVector(const Transform& transform);

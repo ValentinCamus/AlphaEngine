@@ -22,7 +22,9 @@ namespace Alpha
 
     void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform, EDrawMode drawMode)
     {
-        if (!IsMaterialValid())
+        bool bIsMaterialDisable = Renderer::IsDisable(Renderer::EOption::DiscardMaterial);
+
+        if (!IsMaterialValid() && bIsMaterialDisable)
         {
             Logger::Warn("OpenGLStaticMesh::Draw No Material specified, the object will not be rendered.");
         }
@@ -34,11 +36,13 @@ namespace Alpha
 
             GL_CHECK(glBindVertexArray(m_vao));
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
-            GetMaterial()->Bind(shader, "material");
 
+
+            if (bIsMaterialDisable) GetMaterial()->Bind(shader, "material");
             GL_CHECK(glDrawElements(CastDrawMode(drawMode), (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
+            if (bIsMaterialDisable) GetMaterial()->Unbind();
 
-            GetMaterial()->Unbind();
+
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
             GL_CHECK(glBindVertexArray(0));
         }
@@ -48,8 +52,8 @@ namespace Alpha
     void OpenGLStaticMesh::SetupMesh()
     {
         void * offsetOf = nullptr;
-        uint32 iboSizeInByte = m_indices.size() * sizeof(uint32);
-        uint32 vboSizeInByte = m_vertices.size() * sizeof(Vertex);
+        auto iboSizeInByte = static_cast<uint32>(m_indices.size() * sizeof(uint32));
+        auto vboSizeInByte = static_cast<uint32>(m_vertices.size() * sizeof(Vertex));
 
         GL_CHECK(glGenVertexArrays(1, &m_vao));
         GL_CHECK(glGenBuffers(1, &m_vbo));
@@ -89,7 +93,5 @@ namespace Alpha
             case EDrawMode::Lines: return GL_LINES;
             case EDrawMode::Triangles: return GL_TRIANGLES;
         }
-        ALPHA_ASSERT(false, "OpenGLStaticMesh::CastDrawMode: Invalid DrawMode");
-        return GL_TRIANGLES;
     }
 }

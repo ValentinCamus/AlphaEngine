@@ -39,7 +39,7 @@ namespace Alpha
         inline bool IsOccupied() const { return m_bIsOccupied; }
 
     private:
-        void RenderMaterialNode(const Pointer<Material>& material);
+        void RenderMaterialNode();
 
     private:
         bool m_bIsOccupied = false;

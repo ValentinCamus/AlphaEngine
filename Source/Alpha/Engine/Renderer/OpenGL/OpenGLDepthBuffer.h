@@ -2,7 +2,7 @@
 
 #include <Alpha/Core/CoreMinimal.h>
 
-#include <Alpha/Engine/Renderer/Framebuffer.h>
+#include <Alpha/Engine/Renderer/DepthBuffer.h>
 #include <Alpha/Engine/Renderer/Texture.h>
 
 #include <Alpha/Engine/Renderer/OpenGL/OpenGLTools.h>
@@ -12,11 +12,11 @@ namespace Alpha
 {
     namespace OpenGL
     {
-        class FramebufferTexture2D : public Texture2D
+        class DepthBufferTexture2D : public Texture2D
         {
         public:
-            FramebufferTexture2D(uint32 width, uint32 height);
-            ~FramebufferTexture2D() override = default;
+            DepthBufferTexture2D(uint32 width, uint32 height);
+            ~DepthBufferTexture2D() override = default;
 
             void Init(uint32 width, uint32 height);
 
@@ -41,26 +41,26 @@ namespace Alpha
         };
     }
 
-    class OpenGLFramebuffer : public Framebuffer
+    class OpenGLDepthBuffer : public DepthBuffer
     {
     public:
-         OpenGLFramebuffer(uint32 width, uint32 height);
-         ~OpenGLFramebuffer() override { Destroy(); }
+        OpenGLDepthBuffer(uint32 width, uint32 height);
+        ~OpenGLDepthBuffer() override { Destroy(); }
 
-         inline bool IsValid() override { return m_fbo > 0; }
+        inline bool IsValid() override { return m_fbo > 0; }
 
-         void Bind() override;
+        void Bind() override;
 
-         inline void Unbind() override { GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
+        inline void Unbind() override { GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, 0)); }
 
-         inline uint32 GetWidth() override { return m_width; }
-         inline uint32 GetHeight() override { return m_height; }
+        inline uint32 GetWidth() override { return m_width; }
+        inline uint32 GetHeight() override { return m_height; }
 
-		 inline float GetAspectRatio() override { return float(m_width) / float(m_height); }
+        inline float GetAspectRatio() override { return float(m_width) / float(m_height); }
 
-         void Resize(uint32 width, uint32 height) override;
+        void Resize(uint32 width, uint32 height) override;
 
-         inline Pointer<Texture2D> GetTexture() override { return m_texture; }
+        inline Pointer<Texture2D> GetTexture() override { return m_texture; }
 
     private:
         void Init(uint32 width, uint32 height);
@@ -69,11 +69,9 @@ namespace Alpha
 
     private:
         uint32 m_fbo = 0;
-        uint32 m_rbo = 0;
-
         uint32 m_width = 0;
         uint32 m_height = 0;
 
-        Pointer<OpenGL::FramebufferTexture2D> m_texture = nullptr;
+        Pointer<OpenGL::DepthBufferTexture2D> m_texture = nullptr;
     };
 }

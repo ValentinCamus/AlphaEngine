@@ -51,7 +51,7 @@ namespace Alpha
         /// @getter: The right vector.
         inline Vector3 GetRightVector() const { return CalculateRightVector(m_transform); }
 
-		inline const std::string& GetName() const { return m_name; }
+        virtual inline const std::string& GetName() const { return m_name; }
 
 		inline void SetName(const std::string& name) { m_name = name; }
 

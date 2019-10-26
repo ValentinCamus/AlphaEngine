@@ -18,6 +18,13 @@ namespace Alpha
     class Camera : public SceneComponent
     {
     public:
+        enum class EViewType
+        {
+            VT_Orthographic,
+            VT_Perspective,
+        };
+
+    public:
         explicit Camera(const Vector& location = Vector(0.f, 0.f, 1.f),
                         const Vector& rotation = Vector(0.f, 1.f, 0.f),
                         float zoom = 45.f)
@@ -33,9 +40,16 @@ namespace Alpha
         /// @setter : Camera zoom.
         inline float SetZoom(float zoom) { return m_zoom = zoom; }
 
+        inline EViewType GetViewType() const { return  m_viewType; }
+
+        inline void SetViewType(EViewType type) { m_viewType = type; }
+
     private:
         /// Camera zoom.
         float m_zoom;
+
+        EViewType m_viewType = EViewType::VT_Perspective;
     };
 
+    using StaticCamera = Camera;
 }

@@ -25,25 +25,22 @@ namespace Alpha
 
         void OnUpdate() override;
 
-        void InitBSplineExample();
-        void InitTensorProductExample();
-
 	private:
 		void LogTips();
+
+		void RenderShadowMaps();
 
     private:
 		Pointer<Scene> m_scene;
         Pointer<Shader> m_shader;
 
+        Pointer<Scene> m_depthScene;
+        Pointer<Shader> m_depthShader;
+        Pointer<Shader> m_debugDepthShader;
+
+        Pointer<StaticMeshEntity> m_cubeInstance;
+        Pointer<StaticMeshEntity> m_tileInstance;
         Pointer<StaticMeshEntity> m_stanfordDragonInstance;
-
-        BSpline m_spline;
-        Pointer<StaticMeshEntity> m_splineLineEntity;
-        Pointer<StaticMeshEntity> m_splinePointsEntity;
-
-        TensorProduct m_tensorProduct;
-        Pointer<StaticMeshEntity> m_tensorMeshEntity;
-        Pointer<StaticMeshEntity> m_tensorPointsEntity;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

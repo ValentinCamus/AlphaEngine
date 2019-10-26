@@ -20,7 +20,7 @@ namespace Alpha
 
     public:
         /// The number of material.
-        inline uint32 GetNbMaterial() const { return m_materials.size(); }
+        inline uint32 GetNbMaterial() const { return static_cast<uint32>(m_materials.size()); }
 
         /// @getter: The entity's material.
         inline const Pointer<Material>& GetMaterial(uint32 index) { return m_materials[index]; }
@@ -29,13 +29,14 @@ namespace Alpha
         inline void SetMaterial(uint32 index, const Pointer<Material>& mat) { m_materials[index] = mat; }
 
         /// @getter: The entity name.
-        inline const std::string& GetName() const { return m_name; }
+        inline const std::string& GetName() const override { return m_name; }
 
         /// @getter: The model matrix.
         /// @warning: Perform a calculation.
         Matrix4x4 GetModelMatrix() const;
 
         inline EDrawMode GetDrawMode() const { return m_drawMode; }
+
         inline void SetDrawMode(EDrawMode drawMode) { m_drawMode = drawMode; }
 
     private:

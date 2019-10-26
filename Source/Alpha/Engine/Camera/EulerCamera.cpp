@@ -5,7 +5,7 @@ namespace Alpha
     EulerCamera::EulerCamera(const Vector& location, const Vector& rotation)
             : Camera(location, rotation, ZOOM)
             , m_movementSpeed(SPEED)
-            , m_mouseSensitivity(SENSITIVTY) {}
+            , m_mouseSensitivity(SENSITIVITY) {}
 
     void EulerCamera::MoveForward(float axisValue)
     {

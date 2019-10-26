@@ -40,9 +40,14 @@ namespace Alpha
         return viewMatrix;
     }
 
-    Matrix4x4 MakeProjectionMatrix(float fovy, float aspect, float zNear, float zFar)
+    Matrix4x4 MakePerspectiveMatrix(float fovY, float aspect, float zNear, float zFar)
     {
-        return glm::perspective(fovy, aspect, zNear, zFar);
+        return glm::perspective(fovY, aspect, zNear, zFar);
+    }
+
+    Matrix4x4 MakeOrthographicMatrix(float left, float right, float bottom, float top, float zNear, float zFar)
+    {
+        return glm::ortho(left, right, bottom, top, zNear, zFar);
     }
 
     Vector3 CalculateRightVector(const Transform &transform)

@@ -15,10 +15,13 @@ namespace Alpha
     {
         transform.model = GetModelMatrix();
 
-        for (uint32 i = 0; i < m_materials.size(); ++i)
+        if (Renderer::IsDisable(Renderer::EOption::DiscardMaterial))
         {
-            Pointer<Material> mat = m_materials[i];
-            m_model->SetMaterial(i, mat);
+            for (uint32 i = 0; i < m_materials.size(); ++i)
+            {
+                Pointer<Material> mat = m_materials[i];
+                m_model->SetMaterial(i, mat);
+            }
         }
 
         m_model->Draw(shader, transform, m_drawMode);

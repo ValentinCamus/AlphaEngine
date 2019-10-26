@@ -84,7 +84,7 @@ namespace Alpha
             std::replace(localProjectSourceDir.begin(), localProjectSourceDir.end(), '\\', '/');
 
             projectSourceDir = localProjectSourceDir;
-            uint32 pos = projectSourceDir.find("Source/Alpha/Core/Utils.h");
+            auto pos = static_cast<uint32>(projectSourceDir.find("Source/Alpha/Core/Utils.h"));
             projectSourceDir = projectSourceDir.substr(0, pos);
 
             bIsProjectSourceDirInit = true;

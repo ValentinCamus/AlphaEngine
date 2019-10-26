@@ -4,6 +4,8 @@
 
 #include <Alpha/Engine/Renderer/Renderer.h>
 
+#include <Alpha/Engine/Renderer/DepthBuffer.h>
+
 #include <Alpha/Engine/Light/Light.h>
 #include <Alpha/Engine/Light/DirectionalLight.h>
 #include <Alpha/Engine/Light/PointLight.h>
@@ -27,7 +29,5 @@ namespace Alpha
         {
         public:
             static void Init();
-
-        private:
     };
 }

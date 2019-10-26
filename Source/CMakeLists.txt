@@ -81,7 +81,9 @@ set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Core/Math/Random.cpp
         Alpha/Engine/Scene/Scene.cpp
         Alpha/Core/BSpline/TensorProduct.cpp
-        Alpha/Engine/GlobalStorage/GlobalStorage.cpp)
+        Alpha/Engine/GlobalStorage/GlobalStorage.cpp
+        Alpha/Engine/Renderer/DepthBuffer.cpp
+        Alpha/Engine/Renderer/OpenGL/OpenGLDepthBuffer.cpp)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

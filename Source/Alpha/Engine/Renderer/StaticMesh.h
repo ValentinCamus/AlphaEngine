@@ -36,12 +36,15 @@ namespace Alpha
     public:
         /// @getter: The mesh's material.
         virtual inline const Pointer<Material>& GetMaterial() { return m_material; }
+
         /// @setter: The mesh's material.
         virtual inline void SetMaterial(const Pointer<Material>& m) { m_material = m; }
+
         /// @getter: Check if the material is valid.
         virtual inline bool IsMaterialValid() { return m_material != nullptr; }
 
     private:
+
         /// The mesh's material.
         Pointer<Material> m_material = nullptr;
     };

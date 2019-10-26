@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Alpha/Core/CoreMinimal.h>
-
 #include <Alpha/Engine/Renderer/Texture.h>
 
 namespace Alpha
@@ -9,14 +8,7 @@ namespace Alpha
     class Framebuffer
     {
     public:
-        enum class EFormat
-        {
-            FF_RGB,
-            FF_RGBA,
-            FF_Depth
-        };
-
-        static Pointer<Framebuffer> Create(uint32 width, uint32 height, EFormat fmt = EFormat::FF_RGBA);
+        static Pointer<Framebuffer> Create(uint32 width, uint32 height);
 
     public:
         virtual ~Framebuffer() = default;
@@ -35,6 +27,4 @@ namespace Alpha
 
         virtual Pointer<Texture2D> GetTexture() = 0;
     };
-
-
 }

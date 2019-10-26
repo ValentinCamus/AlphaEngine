@@ -28,7 +28,7 @@ namespace Alpha
             if (materialIndex != lastMaterialIndex || m_bNeedUpdate)
             {
                 m_bNeedUpdate = false;
-                Pointer<Material> material = m_entity->GetMaterial(materialIndex);
+                Pointer<Material> material = m_entity->GetMaterial(static_cast<uint32>(materialIndex));
 
                 m_materials.push_back(material);
                 m_materialInfo = {
@@ -41,14 +41,14 @@ namespace Alpha
                 };
             }
 
-            Pointer<Material> material = m_materials.at(materialIndex);
-            std::string name = material->GetName();
+            Pointer<Material> material = m_materials.at(static_cast<unsigned long>(materialIndex));
+            const std::string& name = material->GetName();
 
             ImGui::Separator();
             ImGui::Text("%s (Index = %d)", ToCharArray(name), materialIndex);
             ImGui::Separator();
             ImGui::NewLine();
-            RenderMaterialNode(material);
+            RenderMaterialNode();
 
             material->SetType(static_cast<EMaterialType>(m_materialInfo.type));
 
@@ -98,7 +98,7 @@ namespace Alpha
         }
     }
 
-    void MaterialEditorWidget::RenderMaterialNode(const Pointer<Material> &material)
+    void MaterialEditorWidget::RenderMaterialNode()
     {
         const char* items[] = {"Opaque", "Transparent"};
         ImGui::Combo("Type", &m_materialInfo.type, items, IM_ARRAYSIZE(items));
