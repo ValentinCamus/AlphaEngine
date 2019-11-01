@@ -24,6 +24,9 @@ namespace Alpha
         {
             None,
             DiscardMaterial,
+            DiscardModelMatrix,
+            DiscardViewMatrix,
+            DiscardProjectionMatrix,
         };
 
     public:
@@ -58,8 +61,21 @@ namespace Alpha
                 case EOption::None:
                     // Do nothing
                     break;
+
                 case EOption::DiscardMaterial:
                     s_bDiscardMaterial = true;
+                    break;
+
+                case EOption::DiscardModelMatrix:
+                    s_bDiscardModelMatrix = true;
+                    break;
+
+                case EOption::DiscardViewMatrix:
+                    s_bDiscardViewMatrix = true;
+                    break;
+
+                case EOption::DiscardProjectionMatrix:
+                    s_bDiscardProjectionMatrix = true;
                     break;
             }
         }
@@ -71,8 +87,21 @@ namespace Alpha
                 case EOption::None:
                     // Do nothing
                     break;
+
                 case EOption::DiscardMaterial:
                     s_bDiscardMaterial = false;
+                    break;
+
+                case EOption::DiscardModelMatrix:
+                    s_bDiscardModelMatrix = false;
+                    break;
+
+                case EOption::DiscardViewMatrix:
+                    s_bDiscardViewMatrix = false;
+                    break;
+
+                case EOption::DiscardProjectionMatrix:
+                    s_bDiscardProjectionMatrix = false;
                     break;
             }
         }
@@ -82,6 +111,9 @@ namespace Alpha
             switch (option)
             {
                 case EOption::DiscardMaterial: return s_bDiscardMaterial;
+                case EOption::DiscardModelMatrix: return s_bDiscardModelMatrix;
+                case EOption::DiscardViewMatrix: return s_bDiscardViewMatrix;
+                case EOption::DiscardProjectionMatrix: return s_bDiscardProjectionMatrix;
                 case EOption::None: break;
             }
 
@@ -108,6 +140,9 @@ namespace Alpha
         static ERendererAPI s_rendererAPI;
 
         static bool s_bDiscardMaterial;
+        static bool s_bDiscardModelMatrix;
+        static bool s_bDiscardViewMatrix;
+        static bool s_bDiscardProjectionMatrix;
     };
 }
 

@@ -1,7 +1,7 @@
 #ifndef DEFAULTLIGHTSHADER_GLSL
 #define DEFAULTLIGHTSHADER_GLSL
 
-#define MAX_NB_LIGHTS 32
+#define MAX_NB_LIGHTS 4
 
 struct Attenuation
 {
@@ -18,6 +18,7 @@ struct DirectionalLight
 struct PointLight
 {
     vec3 position;
+
     Attenuation attenuation;
 };
 
@@ -36,6 +37,9 @@ struct Light
 {
     int type;
     vec4 color;
+    mat4 transform;
+
+    sampler2D shadowMap;
 
     DirectionalLight directional;
     PointLight point;
@@ -90,6 +94,24 @@ float SpotLightAttenuation(Light light, vec3 position)
     return radialAttenuation / attenuation;
 }
 
+float GetLightShadow(Light light, vec4 fragPosLightSpace)
+{
+    float bias = 0.005;
+
+    // Perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(light.shadowMap, projCoords.xy).r;
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // Check whether current frag pos is in shadow
+    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+}
+
 vec3 GetLightDirection(Light light, vec3 position)
 {
      switch (light.type)
@@ -102,7 +124,7 @@ vec3 GetLightDirection(Light light, vec3 position)
     return vec3(0.0f);
 }
 
-vec3 LightContributionFrom(Light light, vec3 position)
+vec3 LightContribution(Light light, vec3 position)
 {
     switch (light.type)
     {
@@ -114,7 +136,7 @@ vec3 LightContributionFrom(Light light, vec3 position)
     return vec3(0.0f);
 }
 
-float LightAttenuationFrom(Light light, vec3 position)
+float LightAttenuation(Light light, vec3 position)
 {
     switch (light.type)
     {

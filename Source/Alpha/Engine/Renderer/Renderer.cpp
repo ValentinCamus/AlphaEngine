@@ -9,6 +9,9 @@ namespace Alpha
     ERendererAPI Renderer::s_rendererAPI = ERendererAPI::OpenGL;
 
     bool Renderer::s_bDiscardMaterial = false;
+    bool Renderer::s_bDiscardModelMatrix = false;
+    bool Renderer::s_bDiscardViewMatrix = false;
+    bool Renderer::s_bDiscardProjectionMatrix = false;
 
     void Renderer::Init()
     {

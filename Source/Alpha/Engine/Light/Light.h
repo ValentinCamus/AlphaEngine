@@ -3,6 +3,8 @@
 #include <Alpha/Core/CoreMinimal.h>
 #include <Alpha/Engine/Component/SceneComponent.h>
 
+#include <Alpha/Engine/Renderer/DepthBuffer.h>
+
 namespace Alpha
 {
     struct Attenuation
@@ -48,11 +50,22 @@ namespace Alpha
         inline const Vector& GetDirection() const { return m_direction; }
         inline const Vector& SetDirection(const Vector& dir) { return m_direction = dir; }
 
+        inline const Pointer<DepthBuffer> GetDepthBuffer() const { return m_depthBuffer; }
+        inline void SetDepthBuffer(const Pointer<DepthBuffer> &depthBuffer) { m_depthBuffer = depthBuffer; }
+        inline bool IsDepthBufferValid() const { return m_depthBuffer != nullptr; }
+
+        inline const Matrix4x4& GetSpace() const { return m_space; }
+        inline void SetSpace(const Matrix4x4& space) { m_space = space; }
+
     private:
         Color4 m_color;
 
         LightType m_type;
 
         Vector m_direction;
+
+        Matrix4x4 m_space;
+
+        Pointer<DepthBuffer> m_depthBuffer = nullptr;
     };
 }

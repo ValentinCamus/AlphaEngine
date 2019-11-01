@@ -31,4 +31,16 @@ namespace Alpha
     {
         return MakeModelMatrix(GetWorldLocation(), GetWorldRotation(), GetWorldScale());
     }
+
+    const Pointer<Material> &StaticMeshEntity::GetMaterial(uint32 index)
+    {
+        ALPHA_ASSERT(index < GetNbMaterial(), "{0}: Material {1} doesn't exist", m_name, index);
+        return m_materials.at(index);
+    }
+
+    void StaticMeshEntity::SetMaterial(uint32 index, const Pointer<Material> &mat)
+    {
+        ALPHA_ASSERT(index < GetNbMaterial(), "{0}: Material {1} doesn't exist", m_name, index);
+        m_materials.at(index) = mat;
+    }
 }

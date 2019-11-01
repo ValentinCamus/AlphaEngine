@@ -22,25 +22,27 @@ namespace Alpha
 
     void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform, EDrawMode drawMode)
     {
-        bool bIsMaterialDisable = Renderer::IsDisable(Renderer::EOption::DiscardMaterial);
+        bool bSetMaterial = Renderer::IsDisable(Renderer::EOption::DiscardMaterial);
+        bool bSetModelMatrix = Renderer::IsDisable(Renderer::EOption::DiscardModelMatrix);
+        bool bSetViewMatrix = Renderer::IsDisable(Renderer::EOption::DiscardViewMatrix);
+        bool bSetProjectionMatrix = Renderer::IsDisable(Renderer::EOption::DiscardProjectionMatrix);
 
-        if (!IsMaterialValid() && bIsMaterialDisable)
+        if (bSetMaterial && !IsMaterialValid())
         {
             Logger::Warn("OpenGLStaticMesh::Draw No Material specified, the object will not be rendered.");
         }
         else
         {
-            shader->SetUniform("model", transform.model);
-            shader->SetUniform("view", transform.view);
-            shader->SetUniform("proj", transform.projection);
+            if (bSetModelMatrix) shader->SetUniform("u_model", transform.model);
+            if (bSetViewMatrix) shader->SetUniform("u_view", transform.view);
+            if (bSetProjectionMatrix) shader->SetUniform("u_proj", transform.projection);
 
             GL_CHECK(glBindVertexArray(m_vao));
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
 
-
-            if (bIsMaterialDisable) GetMaterial()->Bind(shader, "material");
+            if (bSetMaterial) GetMaterial()->Bind(shader, "u_material");
             GL_CHECK(glDrawElements(CastDrawMode(drawMode), (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
-            if (bIsMaterialDisable) GetMaterial()->Unbind();
+            if (bSetMaterial) GetMaterial()->Unbind();
 
 
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));

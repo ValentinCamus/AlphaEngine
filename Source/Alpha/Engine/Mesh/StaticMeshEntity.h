@@ -23,10 +23,10 @@ namespace Alpha
         inline uint32 GetNbMaterial() const { return static_cast<uint32>(m_materials.size()); }
 
         /// @getter: The entity's material.
-        inline const Pointer<Material>& GetMaterial(uint32 index) { return m_materials[index]; }
+        const Pointer<Material>& GetMaterial(uint32 index);
 
         /// @setter: The entity's material.
-        inline void SetMaterial(uint32 index, const Pointer<Material>& mat) { m_materials[index] = mat; }
+        void SetMaterial(uint32 index, const Pointer<Material>& mat);
 
         /// @getter: The entity name.
         inline const std::string& GetName() const override { return m_name; }

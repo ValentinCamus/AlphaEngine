@@ -4,6 +4,20 @@
 
 namespace Alpha
 {
+    Pointer<StaticMeshModel> StaticMeshModel::Create(const std::string &filename)
+    {
+        Pointer<StaticMeshModel> model = NewPointer<StaticMeshModel>();
+        model->Load(filename);
+        return model;
+    }
+
+    Pointer<StaticMeshModel> StaticMeshModel::Create(const Vertices& vertices, const Indices& indices)
+    {
+        Pointer<StaticMeshModel> model = NewPointer<StaticMeshModel>();
+        model->Load(vertices, indices);
+        return model;
+    }
+
     bool StaticMeshModel::Load(const std::string &filename)
     {
         bool bIsValid = MeshLoader::Load(filename);

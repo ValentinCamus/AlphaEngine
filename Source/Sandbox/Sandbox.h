@@ -28,19 +28,28 @@ namespace Alpha
 	private:
 		void LogTips();
 
-		void RenderShadowMaps();
+
+		TransformMatrix MakeTransformMatrix(const Pointer<Scene> &scene);
+
+		void InitShadowMaps(const std::vector<Pointer<Light>> &lights);
+        Matrix4x4 RenderShadowMap(const Pointer<Light> &light);
+
+        void DrawSceneLights(const Pointer<Scene> &scene);
+        void Draw3DNormals(const Pointer<Scene> &scene);
 
     private:
 		Pointer<Scene> m_scene;
-        Pointer<Shader> m_shader;
 
-        Pointer<Scene> m_depthScene;
+		Pointer<Shader> m_flatShader;
         Pointer<Shader> m_depthShader;
+        Pointer<Shader> m_forwardShader;
         Pointer<Shader> m_debugDepthShader;
+        Pointer<Shader> m_debugNormalShader;
 
-        Pointer<StaticMeshEntity> m_cubeInstance;
-        Pointer<StaticMeshEntity> m_tileInstance;
-        Pointer<StaticMeshEntity> m_stanfordDragonInstance;
+        Pointer<StaticMeshEntity> m_cube;
+        Pointer<StaticMeshEntity> m_tile;
+        Pointer<StaticMeshEntity> m_dragon;
+        Pointer<StaticMeshEntity> m_lightInstance;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

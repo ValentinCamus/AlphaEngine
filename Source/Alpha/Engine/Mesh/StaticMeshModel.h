@@ -10,6 +10,14 @@ namespace Alpha
     class StaticMeshModel
     {
     public:
+        using Vertices = std::vector<Vertex>;
+        using Indices = std::vector<uint32>;
+
+        static Pointer<StaticMeshModel> Create(const std::string& filename);
+
+        static Pointer<StaticMeshModel> Create(const Vertices& vertices, const Indices& indices);
+
+    public:
         /// Load a static mesh model from a file.
         bool Load(const std::string& filename);
 

@@ -71,6 +71,9 @@ namespace Alpha
 	template <class T, class U>
 	inline Pointer<T> Cast(const Pointer<U>& ptr) { return std::dynamic_pointer_cast<T>(ptr); }
 
+	template<typename T, typename U>
+	inline bool InstanceOf(const Pointer<U>& ptr) { return Cast<Pointer<T>>(ptr) != nullptr; }
+
 	/// @getter: The project source directory.
 	//  FIXME: maybe not the best solution...
 	inline std::string GetProjectSourceDir()

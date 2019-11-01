@@ -43,10 +43,34 @@ void main()
     float shadow = GetLightShadow(u_light, v_positionInLightSpace);
     float brightness = max(nDotL, 0.0) * (1 - shadow);
 
+    // Cook-Torrance BRDF
+    vec3 f0 = GetReflectanceAtNormalIncidence(kd, metallic);
+
+    float d = DistributionGGX(normal, halfVector, roughness);
+    float g = GeometrySmith(normal, viewDirection, lightDirection, roughness);
+    vec3  f = FresnelSchlick(max(hDotV, 0.0), f0);
+
+    vec3  nominator = d * g * f;
+    float denominator = max(4 * max(nDotV, 0.0) * max(nDotL, 0.0), 0.001);
+    vec3  specular = nominator / denominator;
+
+    // For energy conservation, the diffuse and specular u_light can't
+    // be above 1.0 (unless the surface emits u_light), to preserve this
+    // relationship the diffuse component (kD) should equal 1.0 - kS.
+    //
+    // Multiply kD by the inverse metalness such that only non-metals
+    // have diffuse lighting, or a linear blend if partly metal (pure metals have no diffuse light).
+    vec3 kS = f * ks;
+    vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
+
+    // Note that we already multiplied the BRDF by the Fresnel (kS), so we won't multiply by kS again.
     vec3 lightContribution = lightRadiance * brightness;
+    vec3 outgoingRadiance = (kD * kd / Pi + specular) * lightContribution;
     vec3 ambient = vec3(0.03) * kd * ao; // Ambient lighting.
 
-    vec3 rgbColor = ambient * lightContribution;
+    vec3 rgbColor;
+    if (u_debug == 1) rgbColor = ambient + outgoingRadiance;
+    else rgbColor = ambient * lightContribution;
     vec4 rgbaColor = vec4(rgbColor, trans);
 
     fragColor = ApplyGammaCorrection(GAMMA, rgbaColor);

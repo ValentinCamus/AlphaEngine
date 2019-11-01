@@ -51,4 +51,8 @@
 
 #define ALPHA_BIND_EVENT(fn, ref) std::bind(&fn, ref, std::placeholders::_1)
 
-#define PROJECT_SOURCE_DIR GetProjectSourceDir()
+#define STR(x) std::string(x)
+
+#define ALPHA_SOURCE_DIR GetProjectSourceDir()
+#define ALPHA_SHADERS_DIR GetProjectSourceDir() + STR("Shaders/")
+#define ALPHA_ASSETS_DIR GetProjectSourceDir() + STR("Assets/")

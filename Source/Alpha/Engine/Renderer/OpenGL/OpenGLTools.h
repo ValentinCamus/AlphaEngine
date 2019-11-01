@@ -4,13 +4,13 @@
 
 #include <Alpha/ThirdParty/glad/glad.h>
 
-namespace Alpha
-{
 #define GL_CHECK(_function_) \
     Alpha::OpenGL::ClearErrorBuffer(); \
     _function_; \
     Alpha::OpenGL::DumpErrorBuffer(#_function_, __FILE__, __LINE__); \
 
+namespace Alpha
+{
     namespace OpenGL
     {
         /// Cast a GLError to a string
@@ -20,17 +20,17 @@ namespace Alpha
                 case GL_NO_ERROR:
                     return "No error";
                 case GL_INVALID_ENUM:
-                    return "Invalid enum: An unacceptable value is specified for an enumerated argument.";
+                    return "Invalid enum: An unacceptable value is specified for an enumerated argument";
                 case GL_INVALID_VALUE:
-                    return "Invalid value: A numeric argument is out of range.";
+                    return "Invalid value: A numeric argument is out of range";
                 case GL_INVALID_OPERATION:
-                    return "Invalid operation: The specified operation is not allowed in the current state.";
+                    return "Invalid operation: The specified operation is not allowed in the current state";
                 case GL_INVALID_FRAMEBUFFER_OPERATION:
-                    return "Invalid framebuffer operation: The framebuffer object is not complete.";
+                    return "Invalid framebuffer operation: The framebuffer object is not complete";
                 case GL_OUT_OF_MEMORY:
-                    return "Out of memory: There is not enough memory left to execute the command.";
+                    return "Out of memory: There is not enough memory left to execute the command";
                 default:
-                    return "Unknown OpenGL error.";
+                    return "Unknown OpenGL error";
             }
         }
 
@@ -45,8 +45,12 @@ namespace Alpha
             while (GLenum error = glGetError())
             {
                 isBufferEmpty = false;
-                std::string errmsg = ErrorToString(error);
-                Logger::Error("OpenGL : {0}. \n\tFile : {1}, \n\tin {2}, \n\tat line {3}.", errmsg, file, func, line);
+                std::string errorMessage = ErrorToString(error);
+                Logger::Error("An OpenGL error was raised. "
+                              "\n{0}. "
+                              "\nFile: {1}, "
+                              "\nin {2} at line {3}.",
+                              errorMessage, file, func, line);
             }
             ALPHA_ASSERT(isBufferEmpty, "OpenGL error(s)");
             return isBufferEmpty;
