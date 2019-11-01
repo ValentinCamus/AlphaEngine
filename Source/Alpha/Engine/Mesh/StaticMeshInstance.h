@@ -9,11 +9,11 @@
 
 namespace Alpha
 {
-    class StaticMeshEntity : public SceneComponent
+    class StaticMeshInstance : public SceneComponent
     {
     public:
         /// Constructor.
-        explicit StaticMeshEntity(std::string name, const Pointer<StaticMeshModel>& model);
+        explicit StaticMeshInstance(std::string name, const Pointer<StaticMeshModel>& model);
 
         /// Draw the entity.
         void Draw(const Pointer<Shader>& shader, TransformMatrix& transform);
@@ -35,9 +35,9 @@ namespace Alpha
         /// @warning: Perform a calculation.
         Matrix4x4 GetModelMatrix() const;
 
-        inline EDrawMode GetDrawMode() const { return m_drawMode; }
+        inline Renderer::EDrawMode GetDrawMode() const { return m_drawMode; }
 
-        inline void SetDrawMode(EDrawMode drawMode) { m_drawMode = drawMode; }
+        inline void SetDrawMode(Renderer::EDrawMode drawMode) { m_drawMode = drawMode; }
 
     private:
         /// The entity name.
@@ -49,6 +49,6 @@ namespace Alpha
         /// The list of material to apply to the entity when it will be drawn.
         std::vector<Pointer<Material>> m_materials;
 
-        EDrawMode m_drawMode = EDrawMode::Triangles;
+        Renderer::EDrawMode m_drawMode = Renderer::EDrawMode::Triangles;
     };
 }

@@ -14,7 +14,6 @@ namespace Alpha
         using Indices = std::vector<uint32>;
 
         static Pointer<StaticMeshModel> Create(const std::string& filename);
-
         static Pointer<StaticMeshModel> Create(const Vertices& vertices, const Indices& indices);
 
     public:
@@ -26,7 +25,7 @@ namespace Alpha
         bool Load(const std::vector<Vertex>& vertices, const std::vector<uint32>& indices);
 
         /// Render the model.
-        void Draw(const Pointer<Shader>& shader, TransformMatrix& transform, EDrawMode drawMode);
+        void Draw(const Pointer<Shader>& shader, TransformMatrix& transform);
 
         /// Getter: The mesh's material.
         Pointer<Material> GetMaterial(uint32 index);

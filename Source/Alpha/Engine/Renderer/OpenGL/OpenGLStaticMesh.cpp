@@ -20,30 +20,31 @@ namespace Alpha
         GL_CHECK(glDeleteVertexArrays(1, &m_vao));
     }
 
-    void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform, EDrawMode drawMode)
+    void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform)
     {
-        bool bSetMaterial = Renderer::IsDisable(Renderer::EOption::DiscardMaterial);
-        bool bSetModelMatrix = Renderer::IsDisable(Renderer::EOption::DiscardModelMatrix);
-        bool bSetViewMatrix = Renderer::IsDisable(Renderer::EOption::DiscardViewMatrix);
-        bool bSetProjectionMatrix = Renderer::IsDisable(Renderer::EOption::DiscardProjectionMatrix);
+        Renderer::EDrawMode drawMode = Renderer::GetDrawOptions()->drawMode;
 
-        if (bSetMaterial && !IsMaterialValid())
+        int bUseMaterial = Renderer::GetDrawOptions()->bUseMaterial;
+        int bUseModelMatrix = Renderer::GetDrawOptions()->bUseModelMatrix;
+        int bUseViewMatrix = Renderer::GetDrawOptions()->bUseViewMatrix;
+        int bUseProjectionMatrix = Renderer::GetDrawOptions()->bUseProjectionMatrix;
+
+        if (bUseMaterial && !IsMaterialValid())
         {
             Logger::Warn("OpenGLStaticMesh::Draw No Material specified, the object will not be rendered.");
         }
         else
         {
-            if (bSetModelMatrix) shader->SetUniform("u_model", transform.model);
-            if (bSetViewMatrix) shader->SetUniform("u_view", transform.view);
-            if (bSetProjectionMatrix) shader->SetUniform("u_proj", transform.projection);
+            if (bUseModelMatrix) shader->SetUniform("u_model", transform.model);
+            if (bUseViewMatrix) shader->SetUniform("u_view", transform.view);
+            if (bUseProjectionMatrix) shader->SetUniform("u_proj", transform.projection);
 
             GL_CHECK(glBindVertexArray(m_vao));
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));
 
-            if (bSetMaterial) GetMaterial()->Bind(shader, "u_material");
+            if (bUseMaterial) GetMaterial()->Bind(shader, "u_material");
             GL_CHECK(glDrawElements(CastDrawMode(drawMode), (GLsizei) m_indices.size(), GL_UNSIGNED_INT, nullptr));
-            if (bSetMaterial) GetMaterial()->Unbind();
-
+            if (bUseMaterial) GetMaterial()->Unbind();
 
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
             GL_CHECK(glBindVertexArray(0));
@@ -87,13 +88,13 @@ namespace Alpha
         GL_CHECK(glBindVertexArray(0));
     }
 
-    GLenum OpenGLStaticMesh::CastDrawMode(EDrawMode drawMode) const
+    GLenum OpenGLStaticMesh::CastDrawMode(Renderer::EDrawMode drawMode) const
     {
         switch (drawMode)
         {
-            case EDrawMode::Points: return GL_POINTS;
-            case EDrawMode::Lines: return GL_LINES;
-            case EDrawMode::Triangles: return GL_TRIANGLES;
+            case Renderer::EDrawMode::Points: return GL_POINTS;
+            case Renderer::EDrawMode::Lines: return GL_LINES;
+            case Renderer::EDrawMode::Triangles: return GL_TRIANGLES;
         }
     }
 }

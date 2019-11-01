@@ -68,7 +68,7 @@ set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Engine/Renderer/StaticMesh.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLStaticMesh.cpp
         Alpha/Engine/Mesh/StaticMeshModel.cpp
-        Alpha/Engine/Mesh/StaticMeshEntity.cpp
+        Alpha/Engine/Mesh/StaticMeshInstance.cpp
         Alpha/Input/Input.cpp
         Alpha/Window/Window.cpp
         Alpha/Engine/Loader/MeshLoader.cpp

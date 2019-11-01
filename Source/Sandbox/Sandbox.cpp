@@ -52,29 +52,23 @@ namespace Alpha
         Pointer<StaticMeshModel> cubeModel = StaticMeshModel::Create(ALPHA_ASSETS_DIR + "Cube.fbx");
 		Pointer<StaticMeshModel> dragonModel = StaticMeshModel::Create(ALPHA_ASSETS_DIR + "StanfordDragon.fbx");
 
-        m_tile = NewPointer<StaticMeshEntity>("Tile", tileModel);
-        m_tile->SetMaterial(0, defaultMaterial);
-        m_tile->SetWorldLocation({-2, 0, -3});
-        m_tile->SetWorldRotation({0, 45, 0});
+        m_screenInstance = NewPointer<StaticMeshInstance>("Tile", tileModel);
+        m_screenInstance->SetMaterial(0, defaultMaterial);
+        m_screenInstance->SetWorldLocation({-2, 0, -3});
+        m_screenInstance->SetWorldRotation({0, 45, 0});
 
-        m_cube = NewPointer<StaticMeshEntity>("Cube", cubeModel);
-        m_cube->SetMaterial(0, defaultMaterial);
-        m_cube->SetWorldLocation({1, 0, -5});
-        m_cube->SetWorldRotation({30, 25, 42});
-
-        m_lightInstance = NewPointer<StaticMeshEntity>("Light", cubeModel);
+        m_lightInstance = NewPointer<StaticMeshInstance>("Cube", cubeModel);
         m_lightInstance->SetMaterial(0, lightMaterial);
         m_lightInstance->SetWorldScale({0.1f, 0.1f, 0.1f});
 
-        m_dragon = NewPointer<StaticMeshEntity>("Dragon", dragonModel);
-        m_dragon->SetMaterial(0, defaultMaterial);
-        m_dragon->SetMaterial(1, brickMaterial);
-        m_dragon->SetWorldLocation({0, -1, -2});
-        m_dragon->SetWorldScale({0.05, 0.05, 0.05});
+        m_dragonInstance = NewPointer<StaticMeshInstance>("Dragon", dragonModel);
+        m_dragonInstance->SetMaterial(0, defaultMaterial);
+        m_dragonInstance->SetMaterial(1, brickMaterial);
+        m_dragonInstance->SetWorldLocation({0, -1, -2});
+        m_dragonInstance->SetWorldScale({0.05, 0.05, 0.05});
 
-        m_scene->PushComponent(m_tile);
-        m_scene->PushComponent(m_cube);
-		m_scene->PushComponent(m_dragon);
+        m_scene->PushComponent(m_screenInstance);
+		m_scene->PushComponent(m_dragonInstance);
 
         GlobalStorage::AddScene("Scene_01", m_scene);
 
@@ -142,11 +136,9 @@ namespace Alpha
             m_forwardShader->SetUniform("u_light", light);
             m_forwardShader->SetUniform("u_viewPosition", camera->GetWorldLocation());
 
-            // m_cube->Draw(m_forwardShader, transformMatrix);
-            m_dragon->Draw(m_forwardShader, transformMatrix);
+            m_dragonInstance->Draw(m_forwardShader, transformMatrix);
 
             m_forwardShader->Unbind();
-
 
             m_debugDepthShader->Bind();
 
@@ -155,11 +147,11 @@ namespace Alpha
             shadowMap->Bind(0);
             m_debugDepthShader->SetUniform("u_depthMap", shadowMap->GetSlot());
 
-            Renderer::Enable(Renderer::EOption::DiscardMaterial);
+            Renderer::GetDrawOptions()->bUseMaterial = false;
 
-            m_tile->Draw(m_debugDepthShader, transformMatrix);
+            m_screenInstance->Draw(m_debugDepthShader, transformMatrix);
 
-            Renderer::Disable(Renderer::EOption::DiscardMaterial);
+            Renderer::GetDrawOptions()->Reset();
 
             m_debugDepthShader->Unbind();
 
@@ -167,7 +159,7 @@ namespace Alpha
             DrawSceneLights(m_scene);
         }
 
-        m_dragon->SetWorldRotation(m_dragon->GetWorldRotation() + Vector3(0, 0.5f, 0));
+        m_dragonInstance->SetWorldRotation(m_dragonInstance->GetWorldRotation() + Vector3(0, 0.5f, 0));
 
         m_scene->Unbind();
     }
@@ -214,15 +206,13 @@ namespace Alpha
 
         m_depthShader->SetUniform("u_lightSpace", lightSpace);
 
-        Renderer::Enable(Renderer::EOption::DiscardMaterial);
-        Renderer::Enable(Renderer::EOption::DiscardViewMatrix);
-        Renderer::Enable(Renderer::EOption::DiscardProjectionMatrix);
+        Renderer::GetDrawOptions()->bUseMaterial = false;
+        Renderer::GetDrawOptions()->bUseViewMatrix = false;
+        Renderer::GetDrawOptions()->bUseProjectionMatrix = false;
 
-        m_dragon->Draw(m_depthShader, nullTransform);
+        m_dragonInstance->Draw(m_depthShader, nullTransform);
 
-        Renderer::Disable(Renderer::EOption::DiscardMaterial);
-        Renderer::Disable(Renderer::EOption::DiscardViewMatrix);
-        Renderer::Disable(Renderer::EOption::DiscardProjectionMatrix);
+        Renderer::GetDrawOptions()->Reset();
 
         light->SetSpace(lightSpace);
 
@@ -250,13 +240,13 @@ namespace Alpha
 
         m_debugNormalShader->Bind();
 
-        Renderer::Enable(Renderer::EOption::DiscardMaterial);
+        Renderer::GetDrawOptions()->bUseMaterial = false;
 
-        m_tile->Draw(m_debugNormalShader, transformMatrix);
-        m_cube->Draw(m_debugNormalShader, transformMatrix);
-        m_dragon->Draw(m_debugNormalShader, transformMatrix);
+        m_screenInstance->Draw(m_debugNormalShader, transformMatrix);
+        m_lightInstance->Draw(m_debugNormalShader, transformMatrix);
+        m_dragonInstance->Draw(m_debugNormalShader, transformMatrix);
 
-        Renderer::Disable(Renderer::EOption::DiscardMaterial);
+        Renderer::GetDrawOptions()->Reset();
 
         m_debugNormalShader->Unbind();
     }
@@ -267,7 +257,7 @@ namespace Alpha
 
         TransformMatrix transformMatrix = MakeTransformMatrix(scene);
 
-        Renderer::Enable(Renderer::EOption::DiscardMaterial);
+        Renderer::GetDrawOptions()->bUseMaterial = false;
 
         for (const Pointer<Light>& light : scene->GetLights())
         {
@@ -284,7 +274,7 @@ namespace Alpha
 
         }
 
-        Renderer::Disable(Renderer::EOption::DiscardMaterial);
+        Renderer::GetDrawOptions()->Reset();
 
         scene->Unbind();
     }
@@ -348,7 +338,7 @@ namespace Alpha
 		if (m_sceneWidget.IsSelectedEntityValid())
 		{
             auto index = static_cast<uint32>(m_sceneWidget.GetSelectedEntityIndex());
-			auto entity = Cast<StaticMeshEntity>(scene->GetComponentAt(index));
+			auto entity = Cast<StaticMeshInstance>(scene->GetComponentAt(index));
 			if (entity != m_materialEditor.GetEntity()) m_materialEditor.SetEntity(entity);
 		}
 		else m_materialEditor.Clear();

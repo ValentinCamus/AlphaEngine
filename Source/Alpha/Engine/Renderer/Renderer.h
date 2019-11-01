@@ -4,12 +4,6 @@
 
 namespace Alpha
 {
-    enum class EDrawMode
-    {
-        Points,
-        Lines,
-        Triangles
-    };
 
     enum class ERendererAPI
     {
@@ -20,13 +14,29 @@ namespace Alpha
     class Renderer
     {
     public:
-        enum class EOption
+        enum class EDrawMode
         {
-            None,
-            DiscardMaterial,
-            DiscardModelMatrix,
-            DiscardViewMatrix,
-            DiscardProjectionMatrix,
+            Points,
+            Lines,
+            Triangles
+        };
+
+        struct DrawOptions
+        {
+            EDrawMode drawMode = EDrawMode::Triangles;
+            bool bUseMaterial = true;
+            bool bUseModelMatrix = true;
+            bool bUseViewMatrix = true;
+            bool bUseProjectionMatrix = true;
+
+            inline void Reset()
+            {
+                drawMode = EDrawMode::Triangles;
+                bUseMaterial = true;
+                bUseModelMatrix = true;
+                bUseViewMatrix = true;
+                bUseProjectionMatrix = true;
+            }
         };
 
     public:
@@ -54,74 +64,8 @@ namespace Alpha
             s_instance->SetClearColorImpl(color);
         }
 
-        static inline void Enable(EOption option)
-        {
-            switch (option)
-            {
-                case EOption::None:
-                    // Do nothing
-                    break;
-
-                case EOption::DiscardMaterial:
-                    s_bDiscardMaterial = true;
-                    break;
-
-                case EOption::DiscardModelMatrix:
-                    s_bDiscardModelMatrix = true;
-                    break;
-
-                case EOption::DiscardViewMatrix:
-                    s_bDiscardViewMatrix = true;
-                    break;
-
-                case EOption::DiscardProjectionMatrix:
-                    s_bDiscardProjectionMatrix = true;
-                    break;
-            }
-        }
-
-        static inline void Disable(EOption option)
-        {
-            switch (option)
-            {
-                case EOption::None:
-                    // Do nothing
-                    break;
-
-                case EOption::DiscardMaterial:
-                    s_bDiscardMaterial = false;
-                    break;
-
-                case EOption::DiscardModelMatrix:
-                    s_bDiscardModelMatrix = false;
-                    break;
-
-                case EOption::DiscardViewMatrix:
-                    s_bDiscardViewMatrix = false;
-                    break;
-
-                case EOption::DiscardProjectionMatrix:
-                    s_bDiscardProjectionMatrix = false;
-                    break;
-            }
-        }
-
-        static inline bool IsEnable(EOption option)
-        {
-            switch (option)
-            {
-                case EOption::DiscardMaterial: return s_bDiscardMaterial;
-                case EOption::DiscardModelMatrix: return s_bDiscardModelMatrix;
-                case EOption::DiscardViewMatrix: return s_bDiscardViewMatrix;
-                case EOption::DiscardProjectionMatrix: return s_bDiscardProjectionMatrix;
-                case EOption::None: break;
-            }
-
-            Logger::Warn("EOption::None cannot be enable, return false by default");
-            return false;
-        }
-
-        static inline bool IsDisable(EOption option) { return !IsEnable(option); }
+        static inline void ResetDrawOptions() { s_options->Reset(); }
+        static inline const Pointer<DrawOptions>& GetDrawOptions() { return s_options; }
 
     protected:
         /// Initialize the renderer.
@@ -139,10 +83,7 @@ namespace Alpha
 
         static ERendererAPI s_rendererAPI;
 
-        static bool s_bDiscardMaterial;
-        static bool s_bDiscardModelMatrix;
-        static bool s_bDiscardViewMatrix;
-        static bool s_bDiscardProjectionMatrix;
+        static Pointer<DrawOptions> s_options;
     };
 }
 

@@ -23,7 +23,7 @@ namespace Alpha
         virtual void Destroy() = 0;
 
         /// Render the mesh.
-        virtual void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform, EDrawMode drawMode) = 0;
+        virtual void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform) = 0;
 
         /// @getter: The mesh's vertices
         virtual const std::vector<Vertex>& GetVertices() const = 0;

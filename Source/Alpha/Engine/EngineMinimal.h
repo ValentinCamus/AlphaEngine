@@ -13,7 +13,7 @@
 
 #include <Alpha/Engine/Material/Material.h>
 
-#include <Alpha/Engine/Mesh/StaticMeshEntity.h>
+#include <Alpha/Engine/Mesh/StaticMeshInstance.h>
 
 #include <Alpha/Engine/Camera/Camera.h>
 #include <Alpha/Engine/Camera/EulerCamera.h>

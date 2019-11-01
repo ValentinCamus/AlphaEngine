@@ -6,15 +6,14 @@ namespace Alpha
 {
     Renderer* Renderer::s_instance = nullptr;
 
-    ERendererAPI Renderer::s_rendererAPI = ERendererAPI::OpenGL;
+    Pointer<Renderer::DrawOptions> Renderer::s_options = nullptr;
 
-    bool Renderer::s_bDiscardMaterial = false;
-    bool Renderer::s_bDiscardModelMatrix = false;
-    bool Renderer::s_bDiscardViewMatrix = false;
-    bool Renderer::s_bDiscardProjectionMatrix = false;
+    ERendererAPI Renderer::s_rendererAPI = ERendererAPI::OpenGL;
 
     void Renderer::Init()
     {
+        s_options = NewPointer<Renderer::DrawOptions>();
+
         switch (Renderer::GetRendererAPI())
         {
             case ERendererAPI::OpenGL:
@@ -25,7 +24,8 @@ namespace Alpha
                 break;
         }
 
-        ALPHA_ASSERT(s_instance, "Invalid renderer!");
+        ALPHA_ASSERT(s_instance, "Invalid Renderer!");
+
         s_instance->InitImpl();
     }
 }

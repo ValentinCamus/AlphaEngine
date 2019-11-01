@@ -84,7 +84,7 @@ namespace Alpha
         m_materials.clear();
     }
 
-    void MaterialEditorWidget::SetEntity(const Pointer<StaticMeshEntity>& entity)
+    void MaterialEditorWidget::SetEntity(const Pointer<StaticMeshInstance>& entity)
     {
         m_bIsVisible = true;
         m_bIsOccupied = true;

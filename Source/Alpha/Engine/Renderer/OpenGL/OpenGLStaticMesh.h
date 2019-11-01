@@ -21,7 +21,7 @@ namespace Alpha
         void Destroy() override;
 
         /// Render the mesh.
-        void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform, EDrawMode drawMode) override;
+        void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform) override;
 
         /// @getter: The mesh's vertices
         inline const std::vector<Vertex>& GetVertices() const override { return m_vertices; }
@@ -34,7 +34,7 @@ namespace Alpha
     private:
         void SetupMesh();
 
-        GLenum CastDrawMode(EDrawMode drawMode) const;
+        GLenum CastDrawMode(Renderer::EDrawMode drawMode) const;
 
     private:
         /// The mesh's vertices.

@@ -8,7 +8,7 @@
 #include <Alpha/Event/ApplicationEvent.h>
 
 #include <Alpha/Engine/Material/Material.h>
-#include <Alpha/Engine/Mesh/StaticMeshEntity.h>
+#include <Alpha/Engine/Mesh/StaticMeshInstance.h>
 
 namespace Alpha
 {
@@ -33,8 +33,8 @@ namespace Alpha
 
         void Clear();
 
-        inline const Pointer<StaticMeshEntity>& GetEntity() const { return m_entity; }
-        void SetEntity(const Pointer<StaticMeshEntity>& entity);
+        inline const Pointer<StaticMeshInstance>& GetEntity() const { return m_entity; }
+        void SetEntity(const Pointer<StaticMeshInstance>& entity);
 
         inline bool IsOccupied() const { return m_bIsOccupied; }
 
@@ -45,7 +45,7 @@ namespace Alpha
         bool m_bIsOccupied = false;
         bool m_bNeedUpdate = false;
 
-        Pointer<StaticMeshEntity> m_entity = nullptr;
+        Pointer<StaticMeshInstance> m_entity = nullptr;
         std::vector<Pointer<Material>> m_materials;
         MaterialInfo m_materialInfo;
     };
