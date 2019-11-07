@@ -16,7 +16,16 @@ namespace Alpha
         explicit StaticMeshInstance(std::string name, const Pointer<StaticMeshModel>& model);
 
         /// Draw the entity.
-        void Draw(const Pointer<Shader>& shader, TransformMatrix& transform);
+        /// The model matrix will be set with the instance's transform.
+        void Draw(const Pointer<Shader>& shader,
+                  const Matrix4x4 * projection = nullptr,
+                  const Matrix4x4 * view = nullptr) const;
+
+        /// Draw the entity.
+        void Draw(const Pointer<Shader>& shader,
+                  const Matrix4x4 * projection,
+                  const Matrix4x4 * view,
+                  const Matrix4x4 * model) const;
 
     public:
         /// The number of material.
@@ -38,6 +47,13 @@ namespace Alpha
         inline Renderer::EDrawMode GetDrawMode() const { return m_drawMode; }
 
         inline void SetDrawMode(Renderer::EDrawMode drawMode) { m_drawMode = drawMode; }
+
+        inline void BindMaterials() const { Renderer::GetDrawOptions()->bUseMaterial = true; }
+
+        inline void UnbindMaterials() const { Renderer::GetDrawOptions()->bUseMaterial = false; }
+
+    private:
+        void SetModelMaterials() const;
 
     private:
         /// The entity name.

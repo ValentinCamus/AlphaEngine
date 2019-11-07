@@ -9,6 +9,8 @@ namespace Alpha
         Pointer<EulerCamera> camera = NewPointer<EulerCamera>();
 
         Pointer<DirectionalLight> sunLight = NewPointer<DirectionalLight>();
+        sunLight->SetDirection({-90.0f, -90.0f, 0.0f});
+        sunLight->SetWorldLocation({-0.5f, 0.0f, 2.0f});
         sunLight->SetColor(Color4(1.0f, 1.0f, 0.7f, 1.0f));
 
         m_flatShader = Shader::Create("Flat", {
@@ -35,7 +37,7 @@ namespace Alpha
 
 		m_scene = NewPointer<Scene>();
 		m_scene->PushLight(sunLight);
-		m_scene->SetFramebuffer(Framebuffer::Create(500, 500));
+		m_scene->SetFramebuffer(Framebuffer::Create(1024, 1024));
 		m_scene->SetCamera(camera);
 
         Pointer<Texture2D> brickTexture = Texture2D::Create(ALPHA_ASSETS_DIR + "Brick.jpg");
@@ -136,7 +138,9 @@ namespace Alpha
             m_forwardShader->SetUniform("u_light", light);
             m_forwardShader->SetUniform("u_viewPosition", camera->GetWorldLocation());
 
-            m_dragonInstance->Draw(m_forwardShader, transformMatrix);
+            m_dragonInstance->BindMaterials();
+            m_dragonInstance->Draw(m_forwardShader, &transformMatrix.projection, &transformMatrix.view);
+            m_dragonInstance->UnbindMaterials();
 
             m_forwardShader->Unbind();
 
@@ -147,17 +151,13 @@ namespace Alpha
             shadowMap->Bind(0);
             m_debugDepthShader->SetUniform("u_depthMap", shadowMap->GetSlot());
 
-            Renderer::GetDrawOptions()->bUseMaterial = false;
-
-            m_screenInstance->Draw(m_debugDepthShader, transformMatrix);
-
-            Renderer::GetDrawOptions()->Reset();
+            m_screenInstance->Draw(m_debugDepthShader, &transformMatrix.projection, &transformMatrix.view);
 
             m_debugDepthShader->Unbind();
-
-            // Draw3DNormals(m_scene);
-            DrawSceneLights(m_scene);
         }
+
+        //Draw3DNormals(m_scene);
+        DrawSceneLights(m_scene);
 
         m_dragonInstance->SetWorldRotation(m_dragonInstance->GetWorldRotation() + Vector3(0, 0.5f, 0));
 
@@ -171,12 +171,7 @@ namespace Alpha
         constexpr float NEAR_PLANE = 1.0f;
         constexpr float FAR_PLANE = 7.5f;
 
-        TransformMatrix nullTransform = {Matrix4x4(1), Matrix4x4(1), Matrix4x4(1)};
-
         ALPHA_ASSERT(light->IsDepthBufferValid(), "Invalid Shadow Map");
-
-        m_depthShader->Bind();
-        light->GetDepthBuffer()->Bind();
 
         bool bIsDirLight = InstanceOf<DirectionalLight>(light);
 
@@ -204,15 +199,12 @@ namespace Alpha
         Matrix4x4 lightView = MakeViewMatrix(lightCamera.GetWorldLocation(), lightCamera.GetWorldRotation());
         Matrix4x4 lightSpace = lightProjection * lightView;
 
+        m_depthShader->Bind();
+        light->GetDepthBuffer()->Bind();
+
         m_depthShader->SetUniform("u_lightSpace", lightSpace);
 
-        Renderer::GetDrawOptions()->bUseMaterial = false;
-        Renderer::GetDrawOptions()->bUseViewMatrix = false;
-        Renderer::GetDrawOptions()->bUseProjectionMatrix = false;
-
-        m_dragonInstance->Draw(m_depthShader, nullTransform);
-
-        Renderer::GetDrawOptions()->Reset();
+        m_dragonInstance->Draw(m_depthShader, nullptr, nullptr);
 
         light->SetSpace(lightSpace);
 
@@ -240,13 +232,9 @@ namespace Alpha
 
         m_debugNormalShader->Bind();
 
-        Renderer::GetDrawOptions()->bUseMaterial = false;
-
-        m_screenInstance->Draw(m_debugNormalShader, transformMatrix);
-        m_lightInstance->Draw(m_debugNormalShader, transformMatrix);
-        m_dragonInstance->Draw(m_debugNormalShader, transformMatrix);
-
-        Renderer::GetDrawOptions()->Reset();
+        m_screenInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
+        m_lightInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
+        m_dragonInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
 
         m_debugNormalShader->Unbind();
     }
@@ -257,8 +245,6 @@ namespace Alpha
 
         TransformMatrix transformMatrix = MakeTransformMatrix(scene);
 
-        Renderer::GetDrawOptions()->bUseMaterial = false;
-
         for (const Pointer<Light>& light : scene->GetLights())
         {
             m_lightInstance->SetWorldLocation(light->GetWorldLocation());
@@ -268,13 +254,10 @@ namespace Alpha
 
             m_flatShader->SetUniform("u_color", light->GetColor());
 
-            m_lightInstance->Draw(m_flatShader, transformMatrix);
+            m_lightInstance->Draw(m_flatShader, &transformMatrix.projection, &transformMatrix.view);
 
             m_flatShader->Unbind();
-
         }
-
-        Renderer::GetDrawOptions()->Reset();
 
         scene->Unbind();
     }

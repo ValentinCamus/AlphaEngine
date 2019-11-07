@@ -18,6 +18,8 @@ namespace Alpha
     class Window
 	{
     public:
+	    const uint32 DEFAULT_FPS = 60;
+
         static Pointer<Window> Create(const WindowProps& props);
 
 	public:
@@ -43,5 +45,13 @@ namespace Alpha
 
 		/// The native window (aka the window created by the library/framework).
         virtual void* GetNativeWindow() const = 0;
+
+        virtual void SetFramerate(uint32 framerate) = 0;
+
+        virtual uint32 GetFramerate() const = 0;
+
+        virtual void SetVSync(bool enabled) = 0;
+
+        virtual bool IsVSync() const = 0;
 	};
 }

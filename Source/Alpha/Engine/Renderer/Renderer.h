@@ -24,18 +24,18 @@ namespace Alpha
         struct DrawOptions
         {
             EDrawMode drawMode = EDrawMode::Triangles;
-            bool bUseMaterial = true;
-            bool bUseModelMatrix = true;
-            bool bUseViewMatrix = true;
-            bool bUseProjectionMatrix = true;
+            bool bUseMaterial = false;
+            bool bUseModelMatrix = false;
+            bool bUseViewMatrix = false;
+            bool bUseProjectionMatrix = false;
 
             inline void Reset()
             {
                 drawMode = EDrawMode::Triangles;
-                bUseMaterial = true;
-                bUseModelMatrix = true;
-                bUseViewMatrix = true;
-                bUseProjectionMatrix = true;
+                bUseMaterial = false;
+                bUseModelMatrix = false;
+                bUseViewMatrix = false;
+                bUseProjectionMatrix = false;
             }
         };
 
@@ -64,7 +64,6 @@ namespace Alpha
             s_instance->SetClearColorImpl(color);
         }
 
-        static inline void ResetDrawOptions() { s_options->Reset(); }
         static inline const Pointer<DrawOptions>& GetDrawOptions() { return s_options; }
 
     protected:

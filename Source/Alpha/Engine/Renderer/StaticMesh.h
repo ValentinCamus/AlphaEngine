@@ -14,7 +14,8 @@ namespace Alpha
     {
     public:
         /// Load the mesh from raw data.
-        static Pointer<StaticMesh> Create(const std::vector<Vertex>& vertices, const std::vector<uint32>& indices);
+        static Pointer<StaticMesh> Create(const std::vector<Vertex>& vertices,
+                                          const std::vector<uint32>& indices);
 
     public:
         virtual ~StaticMesh() = default;
@@ -23,7 +24,10 @@ namespace Alpha
         virtual void Destroy() = 0;
 
         /// Render the mesh.
-        virtual void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform) = 0;
+        virtual void Draw(const Pointer<Shader>& shader,
+                          const Matrix4x4 * projection,
+                          const Matrix4x4 * view,
+                          const Matrix4x4 * model) const = 0;
 
         /// @getter: The mesh's vertices
         virtual const std::vector<Vertex>& GetVertices() const = 0;
@@ -35,13 +39,13 @@ namespace Alpha
 
     public:
         /// @getter: The mesh's material.
-        virtual inline const Pointer<Material>& GetMaterial() { return m_material; }
+        virtual inline const Pointer<Material>& GetMaterial() const { return m_material; }
 
         /// @setter: The mesh's material.
         virtual inline void SetMaterial(const Pointer<Material>& m) { m_material = m; }
 
         /// @getter: Check if the material is valid.
-        virtual inline bool IsMaterialValid() { return m_material != nullptr; }
+        virtual inline bool IsMaterialValid() const { return m_material != nullptr; }
 
     private:
 

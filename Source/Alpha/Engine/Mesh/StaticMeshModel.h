@@ -24,8 +24,11 @@ namespace Alpha
         /// @note: Use this constructor instead of using a static mesh.
         bool Load(const std::vector<Vertex>& vertices, const std::vector<uint32>& indices);
 
-        /// Render the model.
-        void Draw(const Pointer<Shader>& shader, TransformMatrix& transform);
+        /// Draw the model.
+        void Draw(const Pointer<Shader>& shader,
+                  const Matrix4x4 * projection = nullptr,
+                  const Matrix4x4 * view = nullptr,
+                  const Matrix4x4 * model = nullptr) const;
 
         /// Getter: The mesh's material.
         Pointer<Material> GetMaterial(uint32 index);

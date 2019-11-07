@@ -49,6 +49,12 @@ namespace Alpha
 		if (cond) ForceQuit(EXIT_FAILURE);
 	}
 
+	inline void Sleep(long duration)
+	{
+		std::chrono::milliseconds timespan(duration); // or whatever
+		std::this_thread::sleep_for(timespan);
+	}
+
 	inline void AtExitCallback()
 	{
 #ifdef PLATFORM_WINDOWS

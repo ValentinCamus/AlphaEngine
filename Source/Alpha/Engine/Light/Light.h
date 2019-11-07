@@ -39,7 +39,7 @@ namespace Alpha
 
         }
 
-        virtual ~Light() = default;
+        ~Light() override = default;
 
     public:
         inline const LightType& GetType() const { return m_type; };

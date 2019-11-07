@@ -11,22 +11,23 @@ namespace Alpha
         m_materials = std::vector<Pointer<Material>>(nMeshes);
     }
 
-    void StaticMeshInstance::Draw(const Pointer<Shader> &shader, TransformMatrix &transform)
+    void StaticMeshInstance::Draw(const Pointer<Shader>& shader,
+                                  const Matrix4x4 * projection,
+                                  const Matrix4x4 * view) const
+    {
+        Matrix4x4 model = GetModelMatrix();
+        Draw(shader, projection, view, &model);
+    }
+
+    void StaticMeshInstance::Draw(const Pointer<Shader>& shader,
+              const Matrix4x4 * projection,
+              const Matrix4x4 * view,
+              const Matrix4x4 * model) const
     {
         Renderer::GetDrawOptions()->drawMode = m_drawMode;
+        if (Renderer::GetDrawOptions()->bUseMaterial) SetModelMaterials();
 
-        transform.model = GetModelMatrix();
-
-        if (Renderer::GetDrawOptions()->bUseMaterial)
-        {
-            for (uint32 i = 0; i < m_materials.size(); ++i)
-            {
-                Pointer<Material> mat = m_materials[i];
-                m_model->SetMaterial(i, mat);
-            }
-        }
-
-        m_model->Draw(shader, transform);
+        m_model->Draw(shader, projection, view, model);
     }
 
     Matrix4x4 StaticMeshInstance::GetModelMatrix() const
@@ -44,5 +45,14 @@ namespace Alpha
     {
         ALPHA_ASSERT(index < GetNbMaterial(), "{0}: Material {1} doesn't exist", m_name, index);
         m_materials.at(index) = mat;
+    }
+
+    void StaticMeshInstance::SetModelMaterials() const
+    {
+        for (uint32 i = 0; i < m_materials.size(); ++i)
+        {
+            Pointer<Material> mat = m_materials[i];
+            m_model->SetMaterial(i, mat);
+        }
     }
 }

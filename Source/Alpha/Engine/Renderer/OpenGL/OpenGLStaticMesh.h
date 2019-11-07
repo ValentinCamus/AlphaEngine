@@ -21,7 +21,10 @@ namespace Alpha
         void Destroy() override;
 
         /// Render the mesh.
-        void Draw(const Pointer<Shader>& shader, const TransformMatrix& transform) override;
+        void Draw(const Pointer<Shader>& shader,
+                  const Matrix4x4 * projection,
+                  const Matrix4x4 * view,
+                  const Matrix4x4 * model) const override;
 
         /// @getter: The mesh's vertices
         inline const std::vector<Vertex>& GetVertices() const override { return m_vertices; }

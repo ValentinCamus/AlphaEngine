@@ -12,13 +12,15 @@ namespace Alpha
     OpenGLShader::OpenGLShader(const std::string& name, const std::map<int32, std::string>& sources)
         : m_name(name)
     {
-        std::unordered_map<GLenum, std::string> glSources;
-        for (auto& it: sources)
+        std::unordered_map<GLenum, std::string> glSources = {};
+        for (const auto& it: sources)
         {
             auto shaderId = (GLenum) it.first;
             std::string shaderSource = ReadFile(it.second);
             glSources.insert({shaderId, shaderSource});
         }
+
+        ALPHA_ASSERT(!glSources.empty(), "OpenGLShader: Invalid sources");
 
         Compile(glSources);
     }

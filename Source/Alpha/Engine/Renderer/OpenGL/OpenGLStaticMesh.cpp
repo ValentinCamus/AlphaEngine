@@ -20,14 +20,14 @@ namespace Alpha
         GL_CHECK(glDeleteVertexArrays(1, &m_vao));
     }
 
-    void OpenGLStaticMesh::Draw(const Pointer<Shader> &shader, const TransformMatrix &transform)
+    void OpenGLStaticMesh::Draw(const Pointer<Shader>& shader,
+                                const Matrix4x4 * projection,
+                                const Matrix4x4 * view,
+                                const Matrix4x4 * model) const
     {
         Renderer::EDrawMode drawMode = Renderer::GetDrawOptions()->drawMode;
 
         int bUseMaterial = Renderer::GetDrawOptions()->bUseMaterial;
-        int bUseModelMatrix = Renderer::GetDrawOptions()->bUseModelMatrix;
-        int bUseViewMatrix = Renderer::GetDrawOptions()->bUseViewMatrix;
-        int bUseProjectionMatrix = Renderer::GetDrawOptions()->bUseProjectionMatrix;
 
         if (bUseMaterial && !IsMaterialValid())
         {
@@ -35,9 +35,9 @@ namespace Alpha
         }
         else
         {
-            if (bUseModelMatrix) shader->SetUniform("u_model", transform.model);
-            if (bUseViewMatrix) shader->SetUniform("u_view", transform.view);
-            if (bUseProjectionMatrix) shader->SetUniform("u_proj", transform.projection);
+            if (model) shader->SetUniform("u_model", *model);
+            if (view) shader->SetUniform("u_view", *view);
+            if (projection) shader->SetUniform("u_proj", *projection);
 
             GL_CHECK(glBindVertexArray(m_vao));
             GL_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo));

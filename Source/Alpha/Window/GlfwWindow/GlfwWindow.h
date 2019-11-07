@@ -33,11 +33,19 @@ namespace Alpha
 
 		void OnUpdate() override;
 
-		uint32 GetWidth() const override { return m_props.width; }
+		inline uint32 GetWidth() const override { return m_props.width; }
 
-		uint32 GetHeight() const override { return m_props.height; }
+		inline uint32 GetHeight() const override { return m_props.height; }
 
-        void* GetNativeWindow() const override { return m_window; }
+        inline void* GetNativeWindow() const override { return m_window; }
+
+        inline void SetFramerate(uint32 framerate) override { m_framerate = framerate; };
+
+		uint32 GetFramerate() const override { return m_framerate; }
+
+		void SetVSync(bool enabled) override;
+
+		inline bool IsVSync() const override { return m_props.bIsVSync; }
 
 	private:
 		/// Setup the alpha engine events callback 
@@ -50,8 +58,13 @@ namespace Alpha
 		struct AlphaWindowProps : public WindowProps
         {
             EventCallbackFn eventCallback;
+			bool bIsVSync = true;
         };
 
         AlphaWindowProps m_props;
+
+        uint32 m_framerate = Window::DEFAULT_FPS;
+
+        double m_lastTime;
 	};
 }

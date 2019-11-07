@@ -43,6 +43,9 @@ namespace Alpha
         glfwMakeContextCurrent(m_window);
         glfwSetWindowUserPointer(m_window, &m_props);
 
+        SetVSync(true);
+        m_lastTime = glfwGetTime();
+
         Alpha::Renderer::CreateContext();
 
         SetupEventsCallback();
@@ -63,6 +66,14 @@ namespace Alpha
 
         glfwSwapBuffers(m_window);
         glfwPollEvents();
+
+        if (glfwGetTime() < m_lastTime + 1.0 / m_framerate)
+        {
+            double duration = m_lastTime - glfwGetTime();
+            Sleep(static_cast<long>(duration * 1000.0));
+        }
+
+        m_lastTime += 1.0 / m_framerate;
     }
 
     void GlfwWindow::SetupEventsCallback()
@@ -70,10 +81,10 @@ namespace Alpha
         glfwSetWindowSizeCallback(m_window, [](GLFWwindow *window, int32 width, int32 height)
         {
             AlphaWindowProps &data = *(AlphaWindowProps *) glfwGetWindowUserPointer(window);
-            data.width = width;
-            data.height = height;
+            data.width = static_cast<uint32>(width);
+            data.height = static_cast<uint32>(height);
 
-            WindowResizeEvent event(width, height);
+            WindowResizeEvent event(data.width, data.height);
             data.eventCallback(event);
         });
 
@@ -164,5 +175,11 @@ namespace Alpha
             MouseMovedEvent event((float) xPos, (float) yPos);
             data.eventCallback(event);
         });
+    }
+
+    void GlfwWindow::SetVSync(bool enabled)
+    {
+        glfwSwapInterval(enabled);
+        m_props.bIsVSync = enabled;
     }
 }

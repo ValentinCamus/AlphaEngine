@@ -107,9 +107,9 @@ namespace Alpha
 
     struct Transform
     {
-        Vector location;
-        Vector rotation; // Euler angles
-        Vector scale;
+        Vector location; // 3D position of the object
+        Vector rotation; // Euler angles (degrees) - Roll / Pitch / Yaw
+        Vector scale;    // Scale factor for each axis
 
         inline explicit Transform(const Vector3& inLocation = {0, 0, 0},
                                   const Vector3& inRotation = {0, 0, 0},
