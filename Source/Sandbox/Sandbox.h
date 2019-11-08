@@ -40,9 +40,12 @@ namespace Alpha
     private:
 		Pointer<Scene> m_scene;
 
+		Pointer<Skybox> m_skybox;
+
 		Pointer<Shader> m_flatShader;
         Pointer<Shader> m_depthShader;
         Pointer<Shader> m_forwardShader;
+		Pointer<Shader> m_skyboxShader;
         Pointer<Shader> m_debugDepthShader;
         Pointer<Shader> m_debugNormalShader;
 

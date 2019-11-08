@@ -21,6 +21,10 @@ namespace Alpha
                 {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Forward.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, ALPHA_SHADERS_DIR + "Forward.fs.glsl"}
         });
+        m_skyboxShader = Shader::Create("Skybox", {
+                {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Skybox.vs.glsl"},
+                {Shader::GLSL_FRAGMENT_SHADER, ALPHA_SHADERS_DIR + "Skybox.fs.glsl"}
+        });
         m_depthShader = Shader::Create("Depth", {
                 {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Depth.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, ALPHA_SHADERS_DIR + "Depth.fs.glsl"}
@@ -76,6 +80,7 @@ namespace Alpha
 
         GlobalStorage::AddShader("Flat", m_flatShader);
         GlobalStorage::AddShader("Depth", m_depthShader);
+        GlobalStorage::AddShader("Skybox", m_skyboxShader);
         GlobalStorage::AddShader("Forward", m_forwardShader);
         GlobalStorage::AddShader("DebugDepth", m_debugDepthShader);
         GlobalStorage::AddShader("DebugNormal", m_debugNormalShader);
@@ -90,6 +95,16 @@ namespace Alpha
         GlobalStorage::AddStaticMeshModel("Cube", cubeModel);
         GlobalStorage::AddStaticMeshModel("Tile", tileModel);
         GlobalStorage::AddStaticMeshModel("StanfordDragon", dragonModel);
+
+        std::map<Skybox::EFaceOrientation, std::string> skyboxFaces = {
+                {Skybox::Right, ALPHA_ASSETS_DIR + "Skybox/Right.jpg"},
+                {Skybox::Left, ALPHA_ASSETS_DIR + "Skybox/Left.jpg"},
+                {Skybox::Top, ALPHA_ASSETS_DIR + "Skybox/Top.jpg"},
+                {Skybox::Bottom, ALPHA_ASSETS_DIR + "Skybox/Bottom.jpg"},
+                {Skybox::Front, ALPHA_ASSETS_DIR + "Skybox/Front.jpg"},
+                {Skybox::Back, ALPHA_ASSETS_DIR + "Skybox/Back.jpg"},
+        };
+        m_skybox = NewPointer<Skybox>(skyboxFaces);
 
         LogTips();
 
@@ -130,6 +145,15 @@ namespace Alpha
 
         Renderer::SetClearColor({0.2f, 0.3f, 0.3f, 1.0f});
         Renderer::Clear();
+
+        Renderer::DisableDepthMask();
+        m_skyboxShader->Bind();
+
+        Matrix4x4 skyboxView = Matrix4x4(Matrix3x3(transformMatrix.view)); // Remove any translation.
+        m_skybox->Draw(m_skyboxShader, &transformMatrix.projection, &skyboxView);
+
+        m_skyboxShader->Unbind();
+        Renderer::EnableDepthMask();
 
         for (const Pointer<Light>& light : m_scene->GetLights())
         {

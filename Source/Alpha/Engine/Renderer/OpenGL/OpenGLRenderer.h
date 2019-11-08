@@ -23,5 +23,9 @@ namespace Alpha
         void SetClearColorImpl(const Color4& color) override;
 
         void ClearImpl() override;
+
+        void EnableDepthMaskImpl() override;
+
+        void DisableDepthMaskImpl() override;
     };
 }

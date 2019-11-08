@@ -36,13 +36,13 @@ namespace Alpha
         inline int32 GetSlot() const override { return m_slot; }
 
         /// @getter: The width of the texture.
-        inline uint32 GetWidth() const override { return m_width; }
+        inline uint32 GetWidth() const override { return static_cast<uint32>(m_width); }
 
         /// @getter: The height of the texture.
-        inline uint32 GetHeight() const override { return m_height; }
+        inline uint32 GetHeight() const override { return static_cast<uint32>(m_height); }
 
         /// @getter: The number of bits per pixel.
-        inline uint32 GetBitsPerPixel() const { return m_bitsPerPixel; }
+        inline uint32 GetBitsPerPixel() const { return static_cast<uint32>(m_bitsPerPixel); }
 
     private:
         void Init(const std::string& path);

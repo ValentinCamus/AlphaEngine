@@ -20,6 +20,8 @@
 
 #include <Alpha/Engine/Scene/Scene.h>
 
+#include <Alpha/Engine/Skybox/Skybox.h>
+
 #include <Alpha/Engine/GlobalStorage/GlobalStorage.h>
 
 namespace Alpha

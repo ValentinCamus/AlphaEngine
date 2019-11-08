@@ -25,17 +25,11 @@ namespace Alpha
         {
             EDrawMode drawMode = EDrawMode::Triangles;
             bool bUseMaterial = false;
-            bool bUseModelMatrix = false;
-            bool bUseViewMatrix = false;
-            bool bUseProjectionMatrix = false;
 
             inline void Reset()
             {
                 drawMode = EDrawMode::Triangles;
                 bUseMaterial = false;
-                bUseModelMatrix = false;
-                bUseViewMatrix = false;
-                bUseProjectionMatrix = false;
             }
         };
 
@@ -66,6 +60,10 @@ namespace Alpha
 
         static inline const Pointer<DrawOptions>& GetDrawOptions() { return s_options; }
 
+        static inline void EnableDepthMask() { s_instance->EnableDepthMaskImpl(); }
+
+        static inline void DisableDepthMask() { s_instance->DisableDepthMaskImpl(); }
+
     protected:
         /// Initialize the renderer.
         virtual void InitImpl() = 0;
@@ -76,6 +74,10 @@ namespace Alpha
         virtual void SetClearColorImpl(const Color4& color) = 0;
 
         virtual void ClearImpl() = 0;
+
+        virtual void EnableDepthMaskImpl() = 0;
+
+        virtual void DisableDepthMaskImpl() = 0;
 
     private:
         static Renderer* s_instance;
