@@ -58,6 +58,8 @@ namespace Alpha
             m_cubemap->Unbind();
         }
 
+        inline const Pointer<Cubemap>& GetCubemap() const { return m_cubemap; }
+
     private:
         Pointer<Cubemap> m_cubemap;
         Pointer<StaticMeshInstance> m_cube;

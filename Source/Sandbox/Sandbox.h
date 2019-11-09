@@ -46,12 +46,16 @@ namespace Alpha
         Pointer<Shader> m_depthShader;
         Pointer<Shader> m_forwardShader;
 		Pointer<Shader> m_skyboxShader;
+		Pointer<Shader> m_cubemapsShader;
         Pointer<Shader> m_debugDepthShader;
         Pointer<Shader> m_debugNormalShader;
 
+		Pointer<StaticMeshInstance> m_cubeInstance;
 		Pointer<StaticMeshInstance> m_lightInstance;
-        Pointer<StaticMeshInstance> m_screenInstance;
+        Pointer<StaticMeshInstance> m_planeInstance;
         Pointer<StaticMeshInstance> m_dragonInstance;
+		Pointer<StaticMeshInstance> m_mirrorInstance;
+
     };
 
     class GuiSandboxLayer : public ImGuiLayer

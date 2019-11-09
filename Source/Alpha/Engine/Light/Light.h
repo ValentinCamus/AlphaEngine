@@ -31,13 +31,9 @@ namespace Alpha
                        const Vector& location  = Vector(0.0f),
                        const Vector& direction = Vector(0.0f),
                        const Color4& color     = Color4(1.0f))
-                : SceneComponent(Transform(location))
+                : SceneComponent(Transform(location, direction))
                 , m_color(color)
-                , m_type(type)
-                , m_direction(direction)
-        {
-
-        }
+                , m_type(type) {}
 
         ~Light() override = default;
 
@@ -46,9 +42,6 @@ namespace Alpha
 
         inline const Color4& GetColor() const { return m_color; }
         inline const Color4& SetColor(const Color4& color) { return m_color = color; }
-
-        inline const Vector& GetDirection() const { return m_direction; }
-        inline const Vector& SetDirection(const Vector& dir) { return m_direction = dir; }
 
         inline const Pointer<DepthBuffer> GetDepthBuffer() const { return m_depthBuffer; }
         inline void SetDepthBuffer(const Pointer<DepthBuffer> &depthBuffer) { m_depthBuffer = depthBuffer; }
@@ -61,8 +54,6 @@ namespace Alpha
         Color4 m_color;
 
         LightType m_type;
-
-        Vector m_direction;
 
         Matrix4x4 m_space;
 

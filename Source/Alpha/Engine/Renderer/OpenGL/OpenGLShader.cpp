@@ -207,7 +207,7 @@ namespace Alpha
                 Pointer<DirectionalLight> dirLight = Cast<DirectionalLight>(light);
                 ALPHA_ASSERT(dirLight, "OpenGLShader::SetUniform: Invalid cast (DirectionalLight)");
 
-                SetUniform(name + ".directional.direction", dirLight->GetDirection());
+                SetUniform(name + ".directional.direction", dirLight->GetForwardVector());
 
                 break;
             }
@@ -230,7 +230,7 @@ namespace Alpha
                 ALPHA_ASSERT(spotLight, "OpenGLShader::SetUniform: Invalid cast (SpotLight)");
 
                 SetUniform(name + ".spot.position", spotLight->GetWorldLocation());
-                SetUniform(name + ".spot.direction", spotLight->GetDirection());
+                SetUniform(name + ".spot.direction", spotLight->GetForwardVector());
                 SetUniform(name + ".spot.innerAngle", spotLight->GetInnerAngle());
                 SetUniform(name + ".spot.outerAngle", spotLight->GetOuterAngle());
 

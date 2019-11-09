@@ -9,9 +9,9 @@ namespace Alpha
         Pointer<EulerCamera> camera = NewPointer<EulerCamera>();
 
         Pointer<DirectionalLight> sunLight = NewPointer<DirectionalLight>();
-        sunLight->SetDirection({-90.0f, -90.0f, 0.0f});
-        sunLight->SetWorldLocation({-0.5f, 0.0f, 2.0f});
-        sunLight->SetColor(Color4(1.0f, 1.0f, 0.7f, 1.0f));
+        sunLight->SetWorldRotation({45.0f, -10.0f, 0.0f});
+        sunLight->SetWorldLocation({-0.5f, 1.5f, 1.0f});
+        sunLight->SetColor(Color4(1.0f, 1.0f, 0.9f, 1.0f));
 
         m_flatShader = Shader::Create("Flat", {
                 {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Flat.vs.glsl"},
@@ -24,6 +24,10 @@ namespace Alpha
         m_skyboxShader = Shader::Create("Skybox", {
                 {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Skybox.vs.glsl"},
                 {Shader::GLSL_FRAGMENT_SHADER, ALPHA_SHADERS_DIR + "Skybox.fs.glsl"}
+        });
+        m_cubemapsShader = Shader::Create("Cubemaps", {
+                {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Cubemaps.vs.glsl"},
+                {Shader::GLSL_FRAGMENT_SHADER, ALPHA_SHADERS_DIR + "Cubemaps.fs.glsl"}
         });
         m_depthShader = Shader::Create("Depth", {
                 {Shader::GLSL_VERTEX_SHADER, ALPHA_SHADERS_DIR + "Depth.vs.glsl"},
@@ -58,10 +62,21 @@ namespace Alpha
         Pointer<StaticMeshModel> cubeModel = StaticMeshModel::Create(ALPHA_ASSETS_DIR + "Cube.fbx");
 		Pointer<StaticMeshModel> dragonModel = StaticMeshModel::Create(ALPHA_ASSETS_DIR + "StanfordDragon.fbx");
 
-        m_screenInstance = NewPointer<StaticMeshInstance>("Tile", tileModel);
-        m_screenInstance->SetMaterial(0, defaultMaterial);
-        m_screenInstance->SetWorldLocation({-2, 0, -3});
-        m_screenInstance->SetWorldRotation({0, 45, 0});
+        m_mirrorInstance = NewPointer<StaticMeshInstance>("Mirror", cubeModel);
+        m_mirrorInstance->SetMaterial(0, defaultMaterial);
+        m_mirrorInstance->SetWorldLocation({2, -1, -4});
+        m_mirrorInstance->SetWorldScale({0.5, 0.5, 0.5});
+
+        m_cubeInstance = NewPointer<StaticMeshInstance>("Cube", cubeModel);
+        m_cubeInstance->SetMaterial(0, defaultMaterial);
+        m_cubeInstance->SetWorldLocation({0, -1, -3.1});
+        m_cubeInstance->SetWorldRotation({0, 45, 0});
+        m_cubeInstance->SetWorldScale({0.5, 0.5, 0.5});
+
+        m_planeInstance = NewPointer<StaticMeshInstance>("Tile", tileModel);
+        m_planeInstance->SetMaterial(0, brickMaterial);
+        m_planeInstance->SetWorldLocation({0, -1, -1});
+        m_planeInstance->SetWorldScale({0.1, 0.1, 0.1});
 
         m_lightInstance = NewPointer<StaticMeshInstance>("Cube", cubeModel);
         m_lightInstance->SetMaterial(0, lightMaterial);
@@ -73,7 +88,7 @@ namespace Alpha
         m_dragonInstance->SetWorldLocation({0, -1, -2});
         m_dragonInstance->SetWorldScale({0.05, 0.05, 0.05});
 
-        m_scene->PushComponent(m_screenInstance);
+        m_scene->PushComponent(m_cubeInstance);
 		m_scene->PushComponent(m_dragonInstance);
 
         GlobalStorage::AddScene("Scene_01", m_scene);
@@ -82,6 +97,7 @@ namespace Alpha
         GlobalStorage::AddShader("Depth", m_depthShader);
         GlobalStorage::AddShader("Skybox", m_skyboxShader);
         GlobalStorage::AddShader("Forward", m_forwardShader);
+        GlobalStorage::AddShader("Cubemaps", m_cubemapsShader);
         GlobalStorage::AddShader("DebugDepth", m_debugDepthShader);
         GlobalStorage::AddShader("DebugNormal", m_debugNormalShader);
 
@@ -97,12 +113,12 @@ namespace Alpha
         GlobalStorage::AddStaticMeshModel("StanfordDragon", dragonModel);
 
         std::map<Skybox::EFaceOrientation, std::string> skyboxFaces = {
-                {Skybox::Right, ALPHA_ASSETS_DIR + "Skybox/Right.jpg"},
-                {Skybox::Left, ALPHA_ASSETS_DIR + "Skybox/Left.jpg"},
-                {Skybox::Top, ALPHA_ASSETS_DIR + "Skybox/Top.jpg"},
-                {Skybox::Bottom, ALPHA_ASSETS_DIR + "Skybox/Bottom.jpg"},
-                {Skybox::Front, ALPHA_ASSETS_DIR + "Skybox/Front.jpg"},
-                {Skybox::Back, ALPHA_ASSETS_DIR + "Skybox/Back.jpg"},
+            {Skybox::Right, ALPHA_ASSETS_DIR + "Skybox/Right.jpg"},
+            {Skybox::Left, ALPHA_ASSETS_DIR + "Skybox/Left.jpg"},
+            {Skybox::Top, ALPHA_ASSETS_DIR + "Skybox/Top.jpg"},
+            {Skybox::Bottom, ALPHA_ASSETS_DIR + "Skybox/Bottom.jpg"},
+            {Skybox::Front, ALPHA_ASSETS_DIR + "Skybox/Front.jpg"},
+            {Skybox::Back, ALPHA_ASSETS_DIR + "Skybox/Back.jpg"},
         };
         m_skybox = NewPointer<Skybox>(skyboxFaces);
 
@@ -155,32 +171,36 @@ namespace Alpha
         m_skyboxShader->Unbind();
         Renderer::EnableDepthMask();
 
+        m_forwardShader->Bind();
+
+        m_forwardShader->SetUniform("u_viewPosition", camera->GetWorldLocation());
+
         for (const Pointer<Light>& light : m_scene->GetLights())
         {
-            m_forwardShader->Bind();
-
             m_forwardShader->SetUniform("u_light", light);
-            m_forwardShader->SetUniform("u_viewPosition", camera->GetWorldLocation());
 
             m_dragonInstance->BindMaterials();
             m_dragonInstance->Draw(m_forwardShader, &transformMatrix.projection, &transformMatrix.view);
             m_dragonInstance->UnbindMaterials();
 
-            m_forwardShader->Unbind();
-
-            m_debugDepthShader->Bind();
-
-            Pointer<Texture2D> shadowMap = light->GetDepthBuffer()->GetTexture();
-
-            shadowMap->Bind(0);
-            m_debugDepthShader->SetUniform("u_depthMap", shadowMap->GetSlot());
-
-            m_screenInstance->Draw(m_debugDepthShader, &transformMatrix.projection, &transformMatrix.view);
-
-            m_debugDepthShader->Unbind();
+            m_cubeInstance->BindMaterials();
+            m_cubeInstance->Draw(m_forwardShader, &transformMatrix.projection, &transformMatrix.view);
+            m_cubeInstance->UnbindMaterials();
         }
 
-        //Draw3DNormals(m_scene);
+        m_forwardShader->Unbind();
+
+        m_cubemapsShader->Bind();
+
+        m_skybox->GetCubemap()->Bind(0);
+        m_cubemapsShader->SetUniform("u_skybox", 0);
+        m_cubemapsShader->SetUniform("u_viewPosition", camera->GetWorldLocation());
+
+        m_mirrorInstance->Draw(m_cubemapsShader, &transformMatrix.projection, &transformMatrix.view);
+
+        m_cubemapsShader->Unbind();
+
+        // Draw3DNormals(m_scene);
         DrawSceneLights(m_scene);
 
         m_dragonInstance->SetWorldRotation(m_dragonInstance->GetWorldRotation() + Vector3(0, 0.5f, 0));
@@ -229,6 +249,7 @@ namespace Alpha
         m_depthShader->SetUniform("u_lightSpace", lightSpace);
 
         m_dragonInstance->Draw(m_depthShader, nullptr, nullptr);
+        m_cubeInstance->Draw(m_depthShader, nullptr, nullptr);
 
         light->SetSpace(lightSpace);
 
@@ -256,9 +277,9 @@ namespace Alpha
 
         m_debugNormalShader->Bind();
 
-        m_screenInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
         m_lightInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
         m_dragonInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
+        m_cubeInstance->Draw(m_debugNormalShader, &transformMatrix.projection, &transformMatrix.view);
 
         m_debugNormalShader->Unbind();
     }

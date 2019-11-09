@@ -41,12 +41,11 @@ void main()
     float lightAttenuation = LightAttenuation(u_light, v_positionInWorldSpace);
     vec3 lightRadiance = lightAttenuation * u_light.color.xyz;
     float shadow = GetLightShadow(u_light, v_positionInLightSpace);
-    float brightness = max(nDotL, 0.0) * (1 - shadow);
+    float brightness = max(0, nDotL) * (1 - shadow);
 
     vec3 lightContribution = lightRadiance * brightness;
-    vec3 ambient = vec3(0.03) * kd * ao; // Ambient lighting.
 
-    vec3 rgbColor = ambient * lightContribution;
+    vec3 rgbColor = kd * lightContribution;
     vec4 rgbaColor = vec4(rgbColor, trans);
 
     fragColor = ApplyGammaCorrection(GAMMA, rgbaColor);
