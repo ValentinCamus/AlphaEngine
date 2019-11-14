@@ -3,6 +3,8 @@
 #include <Alpha/Core/CoreMinimal.h>
 #include <Alpha/Engine/Light/Light.h>
 
+#include <Alpha/Engine/Camera/Camera.h>
+
 namespace Alpha
 {
     class PointLight : public Light
@@ -17,22 +19,27 @@ namespace Alpha
 
         ~PointLight() override = default;
 
-        inline const Attenuation& SetAttenuation(const Attenuation& attenuation)
-        {
-            return m_attenuation = attenuation;
-        }
+        inline void SetAttenuation(const Light::Attenuation& attenuation) { m_attenuation = attenuation; }
+        inline const Light::Attenuation& GetAttenuation() const { return m_attenuation; }
 
-        inline const Attenuation& SetAttenuation(float constant, float linear, float quadratic)
+        inline const Matrix4x4& CalculateViewProjectionMatrix() override
         {
-            m_attenuation.constant = constant;
-            m_attenuation.linear = linear;
-            m_attenuation.quadratic = quadratic;
-            return m_attenuation;
-        }
+            ALPHA_ASSERT(IsDepthBufferValid(), "Invalid Shadow Map");
 
-        inline const Attenuation& GetAttenuation() const { return m_attenuation; }
+            Camera camera = Camera(GetWorldLocation(), GetWorldRotation());
+            camera.SetViewType(Camera::EViewType::VT_Perspective);
+
+            float aspectRatio = GetDepthBuffer()->GetAspectRatio();
+            Matrix4x4 lightProjection = glm::perspective(camera.GetZoom(), aspectRatio, 1.0f, 7.5f);
+            Matrix4x4 lightView = MakeViewMatrix(camera.GetWorldLocation(), camera.GetWorldRotation());
+            Matrix4x4 lightSpace = lightProjection * lightView;
+
+            SetViewProjectionMatrix(lightSpace);
+
+            return GetViewProjectionMatrix();
+        }
 
     public:
-        Attenuation m_attenuation;
+        Light::Attenuation m_attenuation;
     };
 }

@@ -40,7 +40,7 @@ namespace Alpha
     void OpenGL::DepthBufferTexture2D::Bind(int32 slot)
     {
         m_slot = slot;
-        GL_CHECK(glViewport(0, 0, m_width, m_height));
+        //GL_CHECK(glViewport(0, 0, m_width, m_height));
         GL_CHECK(glActiveTexture(GL_TEXTURE0 + (GLenum)slot));
         GL_CHECK(glBindTexture(GL_TEXTURE_2D, m_id));
     }
@@ -64,8 +64,6 @@ namespace Alpha
     {
         m_width = width; m_height = height;
         m_texture->Resize(width, height);
-
-        GL_CHECK(glViewport(0, 0, width, height));
     }
 
     void OpenGLDepthBuffer::Bind()
@@ -89,12 +87,11 @@ namespace Alpha
         m_height = height;
 
         m_texture = NewPointer<OpenGL::DepthBufferTexture2D>(width, height);
-        uint32 depthMapId = m_texture->GetId();
 
         GL_CHECK(glGenFramebuffers(1, &m_fbo));
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 
-        GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, ATTACHMENT, GL_TEXTURE_2D, depthMapId, 0));
+        GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, ATTACHMENT, GL_TEXTURE_2D, m_texture->GetId(), 0));
 
         GL_CHECK(glDrawBuffer(GL_NONE));
         GL_CHECK(glReadBuffer(GL_NONE));

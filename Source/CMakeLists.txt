@@ -86,7 +86,7 @@ set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLDepthBuffer.cpp
         Alpha/Engine/Renderer/Cubemap.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLCubemap.cpp
-        Alpha/Engine/Skybox/Skybox.cpp)
+        Alpha/Engine/Skybox/Skybox.cpp Alpha/Core/Math/Matrix.cpp Alpha/Core/Math/Matrix.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

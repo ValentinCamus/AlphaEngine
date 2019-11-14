@@ -2,13 +2,10 @@
 
 #include <cmath>
 
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <Alpha/ThirdParty/glm/glm/ext.hpp>
-#include <Alpha/ThirdParty/glm/glm/gtx/matrix_decompose.hpp>
-
 #include <Alpha/Core/Types.h>
 #include <Alpha/Core/Math/Random.h>
+
+#include <Alpha/Core/Math/Matrix.h>
 
 namespace Alpha
 {
@@ -40,28 +37,6 @@ namespace Alpha
 	/// (e.g. 0.5 normalized from the range 0->1 to 0->50 would result in 25)
 	template<class T>
 	T MapRange(T value, float rangeMin, float rangeMax, float newRangeMin, float newRangeMax);
-
-    /// Create a model matrix from:
-	/// - The location in the scene
-	/// - The rotation (Euler angle)
-	/// - The scale of the object
-	Matrix4x4 MakeModelMatrix(Vector location, Vector rotation, Vector scale);
-
-	/// Create a view matrix from:
-	/// - The location in the scene
-	/// - The rotation (Euler angle)
-	Matrix4x4 MakeViewMatrix(Vector location, Vector rotation);
-
-	/// Create a projection matrix from:
-	/// - TODO
-	Matrix4x4 MakeOrthographicMatrix(float left, float right, float bottom, float top, float zNear = 0.1f, float zFar = 100.0f);
-
-	/// Create a projection matrix from:
-	/// - The fovy (camera zoom for example)
-	/// - The aspect ratio
-	/// - The z near plane
-	/// - The z far plane
-    Matrix4x4 MakePerspectiveMatrix(float fovY, float aspect, float zNear = 0.1f, float zFar = 100.0f);
 
     /// Calculate the right vector from a transform.
     Vector3 CalculateRightVector(const Transform& transform);

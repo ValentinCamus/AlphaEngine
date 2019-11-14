@@ -11,7 +11,8 @@ namespace Alpha
 
     {
     public:
-        explicit EulerCamera(const Vector& location = Vector(0), const Vector& rotation = Vector(0.0f, 1.0f, 0.0f));
+        explicit EulerCamera(const Vector& location = Vector(0.0f, 0.0f, 0.0f),
+                             const Vector& rotation = Vector(0.0f, 1.0f, 0.0f));
 
         ~EulerCamera() override = default;
 

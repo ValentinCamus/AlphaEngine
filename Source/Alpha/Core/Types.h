@@ -14,7 +14,7 @@
 #define BIG_NUMBER (3.4e+38f)
 
 #ifndef PI
-#define PI (3.14159265359)
+#define PI (3.14159265359f)
 #endif
 #define INV_PI (0.31830988618f)
 #define HALF_PI (1.57079632679f)
@@ -40,7 +40,7 @@ namespace Alpha
     using uchar = unsigned char;
 
     // =============================================
-    // Vectores
+    // Vectors
     // =============================================
 
     using Point2 = glm::vec2;

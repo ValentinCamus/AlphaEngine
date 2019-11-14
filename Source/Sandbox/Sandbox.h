@@ -28,15 +28,6 @@ namespace Alpha
 	private:
 		void LogTips();
 
-
-		TransformMatrix MakeTransformMatrix(const Pointer<Scene> &scene);
-
-		void InitShadowMaps(const std::vector<Pointer<Light>> &lights);
-        Matrix4x4 RenderShadowMap(const Pointer<Light> &light);
-
-        void DrawSceneLights(const Pointer<Scene> &scene);
-        void Draw3DNormals(const Pointer<Scene> &scene);
-
     private:
 		Pointer<Scene> m_scene;
 

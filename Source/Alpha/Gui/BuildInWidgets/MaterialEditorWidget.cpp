@@ -124,7 +124,6 @@ namespace Alpha
 
         if (ImGui::TreeNode("Roughness"))
         {
-
             ImGui::InputFloat("Roughness", &m_materialInfo.roughness, 0.01f, 1.0f, "%.3f");
             ImGui::TreePop();
         }

@@ -6,14 +6,10 @@
 
 namespace Alpha
 {
-    constexpr float DEFAULT_DELTA_TIME = 0.1f;
-
-    // From LearnOpenGL tutorial: default camera values
-    constexpr float YAW = -90.0f;
-    constexpr float PITCH =  0.0f;
-    constexpr float SPEED =  10.0f;
-    constexpr float SENSITIVITY =  0.25f;
-    constexpr float ZOOM =  45.0f;
+    // Default camera values
+    constexpr float DEFAULT_CAMERA_ZOOM =  45.0f;
+    constexpr float DEFAULT_CAMERA_SPEED =  10.0f;
+    constexpr float DEFAULT_CAMERA_SENSITIVITY =  0.25f;
 
     class Camera : public SceneComponent
     {
@@ -43,6 +39,33 @@ namespace Alpha
         inline EViewType GetViewType() const { return  m_viewType; }
 
         inline void SetViewType(EViewType type) { m_viewType = type; }
+
+        inline Matrix4x4 GetProjectionMatrix(float aspectRatio) const
+        {
+            switch (GetViewType())
+            {
+                case EViewType::VT_Perspective: return CalculatePerpectiveMatrix(aspectRatio);
+                case EViewType::VT_Orthographic: return CalculateOrthographicProjection(aspectRatio);
+                default: ALPHA_ASSERT(false, "Camera::GetProjectionMatrix: Undefined view type"); break;
+            }
+            return Matrix4x4(1.0f);
+        }
+
+    private:
+
+        inline Matrix4x4 CalculateOrthographicProjection(float aspectRatio) const
+        {
+            float top = GetZoom();
+            float bottom = -GetZoom();
+            float left = -aspectRatio * GetZoom();
+            float right = aspectRatio * GetZoom();
+            return MakeOrthographicMatrix(left, right, bottom, top);
+        }
+
+        inline Matrix4x4 CalculatePerpectiveMatrix(float aspectRatio) const
+        {
+            return MakePerspectiveMatrix(GetZoom(), aspectRatio);
+        }
 
     private:
         /// Camera zoom.

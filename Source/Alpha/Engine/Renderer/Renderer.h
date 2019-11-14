@@ -25,12 +25,6 @@ namespace Alpha
         {
             EDrawMode drawMode = EDrawMode::Triangles;
             bool bUseMaterial = false;
-
-            inline void Reset()
-            {
-                drawMode = EDrawMode::Triangles;
-                bUseMaterial = false;
-            }
         };
 
     public:
@@ -64,6 +58,11 @@ namespace Alpha
 
         static inline void DisableDepthMask() { s_instance->DisableDepthMaskImpl(); }
 
+        static inline float GetZFar() { return s_zFar; }
+        static inline float GetZNear() { return s_zNear; }
+        static inline void SetZFar(float zFar) { s_zFar = zFar; }
+        static inline void SetZNear(float zNear) { s_zNear = zNear; }
+
     protected:
         /// Initialize the renderer.
         virtual void InitImpl() = 0;
@@ -80,6 +79,10 @@ namespace Alpha
         virtual void DisableDepthMaskImpl() = 0;
 
     private:
+        static float s_zFar;
+
+        static float s_zNear;
+
         static Renderer* s_instance;
 
         static ERendererAPI s_rendererAPI;

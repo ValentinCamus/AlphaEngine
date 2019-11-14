@@ -23,7 +23,7 @@ namespace Alpha
     void OpenGL::FramebufferTexture2D::Bind(int32 slot)
     {
         m_slot = slot;
-        GL_CHECK(glViewport(0, 0, m_width, m_height));
+        //GL_CHECK(glViewport(0, 0, m_width, m_height));
         GL_CHECK(glActiveTexture(GL_TEXTURE0 + (GLenum)slot));
         GL_CHECK(glBindTexture(GL_TEXTURE_2D, m_id));
     }
@@ -55,11 +55,12 @@ namespace Alpha
     void OpenGLFramebuffer::Resize(uint32 width, uint32 height)
     {
         m_width = width; m_height = height;
-        m_texture->Resize(width, height);
 
         GL_CHECK(glViewport(0, 0, width, height));
         GL_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, m_rbo));
         GL_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
+
+        m_texture->Resize(width, height);
     }
 
     void OpenGLFramebuffer::Bind()
@@ -70,14 +71,13 @@ namespace Alpha
             return;
         }
 
+        GL_CHECK(glViewport(0, 0, m_width, m_height));
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 
     }
 
     void OpenGLFramebuffer::Init(uint32 width, uint32 height)
     {
-        m_width = width; m_height = height;
-
         GL_CHECK(glGenFramebuffers(1, &m_fbo));
         GL_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_fbo));
 
@@ -85,7 +85,7 @@ namespace Alpha
         m_texture = NewPointer<OpenGL::FramebufferTexture2D>(width, height);
         GL_CHECK(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture->GetId(), 0));
 
-        // Create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+        // Create a renderbuffer object for depth and stencil attachment
         GL_CHECK(glGenRenderbuffers(1, &m_rbo));
         GL_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, m_rbo));
         // Use a single renderbuffer object for both a depth AND stencil buffer.

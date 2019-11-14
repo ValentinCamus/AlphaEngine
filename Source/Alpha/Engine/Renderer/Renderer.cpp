@@ -4,6 +4,10 @@
 
 namespace Alpha
 {
+    float Renderer::s_zNear = 0.1f;
+
+    float Renderer::s_zFar = 100.0f;
+
     Renderer* Renderer::s_instance = nullptr;
 
     Pointer<Renderer::DrawOptions> Renderer::s_options = nullptr;

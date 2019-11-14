@@ -3,19 +3,19 @@
 #include <Alpha/Core/CoreMinimal.h>
 #include <Alpha/Engine/Light/Light.h>
 
+#include <Alpha/Engine/Camera/Camera.h>
+
 namespace Alpha
 {
     class SpotLight : public Light
     {
     public:
-        explicit SpotLight(float innerAngle,
-                           float outerAngle,
+        explicit SpotLight(float cutOff,
                            const Vector& location  = Vector(0.0f),
                            const Vector& direction = Vector(0.0f),
-                           const Color4& color     = Color4(1.0f ))
+                           const Color4& color     = Color4(1.0f))
                : Light(LightType::Spot, location, direction, color)
-               , m_innerAngle(innerAngle)
-               , m_outerAngle(outerAngle)
+               , m_cutOff(cutOff)
         {
 
         }
@@ -23,38 +23,36 @@ namespace Alpha
         ~SpotLight() override = default;
 
     public:
-        inline float SetInnerAngleInRadians(float angle) { return m_innerAngle = angle; }
-        inline float SetOuterAngleInRadians(float angle) { return m_outerAngle = angle; }
+        inline float SetCutOffInRadians(float angle) { return m_cutOff = angle; }
+        inline float SetCutOffInDegrees(float angle) { return m_cutOff = angle * TO_RAD; }
 
-        inline float SetInnerAngleInDegrees(float angle) { return m_innerAngle = angle * TO_RAD; }
-        inline float SetOuterAngleInDegrees(float angle) { return m_outerAngle = angle * TO_RAD; }
+        inline float GetCutOff() const { return m_cutOff; }
 
-        inline float GetInnerAngle() const { return m_innerAngle; }
-        inline float GetOuterAngle() const { return m_outerAngle; }
+        inline void SetAttenuation(const Light::Attenuation& attenuation) { m_attenuation = attenuation; }
+        inline const Light::Attenuation& GetAttenuation() const { return m_attenuation; }
 
-        inline const Attenuation& SetAttenuation(const Attenuation& attenuation)
+        inline const Matrix4x4& CalculateViewProjectionMatrix() override
         {
-            return m_attenuation = attenuation;
-        }
+            ALPHA_ASSERT(IsDepthBufferValid(), "Invalid Shadow Map");
 
-        inline const Attenuation& SetAttenuation(float constant, float linear, float quadratic)
-        {
-            m_attenuation.constant = constant;
-            m_attenuation.linear = linear;
-            m_attenuation.quadratic = quadratic;
-            return m_attenuation;
-        }
+            Camera camera = Camera(GetWorldLocation(), GetWorldRotation());
+            camera.SetViewType(Camera::EViewType::VT_Perspective);
 
-        inline const Attenuation& GetAttenuation() const { return m_attenuation; }
+            float aspectRatio = GetDepthBuffer()->GetAspectRatio();
+            Matrix4x4 lightProjection = glm::perspective(camera.GetZoom(), aspectRatio, 1.0f, 7.5f);
+            Matrix4x4 lightView = MakeViewMatrix(camera.GetWorldLocation(), camera.GetWorldRotation());
+            Matrix4x4 lightSpace = lightProjection * lightView;
+
+            SetViewProjectionMatrix(lightSpace);
+
+            return GetViewProjectionMatrix();
+        }
 
     private:
         /// The inner angle.
-        float m_innerAngle;
-
-        /// The outer angle.
-        float m_outerAngle;
+        float m_cutOff;
 
         /// The attenuation.
-        Attenuation m_attenuation;
+        Light::Attenuation m_attenuation;
     };
 }

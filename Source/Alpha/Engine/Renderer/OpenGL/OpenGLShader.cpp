@@ -191,14 +191,10 @@ namespace Alpha
 
     void OpenGLShader::SetUniform(const std::string &name, const Pointer<Light> &light)
     {
-        const Pointer<Texture2D> &shadowMap = light->GetDepthBuffer()->GetTexture();
-
-        shadowMap->Bind(7);
-
         SetUniform(name + ".type", light->GetType());
         SetUniform(name + ".color", light->GetColor());
-        SetUniform(name + ".transform", light->GetSpace());
-        SetUniform(name + ".shadowMap", shadowMap->GetSlot());
+        SetUniform(name + ".transform", light->GetViewProjectionMatrix());
+        SetUniform(name + ".shadowMap", light->GetDepthBuffer()->GetTexture()->GetSlot());
 
         switch (light->GetType())
         {
@@ -220,7 +216,7 @@ namespace Alpha
 
                 SetUniform(name + ".point.attenuation.constant", pointLight->GetAttenuation().constant);
                 SetUniform(name + ".point.attenuation.linear", pointLight->GetAttenuation().linear);
-                SetUniform(name + ".point.attenuation.quadratic", pointLight->GetAttenuation().quadratic);
+                SetUniform(name + ".point.attenuation.quadratic", pointLight->GetAttenuation().quadractic);
 
                 break;
             }
@@ -231,12 +227,11 @@ namespace Alpha
 
                 SetUniform(name + ".spot.position", spotLight->GetWorldLocation());
                 SetUniform(name + ".spot.direction", spotLight->GetForwardVector());
-                SetUniform(name + ".spot.innerAngle", spotLight->GetInnerAngle());
-                SetUniform(name + ".spot.outerAngle", spotLight->GetOuterAngle());
+                SetUniform(name + ".spot.cutOff", spotLight->GetCutOff());
 
                 SetUniform(name + ".spot.attenuation.constant", spotLight->GetAttenuation().constant);
                 SetUniform(name + ".spot.attenuation.linear", spotLight->GetAttenuation().linear);
-                SetUniform(name + ".spot.attenuation.quadratic", spotLight->GetAttenuation().quadratic);
+                SetUniform(name + ".spot.attenuation.quadratic", spotLight->GetAttenuation().quadractic);
 
                 break;
             }

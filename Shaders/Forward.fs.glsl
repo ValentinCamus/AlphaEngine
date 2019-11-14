@@ -17,7 +17,7 @@ uniform vec3 u_viewPosition;
 uniform Light u_light;
 uniform Material u_material;
 
-uniform int u_debug = 0;
+uniform bool u_debug = false;
 
 // ----------------------------------------------------------------------------
 void main()
@@ -38,14 +38,37 @@ void main()
     float nDotL = dot(normal, lightDirection);
     float hDotV = dot(halfVector, viewDirection);
 
-    float lightAttenuation = LightAttenuation(u_light, v_positionInWorldSpace);
-    vec3 lightRadiance = lightAttenuation * u_light.color.xyz;
+    // Light contribution
+    vec3 lightRadiance = LightContribution(u_light, v_positionInWorldSpace);
     float shadow = GetLightShadow(u_light, v_positionInLightSpace);
     float brightness = max(0, nDotL) * (1 - shadow);
 
     vec3 lightContribution = lightRadiance * brightness;
 
-    vec3 rgbColor = kd * lightContribution;
+    // Cook-Torrance BRDF
+    vec3 f0 = GetReflectanceAtNormalIncidence(kd, metallic);
+
+    float d = DistributionGGX(normal, halfVector, roughness);
+    float g = GeometrySmith(normal, viewDirection, lightDirection, roughness);
+    vec3  f = FresnelSchlick(max(hDotV, 0.0), f0);
+    vec3  specular = d * g * f / max(4 * max(nDotV, 0.0) * max(nDotL, 0.0), 0.001);
+
+    // For energy conservation, the diffuse and specular u_light can't
+    // be above 1.0 (unless the surface emits u_light), to preserve this
+    // relationship the diffuse component (kD) should equal 1.0 - kS.
+    //
+    // Multiply kD by the inverse metalness such that only non-metals
+    // have diffuse lighting, or a linear blend if partly metal
+    // (pure metals have no diffuse light).
+    vec3 kS = f * ks;
+    vec3 kD = (vec3(1.0) - kS) * (1.0 - metallic);
+
+    // Note that we already multiplied the BRDF by the Fresnel (kS),
+    // so we won't multiply by kS again.
+    vec3 outgoingRadiance = (kD * kd / Pi + specular);
+    vec3 ambient = vec3(0.03) * kd * ao; // Ambient lighting.
+
+    vec3 rgbColor = outgoingRadiance * lightContribution + ambient;
     vec4 rgbaColor = vec4(rgbColor, trans);
 
     fragColor = ApplyGammaCorrection(GAMMA, rgbaColor);

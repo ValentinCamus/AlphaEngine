@@ -29,8 +29,7 @@ struct SpotLight
 
     Attenuation attenuation;
 
-    float innerAngle;
-    float outerAngle;
+    float cutOff;
 };
 
 struct Light
@@ -53,12 +52,12 @@ vec3 DirectionalLightDirection(Light light)
 
 vec3 PointLightDirection(Light light, vec3 position)
 {
-    return normalize(light.point.position - position);
+    return -normalize(light.point.position - position);
 }
 
 vec3 SpotLightDirection(Light light, vec3 position)
 {
-    return normalize(light.spot.position - position);
+    return -normalize(light.spot.position - position);
 }
 
 float DirectionalLightAttenuation(Light light)
@@ -68,38 +67,24 @@ float DirectionalLightAttenuation(Light light)
 
 float PointLightAttenuation(Light light, vec3 position)
 {
-    float d = length(light.point.position - position);
-    float attenuation = light.point.attenuation.constant +
-                        light.point.attenuation.linear * d +
-                        light.point.attenuation.quadratic * d * d;
-
-    return 1 / attenuation;
+    float distance = length(light.point.position - position);
+    float attenuation = 1.0 / (light.point.attenuation.constant +
+                               light.point.attenuation.linear * distance +
+                               light.point.attenuation.quadratic * pow(distance, 2));
+    return attenuation;
 }
 
 float SpotLightAttenuation(Light light, vec3 position)
 {
-    vec3 dir = normalize(light.spot.direction);
-    float d = length(light.spot.direction);
-    
-    float attenuation = light.spot.attenuation.constant +
-                        light.spot.attenuation.linear * d +
-                        light.spot.attenuation.quadratic * d * d;
-                        
-    vec3 l = normalize(light.spot.position - position);
-    float cosRealAngle = dot(l, dir);
-    float cosSpotOuter = cos(light.spot.innerAngle / 2.0);
-    float radialAttenuation = pow(clamp((cosRealAngle - cosSpotOuter) /
-                                        (1.0 - cosSpotOuter), 0.0, 1.0), 1.6);
-
-    return radialAttenuation / attenuation;
+    return 1.0f;
 }
 
-float GetLightShadow(Light light, vec4 fragPosLightSpace)
+float DirectionalLightShadow(Light light, vec4 positionLightSpace)
 {
     float bias = 0.005;
 
     // Perform perspective divide
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    vec3 projCoords = positionLightSpace.xyz / positionLightSpace.w;
     // Transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
     // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
@@ -110,6 +95,41 @@ float GetLightShadow(Light light, vec4 fragPosLightSpace)
     float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
 
     return shadow;
+}
+
+float PointLightShadow(Light light, vec4 positionLightSpace)
+{
+    return 0.0f;
+}
+
+float SpotLightShadow(Light light, vec4 positionLightSpace)
+{
+    float bias = 0.005;
+
+    // Perform perspective divide
+    vec3 projCoords = positionLightSpace.xyz / positionLightSpace.w;
+    // Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(light.shadowMap, projCoords.xy).r;
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // Check whether current frag pos is in shadow
+    float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+}
+
+float GetLightShadow(Light light, vec4 positionLightSpace)
+{
+     switch (light.type)
+     {
+        case 0: return DirectionalLightShadow(light, positionLightSpace);
+        case 1: return PointLightShadow(light, positionLightSpace);
+        case 2: return SpotLightShadow(light, positionLightSpace);
+        default: break;
+    }
+    return 0.0f;
 }
 
 vec3 GetLightDirection(Light light, vec3 position)

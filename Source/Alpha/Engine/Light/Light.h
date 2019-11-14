@@ -7,18 +7,16 @@
 
 namespace Alpha
 {
-    struct Attenuation
-    {
-        float constant;
-        float linear;
-        float quadratic;
-
-        Attenuation() : constant(1.0), linear(), quadratic() {}
-    };
-
     class Light : public SceneComponent
     {
     public:
+        struct Attenuation
+        {
+            float constant = 1.0f;
+            float linear = 0.09;
+            float quadractic = 0.032;
+        };
+
         enum LightType
         {
             Directional = 0,
@@ -44,19 +42,33 @@ namespace Alpha
         inline const Color4& SetColor(const Color4& color) { return m_color = color; }
 
         inline const Pointer<DepthBuffer> GetDepthBuffer() const { return m_depthBuffer; }
-        inline void SetDepthBuffer(const Pointer<DepthBuffer> &depthBuffer) { m_depthBuffer = depthBuffer; }
+        inline void SetDepthBuffer(const Pointer<DepthBuffer>& depthBuffer) { m_depthBuffer = depthBuffer; }
         inline bool IsDepthBufferValid() const { return m_depthBuffer != nullptr; }
 
-        inline const Matrix4x4& GetSpace() const { return m_space; }
-        inline void SetSpace(const Matrix4x4& space) { m_space = space; }
+        inline const Matrix4x4& GetViewProjectionMatrix() const { return m_viewProjectionMatrix; }
+        inline void SetViewProjectionMatrix(const Matrix4x4 &matrix) { m_viewProjectionMatrix = matrix; }
+
+        inline bool IsShadowingEnable() const { return IsDepthBufferValid(); }
+
+        inline void CreateShadowMap(uint32 width, uint32 height)
+        {
+            m_depthBuffer = DepthBuffer::Create(width, height);
+            ALPHA_ASSERT(IsDepthBufferValid(), "Failed to initialize Shadow Map");
+        }
+
+        virtual const Matrix4x4& CalculateViewProjectionMatrix() = 0;
 
     private:
+        /// The light color/tint.
         Color4 m_color;
 
+        /// The light type: {Directional, Spot, Point}
         LightType m_type;
 
-        Matrix4x4 m_space;
+        /// A transformation to transform a 3D point in the light space.
+        Matrix4x4 m_viewProjectionMatrix = Matrix4x4(1.0f);
 
+        /// The container of the shadow map.
         Pointer<DepthBuffer> m_depthBuffer = nullptr;
     };
 }

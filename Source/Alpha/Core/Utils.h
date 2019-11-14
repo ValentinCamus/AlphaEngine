@@ -81,7 +81,6 @@ namespace Alpha
 	inline bool InstanceOf(const Pointer<U>& ptr) { return Cast<Pointer<T>>(ptr) != nullptr; }
 
 	/// @getter: The project source directory.
-	//  FIXME: maybe not the best solution...
 	inline std::string GetProjectSourceDir()
     {
 	    static bool bIsProjectSourceDirInit = false;
