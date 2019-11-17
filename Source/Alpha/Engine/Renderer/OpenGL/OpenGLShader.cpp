@@ -227,7 +227,7 @@ namespace Alpha
 
                 SetUniform(name + ".spot.position", spotLight->GetWorldLocation());
                 SetUniform(name + ".spot.direction", spotLight->GetForwardVector());
-                SetUniform(name + ".spot.cutOff", spotLight->GetCutOff());
+                SetUniform(name + ".spot.cutOff", std::cos(spotLight->GetCutOff()));
 
                 SetUniform(name + ".spot.attenuation.constant", spotLight->GetAttenuation().constant);
                 SetUniform(name + ".spot.attenuation.linear", spotLight->GetAttenuation().linear);

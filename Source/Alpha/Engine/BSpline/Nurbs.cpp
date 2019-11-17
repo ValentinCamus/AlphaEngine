@@ -4,8 +4,8 @@ namespace Alpha
 {
     Vector3 Nurbs::Evaluate(float u)
     {
-        std::vector<Vector3> pts; // The points which will influence the curve.
-        std::vector<float> weights; // The weights which will influence the curve.
+        std::vector<Vector3> pts; // The points that will influence the curve.
+        std::vector<float> weights; // The weights that will influence the curve.
 
         uint32 offset = GetInterestPointsOffset(u);
 

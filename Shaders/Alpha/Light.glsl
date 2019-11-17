@@ -76,7 +76,23 @@ float PointLightAttenuation(Light light, vec3 position)
 
 float SpotLightAttenuation(Light light, vec3 position)
 {
-    return 1.0f;
+    vec3 lightDir = SpotLightDirection(light, position);
+    // Check if lighting is inside the spotlight cone
+    float theta = dot(lightDir, normalize(-light.spot.direction));
+    if(theta > light.spot.cutOff)
+    {
+        // attenuation
+        float distance = length(light.spot.position - position);
+        float attenuation = 1.0 / (light.spot.attenuation.constant +
+                                   light.spot.attenuation.linear * distance +
+                                   light.spot.attenuation.quadratic * pow(distance, 2));
+
+        return attenuation;
+    }
+    else
+    {
+        return 0.1; // Ambient lighting
+    }
 }
 
 float DirectionalLightShadow(Light light, vec4 positionLightSpace)

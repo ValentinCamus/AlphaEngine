@@ -58,6 +58,13 @@ namespace Alpha
         sunLight->SetColor(Color4(1.0f, 1.0f, 0.9f, 1.0f));
         sunLight->CreateShadowMap(4096, 4096);
 
+        Pointer<SpotLight> flashlight = NewPointer<SpotLight>(12.5 * DEG2RAD);
+        flashlight->SetWorldRotation({0.0f, -10.0f, 0.0f});
+        flashlight->SetWorldLocation({0, -0.75f, -0.5f});
+        flashlight->SetColor(Color4(1.0f, 1.0f, 0.9f, 1.0f));
+        flashlight->CreateShadowMap(4096, 4096);
+
+        //m_scene->PushLight(flashlight);
         m_scene->PushLight(sunLight);
         //m_scene->PushLight(greenLight);
         //m_scene->PushLight(blueLight);
@@ -66,10 +73,12 @@ namespace Alpha
 
         Pointer<Material> defaultMaterial = NewPointer<Material>("DefaultMaterial");
         Pointer<Material> redMaterial = NewPointer<Material>("RedMaterial");
+        Pointer<Material> greenMaterial = NewPointer<Material>("GreenMaterial");
         Pointer<Material> brickMaterial = NewPointer<Material>("BrickMaterial");
         Pointer<Material> lightMaterial = NewPointer<Material>("LightMaterial");
 
         redMaterial->SetKd(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        greenMaterial->SetKd(Vector4(0.0f, 1.0f, 0.0f, 1.0f));
         brickMaterial->AddTexture(ETextureType::TX_Diffuse, brickTexture);
 
         Pointer<StaticMeshModel> tileModel = StaticMeshModel::Create(ALPHA_ASSETS_DIR + "Tile.fbx");
@@ -120,6 +129,7 @@ namespace Alpha
 
         GlobalStorage::AddMaterial("Default", defaultMaterial);
         GlobalStorage::AddMaterial("Red", redMaterial);
+        GlobalStorage::AddMaterial("Green", greenMaterial);
         GlobalStorage::AddMaterial("Brick", brickMaterial);
         GlobalStorage::AddMaterial("Light", lightMaterial);
 
@@ -150,7 +160,7 @@ namespace Alpha
             Vector3 point = Vector3(xPos, yPos, zPos);
             bSpline->SetPointAt(i, point);
 
-            float w = (i == 6) ? 0.1f : 1.0f;
+            float w = (i == 6) ? 0.9f : 1.0f;
             bSpline->SetWeightAt(i, w);
         }
         m_bSplineController = NewPointer<BSplineController>();
