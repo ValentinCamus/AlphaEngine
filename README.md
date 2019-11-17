@@ -2,7 +2,7 @@
 
 Alpha engine.
 
-Building on Linux/MacOS (command line instruction)
+## Building on Linux/MacOS (command line instruction)
 
 ~~~
 git clone https://github.com/ValentinCamus/AlphaEngine.git
