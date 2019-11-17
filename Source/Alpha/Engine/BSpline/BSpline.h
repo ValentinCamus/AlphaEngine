@@ -7,7 +7,9 @@ namespace Alpha
     class BSpline
     {
     public:
-        Vector3 Evaluate(float u);
+        virtual ~BSpline() = default;
+
+        virtual Vector3 Evaluate(float u);
 
         void ResetKnotsVector();
 
@@ -19,10 +21,10 @@ namespace Alpha
         inline float GetKnotAt(uint32 idx) const { return m_knots[idx]; }
         bool SetKnotAt(uint32 idx, float value);
 
-        inline uint32 GetNbPoints() const { return m_points.size(); }
-        bool SetNbPoints(uint32 size);
+        inline uint32 GetNbPoints() const { return static_cast<uint32>(m_points.size()); }
+        virtual bool SetNbPoints(uint32 size);
 
-        inline uint32 GetNbKnots() const { return m_knots.size(); }
+        inline uint32 GetNbKnots() const { return static_cast<uint32>(m_knots.size()); }
 
         inline Vector2 GetValidRange() const { return Vector2(m_order - 1, m_points.size()); }
 
@@ -31,7 +33,7 @@ namespace Alpha
 
         std::vector<Vector3> GetSamples(float delta);
 
-    private:
+    protected:
         uint32 GetInterestPointsOffset(float u);
 
         void ResizeKnotsVector(uint32 size);

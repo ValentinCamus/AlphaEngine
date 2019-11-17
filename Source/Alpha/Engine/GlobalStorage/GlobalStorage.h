@@ -16,7 +16,7 @@ namespace Alpha
 		static inline Pointer<Scene>& GetScene(const std::string& name)
 		{
 			static Pointer<Scene> output = nullptr;
-			ALPHA_ASSERT(s_scenes.Contains(name), "GlobalStorage::Get<Scene>: Invalid name");
+			ALPHA_ASSERT(s_scenes.Contains(name), "GlobalStorage::Get<Scene>: Invalid name {0}", name);
 			output = s_scenes.Get(name);
 
 			return output;
@@ -25,7 +25,7 @@ namespace Alpha
 		static inline Pointer<Texture2D>& GetTexture2D(const std::string& name)
 		{
 			static Pointer<Texture2D> output = nullptr;
-			ALPHA_ASSERT(s_textures.Contains(name), "GlobalStorage::Get<Texture2D>: Invalid name");
+			ALPHA_ASSERT(s_textures.Contains(name), "GlobalStorage::Get<Texture2D>: Invalid name {0}", name);
 			output = s_textures.Get(name);
 
 			return output;
@@ -34,7 +34,7 @@ namespace Alpha
 		static inline Pointer<Material>& GetMaterial(const std::string& name)
 		{
 			static Pointer<Material> output = nullptr;
-			ALPHA_ASSERT(s_materials.Contains(name), "GlobalStorage::Get<Material>: Invalid name");
+			ALPHA_ASSERT(s_materials.Contains(name), "GlobalStorage::Get<Material>: Invalid name {0}", name);
 			output = s_materials.Get(name);
 
 			return output;
@@ -43,7 +43,7 @@ namespace Alpha
 		static inline Pointer<Shader>& GetShader(const std::string& name)
 		{
 			static Pointer<Shader> output = nullptr;
-			ALPHA_ASSERT(s_shaders.Contains(name), "GlobalStorage::Get<Shader>: Invalid name");
+			ALPHA_ASSERT(s_shaders.Contains(name), "GlobalStorage::Get<Shader>: Invalid name {0}", name);
 			output = s_shaders.Get(name);
 
 			return output;
@@ -52,7 +52,7 @@ namespace Alpha
 		static inline Pointer<StaticMeshModel>& GetStaticMeshModel(const std::string& name)
 		{
 			static Pointer<StaticMeshModel> output = nullptr;
-			ALPHA_ASSERT(s_models.Contains(name), "GlobalStorage::Get<StaticMeshModel>: Invalid name");
+			ALPHA_ASSERT(s_models.Contains(name), "GlobalStorage::Get<StaticMeshModel>: Invalid name {0}", name);
 			output = s_models.Get(name);
 
 			return output;

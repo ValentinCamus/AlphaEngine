@@ -24,7 +24,7 @@ namespace Alpha
 
     public:
         inline float SetCutOffInRadians(float angle) { return m_cutOff = angle; }
-        inline float SetCutOffInDegrees(float angle) { return m_cutOff = angle * TO_RAD; }
+        inline float SetCutOffInDegrees(float angle) { return m_cutOff = angle * DEG2RAD; }
 
         inline float GetCutOff() const { return m_cutOff; }
 

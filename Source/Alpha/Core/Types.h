@@ -5,6 +5,7 @@
 #include <map>
 #include <list>
 #include <stack>
+#include <array>
 #include <vector>
 #include <string>
 
@@ -19,7 +20,8 @@
 #define INV_PI (0.31830988618f)
 #define HALF_PI (1.57079632679f)
 
-#define TO_RAD (0.01745329251f)
+#define DEG2RAD (0.01745329251f)
+#define RAD2DEG (57.2957795131f)
 
 namespace Alpha
 {

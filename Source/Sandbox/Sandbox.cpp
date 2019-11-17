@@ -59,8 +59,8 @@ namespace Alpha
         sunLight->CreateShadowMap(4096, 4096);
 
         m_scene->PushLight(sunLight);
-        m_scene->PushLight(greenLight);
-        m_scene->PushLight(blueLight);
+        //m_scene->PushLight(greenLight);
+        //m_scene->PushLight(blueLight);
 
         Pointer<Texture2D> brickTexture = Texture2D::Create(ALPHA_ASSETS_DIR + "Brick.jpg");
 
@@ -138,6 +138,26 @@ namespace Alpha
         };
         m_skybox = NewPointer<Skybox>(skyboxFaces);
 
+        Pointer<Nurbs> bSpline = NewPointer<Nurbs>();
+        bSpline->SetDegree(3);
+        bSpline->SetNbPoints(16);
+        bSpline->ResetKnotsVector();
+        for (uint32 i = 0; i < bSpline->GetNbPoints(); ++i)
+        {
+            float xPos = i - bSpline->GetNbPoints() / 2.0f;
+            float yPos = Random::GetFloat(-PI, PI);
+            float zPos = Random::GetFloat(-6, -4);
+            Vector3 point = Vector3(xPos, yPos, zPos);
+            bSpline->SetPointAt(i, point);
+
+            float w = (i == 6) ? 0.1f : 1.0f;
+            bSpline->SetWeightAt(i, w);
+        }
+        m_bSplineController = NewPointer<BSplineController>();
+        m_bSplineController->SetBSpline(bSpline);
+        m_bSplineController->SetCurveMaterial(defaultMaterial);
+        m_bSplineController->GenerateCurve(0.1f);
+
         LogTips();
     }
 
@@ -157,6 +177,8 @@ namespace Alpha
 
         if (Input::IsKeyPressed(ALPHA_KEY_Z)) camera->SetViewType(Camera::EViewType::VT_Perspective);
         if (Input::IsKeyPressed(ALPHA_KEY_K)) camera->SetViewType(Camera::EViewType::VT_Orthographic);
+
+        if (Input::IsKeyPressed(ALPHA_KEY_G)) m_bSplineController->GenerateCurve(0.1f);
 
 #ifdef PLATFORM_APPLE
 		if (Input::IsMouseButtonPressed(ALPHA_MOUSE_BUTTON_2)) camera->Look(Input::GetMousePosition());
@@ -205,6 +227,8 @@ namespace Alpha
 
             light->GetDepthBuffer()->GetTexture()->Bind(8);
 
+            m_bSplineController->UpdateNodeInstances(m_scene);
+
             m_forwardShader->SetUniform("u_light", light);
             m_forwardShader->SetUniform("u_viewPosition", camera->GetWorldLocation());
             m_dragonInstance->BindMaterials();
@@ -213,6 +237,9 @@ namespace Alpha
             m_cubeInstance->BindMaterials();
             m_cubeInstance->Draw(m_forwardShader, &transformMatrix.projection, &transformMatrix.view);
             m_cubeInstance->UnbindMaterials();
+            m_bSplineController->BindMaterials();
+            m_bSplineController->Draw(m_forwardShader, &transformMatrix.projection, &transformMatrix.view);
+            m_bSplineController->UnbindMaterials();
 
             light->GetDepthBuffer()->GetTexture()->Unbind();
 
@@ -270,20 +297,28 @@ namespace Alpha
         Pointer<Scene> scene = GlobalStorage::GetScene("Scene_01");
 
 		m_sceneWidget.SetScene(scene);
+		m_gizmoWidget.SetScene(scene);
 
 		if (m_sceneWidget.IsSelectedEntityValid())
 		{
             auto index = static_cast<uint32>(m_sceneWidget.GetSelectedEntityIndex());
-			auto entity = Cast<StaticMeshInstance>(scene->GetComponentAt(index));
-			if (entity != m_materialEditor.GetEntity()) m_materialEditor.SetEntity(entity);
-		}
-		else m_materialEditor.Clear();
+			auto instance = Cast<StaticMeshInstance>(scene->GetComponentAt(index));
+
+			if (instance != m_materialEditor.GetEntity()) m_materialEditor.SetEntity(instance);
+            if (instance != m_gizmoWidget.GetMeshInstance()) m_gizmoWidget.SetMeshInstance(instance);
+        }
+		else
+        {
+		    m_materialEditor.Clear();
+            m_gizmoWidget.Clear();
+        }
 
         m_dockerWidget.Render();
         m_viewportWidget01.Render();
         m_statWidget.Render();
         m_sceneWidget.Render();
         m_materialEditor.Render();
+        m_gizmoWidget.Render();
     }
 
     void GuiSandboxLayer::OnEvent(Event &e)
@@ -293,5 +328,6 @@ namespace Alpha
         m_statWidget.OnEvent(e);
         m_sceneWidget.OnEvent(e);
         m_materialEditor.OnEvent(e);
+        m_gizmoWidget.OnEvent(e);
     }
 }

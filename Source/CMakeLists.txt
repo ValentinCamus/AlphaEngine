@@ -36,11 +36,14 @@ set(IMGUI Alpha/ThirdParty/imgui/imstb_truetype.h
         Alpha/ThirdParty/imgui/imgui.cpp
         Alpha/ThirdParty/imgui/imconfig.h)
 
+set(IMGUIZMO Alpha/ThirdParty/imguizmo/ImGuizmo.h
+        Alpha/ThirdParty/imguizmo/ImGuizmo.cpp)
+
 set(GLAD Alpha/ThirdParty/glad/glad.cpp
         Alpha/ThirdParty/glad/glad.h
         Alpha/ThirdParty/glad/khrplatform.h)
 
-set(THIRD_PARTY ${GLAD} ${IMGUI})
+set(THIRD_PARTY ${GLAD} ${IMGUI} ${IMGUIZMO})
 
 set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Application/Application.cpp
@@ -75,18 +78,22 @@ set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Gui/BuildInWidgets/StatsWidget.cpp
         Alpha/Gui/BuildInWidgets/SceneWidget.cpp
         Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp
-        Alpha/Core/BSpline/BSpline.cpp
+        Alpha/Engine/BSpline/BSpline.cpp
         Sandbox/Sandbox.cpp
         Alpha/Core/Math/Math.cpp
         Alpha/Core/Math/Random.cpp
         Alpha/Engine/Scene/Scene.cpp
-        Alpha/Core/BSpline/TensorProduct.cpp
+        Alpha/Engine/BSpline/TensorProduct.cpp
         Alpha/Engine/GlobalStorage/GlobalStorage.cpp
         Alpha/Engine/Renderer/DepthBuffer.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLDepthBuffer.cpp
         Alpha/Engine/Renderer/Cubemap.cpp
         Alpha/Engine/Renderer/OpenGL/OpenGLCubemap.cpp
-        Alpha/Engine/Skybox/Skybox.cpp Alpha/Core/Math/Matrix.cpp Alpha/Core/Math/Matrix.h)
+        Alpha/Engine/Skybox/Skybox.cpp
+        Alpha/Core/Math/Matrix.cpp
+        Alpha/Gui/BuildInWidgets/ImGuizmoWidget.cpp
+        Alpha/Engine/BSpline/BSplineController.cpp
+        Alpha/Engine/BSpline/Nurbs.cpp)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE
