@@ -32,6 +32,16 @@ namespace Alpha
 	private:
 		void LogTips();
 
+		void EventTick();
+
+		void CheckInputs();
+
+		TransformMatrix CalculateTransformMatrix();
+
+		void DrawSkybox(const TransformMatrix& transformMatrix);
+
+		void UpdateShadowMaps(const std::vector<Pointer<StaticMeshInstance>>& instances);
+
     private:
 		Pointer<Scene> m_scene = nullptr;
 
@@ -39,19 +49,19 @@ namespace Alpha
 
 		Pointer<Shader> m_flatShader = nullptr;
         Pointer<Shader> m_depthShader = nullptr;
-        Pointer<Shader> m_forwardShader = nullptr;
 		Pointer<Shader> m_skyboxShader = nullptr;
 		Pointer<Shader> m_cubemapsShader = nullptr;
         Pointer<Shader> m_debugDepthShader = nullptr;
         Pointer<Shader> m_debugNormalShader = nullptr;
+		Pointer<Shader> m_animForwardShader = nullptr;
+		Pointer<Shader> m_staticForwardShader = nullptr;
 
 		Pointer<StaticMeshInstance> m_cubeInstance = nullptr;
 		Pointer<StaticMeshInstance> m_lightInstance = nullptr;
         Pointer<StaticMeshInstance> m_planeInstance = nullptr;
-        Pointer<StaticMeshInstance> m_dragonInstance = nullptr;
+        Pointer<StaticMeshInstance> m_bustInstance = nullptr;
+        Pointer<StaticMeshInstance> m_stanLeeInstance = nullptr;
 		Pointer<StaticMeshInstance> m_mirrorInstance = nullptr;
-
-		Pointer<BSplineController> m_bSplineController = nullptr;
     };
 
     class GuiSandboxLayer : public ImGuiLayer

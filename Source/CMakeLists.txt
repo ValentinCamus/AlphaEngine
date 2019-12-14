@@ -74,7 +74,7 @@ set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Engine/Mesh/StaticMeshInstance.cpp
         Alpha/Input/Input.cpp
         Alpha/Window/Window.cpp
-        Alpha/Engine/Loader/MeshLoader.cpp
+        Alpha/Engine/Loader/StaticMeshLoader.cpp
         Alpha/Gui/BuildInWidgets/StatsWidget.cpp
         Alpha/Gui/BuildInWidgets/SceneWidget.cpp
         Alpha/Gui/BuildInWidgets/MaterialEditorWidget.cpp
@@ -93,7 +93,7 @@ set(ENGINE_SRCS EntryPoint.cpp
         Alpha/Core/Math/Matrix.cpp
         Alpha/Gui/BuildInWidgets/ImGuizmoWidget.cpp
         Alpha/Engine/BSpline/BSplineController.cpp
-        Alpha/Engine/BSpline/Nurbs.cpp)
+        Alpha/Engine/BSpline/Nurbs.cpp Alpha/Engine/Animation/Bone.cpp Alpha/Engine/Animation/Bone.h Alpha/Engine/Animation/Animation.cpp Alpha/Engine/Animation/Animation.h Alpha/Engine/Animation/KeyFrame.cpp Alpha/Engine/Animation/KeyFrame.h Alpha/Engine/Animation/BoneTransform.cpp Alpha/Engine/Animation/BoneTransform.h Alpha/Engine/Animation/BoneAnimation.cpp Alpha/Engine/Animation/BoneAnimation.h)
 
 add_executable(AlphaEngine
         MACOSX_BUNDLE

@@ -32,7 +32,7 @@ namespace Alpha
 
         inline void UnbindMaterials() const { Renderer::GetDrawOptions()->bUseMaterial = false; }
 
-        void UpdateNodeInstances(const Pointer<Scene>& scene);
+        void TickUpdate(const Pointer<Scene> &scene);
 
         /// Draw the entity.
         /// The model matrix will be set with the instance's transform.

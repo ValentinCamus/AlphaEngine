@@ -1,0 +1,75 @@
+#pragma once
+
+#include <Alpha/Core/CoreMinimal.h>
+#include <Alpha/Engine/Renderer/Renderer.h>
+
+#include <Alpha/Engine/Renderer/Shader.h>
+#include <Alpha/Engine/Renderer/Texture.h>
+
+#include <Alpha/Engine/Material/Material.h>
+
+namespace Alpha
+{
+    class SkeletalMesh
+    {
+    public:
+        struct Vertex
+        {
+            Vector position;
+            Vector normal;
+            Vector2 texCoords;
+            IntVector3 boneIds;
+            Vector3 weights;
+
+            explicit Vertex(const Vector& inPosition    = {0, 0, 0},
+                            const Vector& inNormal      = {1, 0, 0},
+                            const Vector2& inTexCoords  = {0, 0   },
+                            const IntVector3& inBoneIds = {0, 0, 0},
+                            const Vector3& inWeights    = {0, 0, 0})
+                    : position(inPosition)
+                    , normal(inNormal)
+                    , texCoords(inTexCoords)
+                    , boneIds(inBoneIds)
+                    , weights(inWeights) {}
+        };
+
+        /// Load the mesh from raw data.
+        static Pointer<SkeletalMesh> Create(const std::vector<Vertex>& vertices,
+                                            const std::vector<uint32>& indices);
+
+    public:
+        virtual ~SkeletalMesh() = default;
+
+        /// Destroy the mesh.
+        virtual void Destroy() = 0;
+
+        /// Render the mesh.
+        virtual void Draw(const Pointer<Shader>& shader,
+                          const Matrix4x4 * projection,
+                          const Matrix4x4 * view,
+                          const Matrix4x4 * model) const = 0;
+
+        /// @getter: The mesh's vertices
+        virtual const std::vector<Vertex>& GetVertices() const = 0;
+        /// @getter: The mesh's indices
+        virtual const std::vector<uint32>& GetIndices() const = 0;
+
+        /// @getter: The mesh's id.
+        virtual int32 GetId() const = 0;
+
+    public:
+        /// @getter: The mesh's material.
+        virtual inline const Pointer<Material>& GetMaterial() const { return m_material; }
+
+        /// @setter: The mesh's material.
+        virtual inline void SetMaterial(const Pointer<Material>& m) { m_material = m; }
+
+        /// @getter: Check if the material is valid.
+        virtual inline bool IsMaterialValid() const { return m_material != nullptr; }
+
+    private:
+
+        /// The mesh's material.
+        Pointer<Material> m_material = nullptr;
+    };
+}

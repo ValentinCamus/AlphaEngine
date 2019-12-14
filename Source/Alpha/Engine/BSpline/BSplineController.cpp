@@ -57,17 +57,17 @@ namespace Alpha
     {
         std::vector<Vector3> samples = m_bSpline->GetSamples(delta);
 
-        std::vector<Vertex> vertices(samples.size());
+        std::vector<StaticMesh::Vertex> vertices(samples.size());
         std::vector<uint32> indices((samples.size() - 1) * 2);
 
         for (uint32 i = 0; i < samples.size() - 1; ++i)
         {
             indices[i * 2    ] = i;
             indices[i * 2 + 1] = i + 1;
-            vertices[i] = Vertex(samples[i]);
+            vertices[i] = StaticMesh::Vertex(samples[i]);
         }
         // Add missing vertices
-        vertices[samples.size() - 1] = Vertex(samples[samples.size() - 1]);
+        vertices[samples.size() - 1] = StaticMesh::Vertex(samples[samples.size() - 1]);
 
         Pointer<StaticMeshModel> curveModel = StaticMeshModel::Create(vertices, indices);
 
@@ -79,7 +79,7 @@ namespace Alpha
         m_curve->SetDrawMode(Renderer::EDrawMode::Lines);
     }
 
-    void BSplineController::UpdateNodeInstances(const Pointer<Scene>& scene)
+    void BSplineController::TickUpdate(const Pointer<Scene> &scene)
     {
         auto nNodes = static_cast<int32>(m_bSpline->GetNbPoints());
         auto nNodesInstance = static_cast<int32>(m_nodeInstances.size());

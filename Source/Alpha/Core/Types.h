@@ -67,9 +67,10 @@ namespace Alpha
     using IntPoint4 = glm::ivec4;
     using IntVector4 = glm::ivec4;
 
+    using Color3 = Vector3;
     using Color4 = Vector4;
 
-    using Quat = glm::quat;
+    using Quaternion = glm::quat;
 
     // =============================================
     // Matrices
@@ -119,20 +120,6 @@ namespace Alpha
                 : location(inLocation)
                 , rotation(inRotation)
                 , scale(inScale) {}
-    };
-
-    struct Vertex
-    {
-        Vector position;
-        Vector normal;
-        Vector2 texCoords;
-
-        explicit Vertex(const Vector& inPosition  = {0, 0, 0},
-                        const Vector& inNormal    = {1, 0, 0},
-                        const Vector2& inTexCoords = {0, 0  })
-            : position(inPosition)
-            , normal(inNormal)
-            , texCoords(inTexCoords) {}
     };
 
     struct RawImage

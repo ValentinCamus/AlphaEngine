@@ -7,8 +7,8 @@
 
 out vec4 fragColor;
 
-in vec3 v_positionInWorldSpace;
-in vec4 v_positionInLightSpace;
+in vec3 v_wsPosition;
+in vec4 v_lsPosition;
 in vec3 v_normal;
 in vec2 v_texcoord;
 
@@ -16,8 +16,6 @@ uniform vec3 u_viewPosition;
 
 uniform Light u_light;
 uniform Material u_material;
-
-uniform bool u_debug = false;
 
 // ----------------------------------------------------------------------------
 void main()
@@ -30,8 +28,8 @@ void main()
     float ao = GetAO(u_material, v_texcoord);
     float trans = GetTransparency(u_material, v_texcoord);
 
-    vec3 viewDirection = normalize(u_viewPosition - v_positionInWorldSpace);
-    vec3 lightDirection = GetLightDirection(u_light, v_positionInWorldSpace);
+    vec3 viewDirection = normalize(u_viewPosition - v_wsPosition);
+    vec3 lightDirection = GetLightDirection(u_light, v_wsPosition);
     vec3 halfVector = normalize(viewDirection + lightDirection);
 
     float nDotV = dot(normal, viewDirection);
@@ -39,8 +37,8 @@ void main()
     float hDotV = dot(halfVector, viewDirection);
 
     // Light contribution
-    vec3 lightRadiance = LightContribution(u_light, v_positionInWorldSpace);
-    float shadow = GetLightShadow(u_light, v_positionInLightSpace);
+    vec3 lightRadiance = LightContribution(u_light, v_wsPosition);
+    float shadow = GetLightShadow(u_light, v_lsPosition);
     float brightness = max(0, nDotL) * (1 - shadow);
 
     vec3 lightContribution = lightRadiance * brightness;

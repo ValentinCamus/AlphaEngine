@@ -1,6 +1,6 @@
 #include "StaticMeshModel.h"
 
-#include <Alpha/Engine/Loader/MeshLoader.h>
+#include <Alpha/Engine/Loader/StaticMeshLoader.h>
 
 namespace Alpha
 {
@@ -20,18 +20,18 @@ namespace Alpha
 
     bool StaticMeshModel::Load(const std::string &filename)
     {
-        bool bIsValid = MeshLoader::Load(filename);
+        bool bIsValid = StaticMeshLoader::Load(filename);
 
         if (bIsValid)
         {
-            m_meshes = MeshLoader::Get();
-            MeshLoader::Flush();
+            m_meshes = StaticMeshLoader::Get();
+            StaticMeshLoader::Flush();
         }
 
         return bIsValid;
     }
 
-    bool StaticMeshModel::Load(const std::vector<Vertex> &vertices, const std::vector<uint32> &indices)
+    bool StaticMeshModel::Load(const std::vector<StaticMesh::Vertex> &vertices, const std::vector<uint32> &indices)
     {
         Pointer<StaticMesh> sm = StaticMesh::Create(vertices, indices);
         m_meshes = {sm};

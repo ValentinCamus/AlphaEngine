@@ -13,6 +13,20 @@ namespace Alpha
     class StaticMesh
     {
     public:
+        struct Vertex
+        {
+            Vector position;
+            Vector normal;
+            Vector2 texCoords;
+
+            explicit Vertex(const Vector& inPosition  = {0, 0, 0},
+                            const Vector& inNormal    = {1, 0, 0},
+                            const Vector2& inTexCoords = {0, 0  })
+                    : position(inPosition)
+                    , normal(inNormal)
+                    , texCoords(inTexCoords) {}
+        };
+
         /// Load the mesh from raw data.
         static Pointer<StaticMesh> Create(const std::vector<Vertex>& vertices,
                                           const std::vector<uint32>& indices);

@@ -10,7 +10,7 @@ namespace Alpha
     class StaticMeshModel
     {
     public:
-        using Vertices = std::vector<Vertex>;
+        using Vertices = std::vector<StaticMesh::Vertex>;
         using Indices = std::vector<uint32>;
 
         static Pointer<StaticMeshModel> Create(const std::string& filename);
@@ -22,7 +22,7 @@ namespace Alpha
 
         /// Load a static mesh model.
         /// @note: Use this constructor instead of using a static mesh.
-        bool Load(const std::vector<Vertex>& vertices, const std::vector<uint32>& indices);
+        bool Load(const std::vector<StaticMesh::Vertex>& vertices, const std::vector<uint32>& indices);
 
         /// Draw the model.
         void Draw(const Pointer<Shader>& shader,

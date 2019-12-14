@@ -80,7 +80,6 @@ namespace Alpha
 
     private:
         static float s_zFar;
-
         static float s_zNear;
 
         static Renderer* s_instance;

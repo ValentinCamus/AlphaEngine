@@ -100,4 +100,16 @@ namespace Alpha
 
 	    return projectSourceDir;
     }
+
+    namespace Map
+	{
+		template<typename Key, typename Value>
+		inline std::vector<Key> ExtractKeys(const std::map<Key, Value>& map)
+		{
+			std::vector<Key> keys;
+
+			auto fKeyRetriever = [](const auto &pair) { return pair.first; };
+			std::transform(map.begin(), map.end(), std::back_inserter(keys), fKeyRetriever);
+		}
+	}
 }
